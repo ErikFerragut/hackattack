@@ -1,13 +1,5 @@
 # HACK ATTACK - a cyber hacking game
 #
-# Created by:
-#    Erik Ferragut
-#    Max Wildgruber
-#    Jacob Ferragut
-#    Nathan Ferragut
-#    Ethan Brady
-#    Andrew Brady
-#
 # V 1.0 - first working version - 6/11/2015
 # V 1.1 - various bug fixes 
 #         - recon now says what was probed
