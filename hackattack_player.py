@@ -1,3 +1,5 @@
+import random
+
 class Player(object):
     '''Handle all server-side interactions with the user'''
     def __init__(self, game, name):

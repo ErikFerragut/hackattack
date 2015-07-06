@@ -53,7 +53,8 @@ class Game(object):
 
     def do_recon(self,move):
         player = move['player']
-        print "Machine {} is running the {} OS".format(move['to'], self.state.board_os[move['to']])
+        print "Machine {} is running the {} OS".format(move['to'],
+                                            self.state.board_os[move['to']])
         openings = self.working_attacks(player, move['to'])
         if len(openings) == 0:
             print "You have no exploits for that machine."
