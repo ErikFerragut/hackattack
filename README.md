@@ -10,6 +10,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 4. create a test routine (maybe start with a random seed and feed in fixed commands and check output?)
 5. Make it so it works more uniformly for one screen and many
 6. Allow for player types (AI?) or other parameters (IP?) to be specified up front
+7. Develop test code
 
 ### Game mechanics
 1. Announce DDoS as news
