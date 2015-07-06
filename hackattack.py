@@ -31,7 +31,7 @@ class Game(object):
     def __init__(self):
         self.state = GameState()
         self.move_funcs = {'r':self.do_recon, 'c':self.do_clean, 'h':self.do_hack,
-                           'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos}
+                           'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos, 's' : self.do_scan}
         
         self.state.players_names = [ "Player {}".format(i)
                                      for i in xrange(self.state.num_players) ]
@@ -50,7 +50,17 @@ class Game(object):
         '''return a list of the short codes for attacks player has that work on machine'''
         return [ e[0][0] + str(e[1]) for e in self.state.players_expl[player]
                  if self.state.board_os[host] == e[0] and e[1] in self.state.board_vuln[host] ]
-
+    def do_scan(self, move):
+        player = move['player']
+        for s in xrange(self.state.num_players):
+            if s != self.state.player:
+                if move['from'] in self.state.players_own[s] and self.state.players_own[s][move['from']] > 0:
+                    num_removed = 10000
+                    self.state.players_own[s][move['from']] -= num_removed
+                    if self.state.players_own[s][move['from']] == 0:
+                        self.state.players_own[s].pop(move['from'])
+                    print "Player {} has accounts".format(self.state.players_names[s])
+        
     def do_recon(self,move):
         player = move['player']
         print "Machine {} is running the {} OS".format(move['to'],
@@ -129,7 +139,7 @@ class Game(object):
 
     def do_ddos(self,move):
         # do you have the trace you need
-        player = move['player']
+        player = self.players[move['player']]
         if move['user'] in self.state.players_traced[player]:
             you_str = len(self.state.players_own[player])
             them_str = len(self.state.players_own[move['user']])
@@ -137,13 +147,19 @@ class Game(object):
                 print "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.state.players_names[move['user']].upper())
                 self.state.players_own[move['user']] = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.state.players_names[player].upper()))
+                #for self.num_players in self.players:
+                    #self.state.news[move['user']].append("{} DDOSED {} and won".format(self.state.players_names[move['user']].upper(), self.state.players_names[player].upper() ))
             elif you_str < them_str:
                 print "YOU LOST THE DDOS -- YOU ARE ELIMINATED"
                 self.state.players_own[player] = {}
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.state.players_names[player]))
+                #for self.num_players in self.players:
+                    #self.state.news[move['user']].append("{} DDOSED {} and lost".format(self.state.players_names[move['user']].upper(), self.state.players_names[player].upper() ))
             else:
                 print "DDOS was a tie"
                 self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.state.players_names[player]))
+                #for self.num_players in self.players:
+                    #self.state.news[move['user']].append("{} DDOSED {} and tied".format(self.state.players_names[move['user']].upper(), self.state.players_names[player].upper() ))
         else:
             print "You need a trace before you can ddos (this output signifies a logic error!)"
             

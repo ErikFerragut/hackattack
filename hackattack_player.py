@@ -42,7 +42,7 @@ class Player(object):
             if user not in s.players_traced[s.player]:
                 print "You can only DDoS a player after you have traced them"
                 return
-            return {'action':'d', 'user':user}
+            return {'action':'d', 'user':user, 'player':s.player}
         
         if len(words) < 2:
             print "Follow format: <acting-machine> <action> ... --or-- (D)DoS <user>"
@@ -115,6 +115,10 @@ class Player(object):
                 return
             move['exploit'] = words[2].upper()
             return move
+        
+        elif move['action'] == 's':
+            return move
+                
         else:
             print "Invalid action"
             return
@@ -177,6 +181,7 @@ class Player(object):
         print "<acting-machine> (B)ackdoor"
         print "<acting-machine> (P)atch <exploit>"
         print "(D)DoS <user>"
+        print "<acting-machine> (S) can <machine>"
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
         while len(moves) < len(s.players_own[s.player].keys()):
@@ -184,7 +189,7 @@ class Player(object):
             while move == None:
                 move_str = raw_input("\nSelect a move: ")
                 move = self.parse_move(move_str)
-                if move != None and move['from'] in [ m['from'] for m in moves]:
+                if move != None and move['action'] != 'd' and move['from'] in [ m['from'] for m in moves]:
                     print "Each machine can only have one move"
                     killed = [ m for m in moves if m['from'] == move['from'] ][0]
                     print "Replacing {} with {}".format(killed, move)
