@@ -115,6 +115,10 @@ class Player(object):
                 return
             move['exploit'] = words[2].upper()
             return move
+        
+        elif move['action'] == 's':
+            return move
+                
         else:
             print "Invalid action"
             return
@@ -177,6 +181,7 @@ class Player(object):
         print "<acting-machine> (B)ackdoor"
         print "<acting-machine> (P)atch <exploit>"
         print "(D)DoS <user>"
+        print "<acting-machine> (S) can <machine>"
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
         while len(moves) < len(s.players_own[s.player].keys()):
