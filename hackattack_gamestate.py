@@ -28,7 +28,6 @@ class GameState(object):
         for i in xrange(self.num_players):
             random.shuffle(self.all_exploits)
             self.players_expl.append( self.all_exploits[:self.start_with_exploits] )
-        self.players_traced = [ set([2]) for i in xrange(self.num_players) ]  # DEBUG
-        # self.players_traced = [ set([]) for i in xrange(self.num_players) ]  # original
+        self.players_traced = [ set([]) for i in xrange(self.num_players) ]  # original
         self.news = { p:[] for p in xrange(self.num_players) }
         self.game_round = 0
