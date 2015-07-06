@@ -10,7 +10,13 @@ class GameState(object):
         self.detection_prob = { 'r':0.05, 'h':0.15, 'b':0.10, 'p':0.25 }
 
         self.OSs = ['Linux', 'Windows', 'Mac', 'Solaris']
+
+        '''self.all_exploits = []
+        for o in self.OSs:
+            for i in xrange(self.exploits_per_os):
+                self.all_exploits.append( (o,i) )'''
         self.all_exploits = [ (o,i) for o in self.OSs for i in xrange(self.exploits_per_os) ]
+        
         self.num_hosts = 5*self.num_players
 
 
