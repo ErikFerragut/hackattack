@@ -100,7 +100,7 @@ class Game(object):
                 self.state.players_own[player][move['to']] += 1
         else:
             print "Hack failed"
-            print "OS was {}".format(self.state.board_os[move['to']])
+            #print "OS was {}".format(self.state.board_os[move['to']])
 
     def do_backdoor(self,move):
         player = move['player']
