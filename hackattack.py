@@ -52,19 +52,19 @@ class Game(object):
                  if self.state.board_os[host] == e[0] and e[1] in self.state.board_vuln[host] ]
 
     def do_recon(self,move):
-        player = move['player']
-        print "Machine {} is running the {} OS".format(move['to'],
-                                            self.state.board_os[move['to']])
-        openings = self.working_attacks(player, move['to'])
+        player = self.players[move['player']]
+        player.say("Machine {} is running the {} OS".format(move['to'], self.state.board_os[move['to']]))
+        openings = self.working_attacks(move['player'], move['to'])
         if len(openings) == 0:
-            print "You have no exploits for that machine."
+            player.say("You have no exploits for that machine.") 
         else:
-            print "You can hack it with", ", ".join(openings)
+            player.say(("You can hack it with", openings)) 
         # check for detection
         if random.random() < self.state.detection_prob['r']:
             self.detected(move['to'], "{} probed machine {} from machine {}".format(self.state.players_names[move['player']], move['to'], move['from']))
 
     def do_clean(self,move):
+        player = self.players[move['player']]
         for p in xrange(self.state.num_players):
             if p != self.state.player:
                 if move['from'] in self.state.players_own[p] and self.state.players_own[p][move['from']] > 0:
@@ -72,18 +72,19 @@ class Game(object):
                     self.state.players_own[p][move['from']] -= num_removed
                     if self.state.players_own[p][move['from']] == 0:
                         self.state.players_own[p].pop(move['from'])
-                    print "You removed {} of {}'s accounts".format(num_removed, self.state.players_names[p])
+                    player.say("You removed {} of {}'s accounts".format(num_removed, self.state.players_names[p]))
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
                         self.state.players_names[move['player']], num_removed, move['from']))
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
                             self.state.players_traced[move['player']].add(p)
-                            print "You traced {}!".format(self.state.players_names[p])
+                            player.say("You traced {}!".format(self.state.players_names[p]))
                             
-        print "Clean completed on machine {}".format(move['from'])
+        player.say("Clean completed on machine {}".format(move['from']))
 
     def do_hack(self,move):
+        theplayer = self.players[move['player']]
         player = move['player']
         worked = move['exploit'] in self.working_attacks(player, move['to'])
         # detected? -- do it first so you don't learn if you were detected
@@ -92,36 +93,39 @@ class Game(object):
               self.state.players_names[player], "" if worked else "un", move['to'], move['from']))
 
         if worked:
-            print "Hack succeeded"
+            theplayer.say("Hack succeeded")
             # add access
             if move['to'] not in self.state.players_own[player]:
                 self.state.players_own[player][move['to']] = 1
             else:
                 self.state.players_own[player][move['to']] += 1
         else:
-            print "Hack failed"
-            print "OS was {}".format(self.state.board_os[move['to']])
+            theplayer.say("Hack failed")
+            theplayer.say("OS was {}".format(self.state.board_os[move['to']]))
 
     def do_backdoor(self,move):
         player = move['player']
+        theplayer = self.players[move['player']]
+        
         self.state.players_own[player][move['from']] += 1
         if random.random() < self.state.detection_prob['b']:
             self.detected(move['from'], "{} added a backdoor to machine {}".format(self.state.players_names[player],
                                                                               move['from']))
-        print "One backdoor added to machine {}; you now have {}".format(move['from'],
-                                                                      self.state.players_own[player][move['from']])
+        theplayer.say("One backdoor added to machine {}; you now have {}".format(move['from'],
+                                                                      self.state.players_own[player][move['from']]))
         
     def do_patch(self,move):
+        theplayer = self.players[move['player']]
         if move['exploit'][0].upper() == self.state.board_os[move['from']][0]:
             patch_id = int(move['exploit'][1:])
             if patch_id in self.state.board_vuln[move['from']]:
                 self.state.board_vuln[move['from']].remove(patch_id)
-                print "Vulnerability patched"
+                theplayer.say("Vulnerability patched")
             else:
-                print "Vulnerability was already patched"
+                theplayer.say("Vulnerability was already patched")
         else:
-            print "Failed patch due to OS mismatch of {} on {}".format(move['exploit'],
-                                                                       self.state.board_os[move['from']])
+            theplayer.say("Failed patch due to OS mismatch of {} on {}".format(move['exploit'],
+                                                                       self.state.board_os[move['from']]))
 
         if random.random() < self.state.detection_prob['p']:
             self.detected(move['from'], "{} patched machine {}".format(self.state.players_names[move['player']],
@@ -130,22 +134,23 @@ class Game(object):
     def do_ddos(self,move):
         # do you have the trace you need
         player = move['player']
+        theplayer = self.players[move['player']]
         if move['user'] in self.state.players_traced[player]:
             you_str = len(self.state.players_own[player])
             them_str = len(self.state.players_own[move['user']])
             if you_str > them_str:
-                print "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.state.players_names[move['user']].upper())
+                theplayer.say( "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.state.players_names[move['user']].upper()))
                 self.state.players_own[move['user']] = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.state.players_names[player].upper()))
             elif you_str < them_str:
-                print "YOU LOST THE DDOS -- YOU ARE ELIMINATED"
+                theplayer.say( "YOU LOST THE DDOS -- YOU ARE ELIMINATED")
                 self.state.players_own[player] = {}
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.state.players_names[player]))
             else:
-                print "DDOS was a tie"
+                theplayer.say( "DDOS was a tie")
                 self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.state.players_names[player]))
         else:
-            print "You need a trace before you can ddos (this output signifies a logic error!)"
+            theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
 
     def mainloop(self):
