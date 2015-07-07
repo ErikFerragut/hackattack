@@ -51,4 +51,17 @@ Player to store knowledge in knowledge system
 
 
 ## known bugs
-None
+### when enter is repeatedly pressed, it causes this error
+Select a move:
+Traceback (most recent call last):
+  File "hackattack.py", line 210, in <module>
+    g.mainloop()
+  File "hackattack.py", line 190, in mainloop
+    moves = player.get_moves()
+  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
+202, in get_moves
+    move = self.parse_move(move_str)
+  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
+34, in parse_move
+    if words[0].lower() == 'd':
+IndexError: list index out of range

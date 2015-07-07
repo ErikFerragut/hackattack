@@ -152,7 +152,7 @@ class Game(object):
                 self.state.players_own[move['user']] = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.state.players_names[player].upper()))
                 #for self.num_players in self.players:
-                    #self.state.news[move['user']].append("{} DDOSED {} and won".format(self.state.players_names[move['user']].upper(), self.state.players_names[player].upper() ))
+                    #self.state.news[move['user']].append("{} HAS SUCCESSFULLY DDOSED {}".format(self.state.players_names[move['user']].upper(), self.state.players_names[player].upper() ))
             elif you_str < them_str:
                 theplayer.say( "YOU LOST THE DDOS -- YOU ARE ELIMINATED")
                 self.state.players_own[player] = {}
