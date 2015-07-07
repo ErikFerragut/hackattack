@@ -5,7 +5,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 
 ### Finish modularizing the code
 1. move variables having to do with players to the player class (see GameState init)
-2. change do_ functions to use player.say() instead of print
+2. ~~change do_ functions to use player.say() instead of print~~
 3. move non-output parts from updateoutput to mainloop
 4. create a test routine (maybe start with a random seed and feed in fixed commands and check output?)
 5. Make it so it works more uniformly for one screen and many
@@ -14,7 +14,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 
 ### Game mechanics
 1. Announce DDoS as news
-2. Don't learn OS on failed hack attempts
+2. ~~Don't learn OS on failed hack attempts~~
 3. Create a deep recon move to detect accounts on your machine
 4. From time to time, most common exploit gets patched
 5. Make it so there are arbitrarily many exploits with different probabilities
