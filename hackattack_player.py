@@ -5,6 +5,7 @@ class Player(object):
     def __init__(self, game, name):
         self.game = game
         self.name = name
+        self.status = 'in'  # other status values are 'out' and 'won'
         
         # show title screen until someone hits a key
         print "HACK ATTACK!\n\n"
