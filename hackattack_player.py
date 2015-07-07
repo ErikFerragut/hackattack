@@ -119,23 +119,38 @@ class Player(object):
             print "Invalid action"
             return
 
+    def update_status(self):
+        s = self.game.state
+        if sum(s.players_own[s.player].values()) == 0:
+            self.status = 'out'
+        elif all( [ sum(s.players_own[p].values()) == 0
+                    for p in xrange(s.num_players)
+                    if p != s.player ] ):
+            self.status = 'won'
+
+    def start_round(self):
+        s = self.game.state
+        ## check for a new exploit
+        if random.random() <= 1./6:
+            ne = random.choice(list(set(s.all_exploits).difference(s.players_expl[s.player])))
+            s.players_expl[s.player].append( ne )
+            print "\nYou found a new exploit! ", ne
+        pass
+    
     def update_output(self):
         # to do:
-        #   1. do not let this function update whose turn it is; do that in main loop
+        # X 1. do not let this function update whose turn it is; do that in main loop
         #   2. do not add exploit here; do that in main loop
         #   3. don't use s.player to know who the player is, store it locally
         #   4. do not determine if the game is over in this function, but in main loop
         s = self.game.state
         ### output stuff to update the player
-        if sum(s.players_own[s.player].values()) == 0:
+        if self.status == 'out':
             print "{} is out".format(s.players_names[s.player])
-            s.player = (s.player + 1) % s.num_players
-            return True
-        elif all( [ sum(s.players_own[p].values()) == 0
-                    for p in xrange(s.num_players)
-                    if p != s.player ] ):
+            return
+        if self.status == 'won':
             print "You won!"
-            return False
+            return
             
         # for each player (if they haven't lost)
         ## are you ready? screen
@@ -153,11 +168,6 @@ class Player(object):
             if v > 0:
                 print "{} account{} on machine {}, which runs the {} OS".format(
                     v, 's' if v > 1 else '', k, s.board_os[k])
-        ## check for a new exploit
-        if random.random() <= 1./6:
-            ne = random.choice(list(set(s.all_exploits).difference(s.players_expl[s.player])))
-            s.players_expl[s.player].append( ne )
-            print "\nYou found a new exploit! ", ne
             
         print "\nYour exploits:"
         for e in s.players_expl[s.player]:

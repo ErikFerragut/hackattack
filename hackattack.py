@@ -156,8 +156,16 @@ class Game(object):
                 self.state.game_round += 1
 
             player = self.players[self.state.player]
-            if not player.update_output():
+            player.update_status()  # did they win, lose?
+
+            player.start_round()   # did they get a new exploit?
+            
+            player.update_output()  # show screen
+            if player.status == 'won':
                 break
+            elif player.status == 'out':
+                s.player = (s.player + 1) % s.num_players
+                continue
             
             moves = player.get_moves()
 
