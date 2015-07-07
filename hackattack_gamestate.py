@@ -29,6 +29,8 @@ class GameState(object):
         a = range(self.num_hosts)
         random.shuffle(a)
         players_start = [ aa for aa in a[:self.num_players] ]
+        
+        
         self.players_own = [ {s:1} for s in players_start ]
         self.players_expl = []
         for i in xrange(self.num_players):

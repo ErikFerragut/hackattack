@@ -52,14 +52,18 @@ class Game(object):
                  if self.state.board_os[host] == e[0] and e[1] in self.state.board_vuln[host] ]
     def do_scan(self, move):
         player = move['player']
+        
         for s in xrange(self.state.num_players):
             if s != self.state.player:
                 if move['from'] in self.state.players_own[s] and self.state.players_own[s][move['from']] > 0:
-                    num_removed = 10000
-                    self.state.players_own[s][move['from']] -= num_removed
-                    if self.state.players_own[s][move['from']] == 0:
-                        self.state.players_own[s].pop(move['from'])
-                    print "Player {} has accounts".format(self.state.players_names[s])
+                    #num_removed = 10000
+                    print "Player {} accounts {}".format(s, self.state.players_own[s][move['from']])
+                    #print self.state.players_own[s][player]
+                    
+                    #if self.state.players_own[s][move['from']] == 0:
+                        #self.state.players_own[s].pop(move['from'])
+                    #print "Player {} has accounts".format(self.state.players_names[s])
+                    #print self.state.players_own
         
     def do_recon(self,move):
         player = self.players[move['player']]

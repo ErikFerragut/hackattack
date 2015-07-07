@@ -50,7 +50,7 @@ class Player(object):
             return
 
         try:
-            move = { 'from': int(words[0]), 'action': words[1][0], 'player':s.player }
+            move = { 'from': int(words[0]), 'action': words[1][0], 'player':s.player,  }
         except:
             print "Must indicate source of move first (as int) and then action (by letter)"
             return
