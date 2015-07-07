@@ -1,12 +1,14 @@
 import random
+import hackattack_util
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
-    def __init__(self, game, name):
+    def __init__(self, game, name, start):
         self.game = game
         self.name = name
         self.status = 'in'  # other status values are 'out' and 'won'
-        
+        self.own = {start:1}
+
         # show title screen until someone hits a key
         print "HACK ATTACK!\n\n"
 
@@ -55,7 +57,7 @@ class Player(object):
             print "Must indicate source of move first (as int) and then action (by letter)"
             return
 
-        if move['from'] not in s.players_own[s.player]:
+        if move['from'] not in self.own:#new change
             print "You must specify only a machine that you own"
             return
         
@@ -125,22 +127,25 @@ class Player(object):
             return
 
     def update_status(self):
-        s = self.game.state
-        if sum(s.players_own[s.player].values()) == 0:
+        if sum(self.own.values()) == 0:
             self.status = 'out'
-        elif all( [ sum(s.players_own[p].values()) == 0
-                    for p in xrange(s.num_players)
-                    if p != s.player ] ):
+        elif all( [ sum(p.own.values()) == 0 for p in self.game.players if p.name != self.name] ):
             self.status = 'won'
 
     def start_round(self):
         s = self.game.state
+        # for each player (if they haven't lost)
+        ## are you ready? screen
+        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
+            
+        
         ## check for a new exploit
         if random.random() <= 1./6:
-            ne = random.choice(list(set(s.all_exploits).difference(s.players_expl[s.player])))
+            ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
+            while ne in s.players_expl[s.player]:
+                ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
             s.players_expl[s.player].append( ne )
             print "\nYou found a new exploit! ", ne
-        pass
     
     def update_output(self):
         # to do:
@@ -157,10 +162,6 @@ class Player(object):
             print "You won!"
             return
             
-        # for each player (if they haven't lost)
-        ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
-            
         if len(s.news[s.player]) == 0:
             print "No news to report on round {}".format(s.game_round)
         else:
@@ -169,7 +170,7 @@ class Player(object):
 
         ## show them what they have
         print "Your access:"
-        for k,v in s.players_own[s.player].iteritems():
+        for k,v in self.own.iteritems(): #self.own = {start:1} at start
             if v > 0:
                 print "{} account{} on machine {}, which runs the {} OS".format(
                     v, 's' if v > 1 else '', k, s.board_os[k])
@@ -195,7 +196,7 @@ class Player(object):
         print "<acting-machine> (S) can <machine>"
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
-        while len(moves) < len(s.players_own[s.player].keys()):
+        while len(moves) < len(self.own.keys()):
             move = None
             while move == None:
                 move_str = raw_input("\nSelect a move: ")
