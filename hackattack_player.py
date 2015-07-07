@@ -3,11 +3,12 @@ import hackattack_util
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
-    def __init__(self, game, name):
+    def __init__(self, game, name, start):
         self.game = game
         self.name = name
         self.status = 'in'  # other status values are 'out' and 'won'
-        
+        self.own = {start:1}
+
         # show title screen until someone hits a key
         print "HACK ATTACK!\n\n"
 
@@ -56,7 +57,7 @@ class Player(object):
             print "Must indicate source of move first (as int) and then action (by letter)"
             return
 
-        if move['from'] not in s.players_own[s.player]:
+        if move['from'] not in self.own:#new change
             print "You must specify only a machine that you own"
             return
         
@@ -126,12 +127,9 @@ class Player(object):
             return
 
     def update_status(self):
-        s = self.game.state
-        if sum(s.players_own[s.player].values()) == 0:
+        if sum(self.own.values()) == 0:
             self.status = 'out'
-        elif all( [ sum(s.players_own[p].values()) == 0
-                    for p in xrange(s.num_players)
-                    if p != s.player ] ):
+        elif all( [ sum(p.own.values()) == 0 for p in self.game.players if p.name != self.name] ):
             self.status = 'won'
 
     def start_round(self):
@@ -172,7 +170,7 @@ class Player(object):
 
         ## show them what they have
         print "Your access:"
-        for k,v in s.players_own[s.player].iteritems():
+        for k,v in self.own.iteritems(): #self.own = {start:1} at start
             if v > 0:
                 print "{} account{} on machine {}, which runs the {} OS".format(
                     v, 's' if v > 1 else '', k, s.board_os[k])
@@ -198,7 +196,7 @@ class Player(object):
         print "<acting-machine> (S) can <machine>"
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
-        while len(moves) < len(s.players_own[s.player].keys()):
+        while len(moves) < len(self.own.keys()):
             move = None
             while move == None:
                 move_str = raw_input("\nSelect a move: ")
