@@ -1,4 +1,5 @@
 import random
+import hackattack_util
 
 class GameState(object):
     def __init__(self):
@@ -32,10 +33,14 @@ class GameState(object):
         
         
         self.players_own = [ {s:1} for s in players_start ]
+        
         self.players_expl = []
         for i in xrange(self.num_players):
-            random.shuffle(self.all_exploits)
-            self.players_expl.append( self.all_exploits[:self.start_with_exploits] )
+            E = set([])
+            while len(E)<4:
+                E.add(random.choice(self.OSs)[0]+str(hackattack_util.pick_exp_int()))
+            self.players_expl.append(list(E))
+            
         self.players_traced = [ set([2]) for i in xrange(self.num_players) ]  # original
         self.news = { p:[] for p in xrange(self.num_players) }
         self.game_round = 0

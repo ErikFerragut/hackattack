@@ -1,4 +1,5 @@
 import random
+import hackattack_util
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
@@ -135,12 +136,18 @@ class Player(object):
 
     def start_round(self):
         s = self.game.state
+        # for each player (if they haven't lost)
+        ## are you ready? screen
+        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
+            
+        
         ## check for a new exploit
         if random.random() <= 1./6:
-            ne = random.choice(list(set(s.all_exploits).difference(s.players_expl[s.player])))
+            ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
+            while ne in s.players_expl[s.player]:
+                ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
             s.players_expl[s.player].append( ne )
             print "\nYou found a new exploit! ", ne
-        pass
     
     def update_output(self):
         # to do:
@@ -156,10 +163,6 @@ class Player(object):
         if self.status == 'won':
             print "You won!"
             return
-            
-        # for each player (if they haven't lost)
-        ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
             
         if len(s.news[s.player]) == 0:
             print "No news to report on round {}".format(s.game_round)
