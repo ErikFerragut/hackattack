@@ -13,7 +13,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 7. Develop test code
 
 ### Game mechanics
-1. Announce DDoS as news
+1. ~~Announce DDoS as news~~
 2. ~~Don't learn OS on failed hack attempts~~
 3. Create a deep recon move to detect accounts on your machine
 4. From time to time, most common exploit gets patched
