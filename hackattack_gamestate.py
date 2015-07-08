@@ -33,7 +33,7 @@ class GameState(object):
             E = set([])
             while len(E)<4:
                 E.add(random.choice(self.OSs)[0]+str(hackattack_util.pick_exp_int()))
-            self.player.players_expl.append(list(E))
+            self.players_expl.append(list(E))
             
         self.players_traced = [ set([]) for i in xrange(self.game.num_players) ]  # original
         self.news = { p:[] for p in xrange(self.game.num_players) }
