@@ -54,6 +54,7 @@ None
 
 ## Recently fixed bugs
 ### when enter is repeatedly pressed, it causes this error
+
 Select a move:
 Traceback (most recent call last):
   File "hackattack.py", line 210, in <module>
