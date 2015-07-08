@@ -112,12 +112,11 @@ class Player(object):
             if len(words) != 3:
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
-            try:
-                if not any([ e[0][0] == words[2][0].upper() and e[1] == int(words[2][1:])
-                        for e in self.players_expl[s.player] ]):
+            if words[2][1:].isdigit():
+                if not words[2].upper() in s.players_expl[s.player]:
                     print "Must apply a patch for an exploit you have"
                     return
-            except:
+            else:
                 print "Third word must be a letter followed by a number (no space)"
                 return
             move['exploit'] = words[2].upper()
