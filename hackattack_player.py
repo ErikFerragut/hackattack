@@ -8,6 +8,10 @@ class Player(object):
         self.name = name
         self.status = 'in'  # other status values are 'out' and 'won'
         self.own = {start:1}
+        self.log = []
+        
+
+
         # show title screen until someone hits a key
         print "HACK ATTACK!\n\n"
 
@@ -194,14 +198,20 @@ class Player(object):
         print "<acting-machine> (H)ack <machine> <exploit>"
         print "<acting-machine> (B)ackdoor"
         print "<acting-machine> (P)atch <exploit>"
+        print "<acting-machine> (S)can <machine>"
+        print "(L)ogreview"
         print "(D)DoS <user>"
-        print "<acting-machine> (S) can <machine>"
+        
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
         while len(moves) < len(self.own.keys()):
             move = None
             while move == None:
                 move_str = raw_input("\nSelect a move: ")
+                if len(move_str) > 0 and move_str[0].upper() == 'L':
+                    print "LOG".center(30,'=')
+                    print "\n".join(self.log)
+                    continue
                 move = self.parse_move(move_str)
                 if move != None and move['action'] != 'd' and move['from'] in [ m['from'] for m in moves]:
                     print "Each machine can only have one move"
@@ -221,4 +231,5 @@ class Player(object):
         print "\n"*100
 
     def say(self, thing_to_say):
+        self.log.append(thing_to_say)
         print thing_to_say
