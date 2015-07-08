@@ -206,7 +206,7 @@ class Game(object):
         else:
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
-     '''def new_patches(self) :
+    '''def new_patches(self) :
         if random.random()<.15:
             if state.board_OSs == random.choice(state.OSs)
             one patched = random.randint(0,4)            
