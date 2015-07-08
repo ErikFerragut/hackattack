@@ -26,7 +26,7 @@ class GameState(object):
         self.board_vuln = [ [ i for i in range(self.exploits_per_os)
                               if random.random() < self.vuln_prob ]
                        for h in xrange(self.num_hosts) ]
-
+        
         self.players_expl = []
         for i in xrange(self.num_players):
             E = set([])
