@@ -52,7 +52,7 @@ class Game(object):
         
     def working_attacks(self,player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
-        print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
+        # print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
         return [ e for e in self.state.players_expl[player]
                  if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
                  
@@ -63,14 +63,9 @@ class Game(object):
         for s in xrange(self.num_players):
             if s != self.state.player:
                 if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
-                    #num_removed = 10000
-                    print "Player {} accounts {}".format(s, self.game.players_own[s][move['from']])
-                    #print self.game.players_own[s][player]
-        #for playerB in xrange(self.state.num_players):
-            #if random.random() < self.state.detection_prob['s']:
-               # self.detected( playerB,  "Player {} scanned machine {} from machine {} ".format(player.name, players, move['from']))
-        for playerB in xrange(self.num_players):
-            
+                    player.say("Player {} accounts {}".format(s, self.game.players_own[s][move['from']]))
+                    
+        for playerB in xrange(self.num_players):            
             if random.random() < self.state.detection_prob['r']:
                 if self.game.players_own[player][move['from']] is self.game.players_own[playerB]:
                     self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
