@@ -2,7 +2,7 @@ import random
 import hackattack_util
 
 class GameState(object):
-    def __init__(self):
+    def __init__(self, game):
         self.game = game
         self.exploits_per_os = 5
         self.start_with_exploits = 4
@@ -28,13 +28,13 @@ class GameState(object):
                        for h in xrange(self.num_hosts) ]
 
         self.players_expl = []
-        for i in xrange(self.num_players):
+        for i in xrange(self.game.num_players):
             E = set([])
             while len(E)<4:
                 E.add(random.choice(self.OSs)[0]+str(hackattack_util.pick_exp_int()))
             self.players_expl.append(list(E))
             
-        self.players_traced = [ set([]) for i in xrange(self.num_players) ]  # original
-        self.news = { p:[] for p in xrange(self.num_players) }
+        self.players_traced = [ set([]) for i in xrange(self.game.num_players) ]  # original
+        self.news = { p:[] for p in xrange(self.game.num_players) }
 
         self.game_round = 0

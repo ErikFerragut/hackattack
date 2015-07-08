@@ -71,7 +71,8 @@ class Game(object):
         for playerB in xrange(self.state.num_players):
             
             if random.random() < self.state.detection_prob['r']:
-                self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
+                if self.state.players_own[player][move['from']] is self.state.players_own[playerB]:
+                    self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                         
                     #if self.state.players_own[s][move['from']] == 0:
                     #self.state.players_own[s].pop(move['from'])
@@ -206,7 +207,7 @@ class Game(object):
         else:
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
-     '''def new_patches(self) :
+    '''def new_patches(self) :
         if random.random()<.15:
             if state.board_OSs == random.choice(state.OSs)
             one patched = random.randint(0,4)            
@@ -223,7 +224,7 @@ class Game(object):
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
-            player.start_round()   # did they get a new exploit?
+            player.start_round()   # did they get a new exploit?f
             
             player.update_output()  # show screen
             if player.status == 'won':
