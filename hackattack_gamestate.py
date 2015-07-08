@@ -8,7 +8,7 @@ class GameState(object):
         self.start_with_exploits = 4
         self.vuln_prob = 0.8
 
-        self.detection_prob = { 'r':0.05, 'h':0.10, 'b':0.15, 'p':0.25, 's' : 0.30 }
+        self.detection_prob = { 'r':0.05, 'h':0.10, 'b':0.15, 'p':0.25, 's' : 1.00 }
 
         self.OSs = ['Linux', 'Windows', 'Mac', 'Solaris']
 
