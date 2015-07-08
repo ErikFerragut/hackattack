@@ -52,31 +52,33 @@ class Game(object):
         
     def working_attacks(self,player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
-        return [ e[0][0] + str(e[1]) for e in self.state.players_expl[player]
-                 if self.state.board_os[host] == e[0] and e[1] in self.state.board_vuln[host] ]
+        print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
+        return [ e for e in self.state.players_expl[player]
+                 if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
                  
     def do_scan(self, move):
         #player = move['player']
         #player2 = self.state.player[move['to']]
         player = self.players[move['player']]
-        for s in xrange(self.state.num_players):
+        for s in xrange(self.num_players):
             if s != self.state.player:
-                if move['from'] in self.state.players_own[s] and self.state.players_own[s][move['from']] > 0:
+                if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
                     #num_removed = 10000
-                    print "Player {} accounts {}".format(s, self.state.players_own[s][move['from']])
-                    #print self.state.players_own[s][player]
+                    print "Player {} accounts {}".format(s, self.game.players_own[s][move['from']])
+                    #print self.game.players_own[s][player]
         #for playerB in xrange(self.state.num_players):
             #if random.random() < self.state.detection_prob['s']:
                # self.detected( playerB,  "Player {} scanned machine {} from machine {} ".format(player.name, players, move['from']))
-        for playerB in xrange(self.state.num_players):
+        for playerB in xrange(self.num_players):
             
             if random.random() < self.state.detection_prob['r']:
-                self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
+                if self.game.players_own[player][move['from']] is self.game.players_own[playerB]:
+                    self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                         
-                    #if self.state.players_own[s][move['from']] == 0:
-                    #self.state.players_own[s].pop(move['from'])
+                    #if self.game.players_own[s][move['from']] == 0:
+                    #self.game.players_own[s].pop(move['from'])
                     #print "Player {} has accounts".format(self.state.players_names[s])
-                    #print self.state.players_own
+                    #print self.game.players_own
                     
     def do_recon(self,move):
         player = self.players[move['player']]
@@ -87,7 +89,7 @@ class Game(object):
         else:
             player.say(("You can hack it with", openings)) 
         # check for detection
-        for playerB in xrange(self.state.num_players):
+        for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['r']:
                 self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['to'], move['from']))
 
@@ -123,7 +125,7 @@ class Game(object):
 
         if worked:
             theplayer.say("Hack succeeded")
-            for playerB in xrange(self.state.num_players):
+            for playerB in xrange(self.num_players):
                 if random.random() < self.state.detection_prob['h']:
                     self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(player.name, move['to'], move['from']))
 
@@ -135,7 +137,7 @@ class Game(object):
                 theplayer.own[move['to']] += 1
         else:
             theplayer.say("Hack failed")
-            for playerB in xrange(self.state.num_players):
+            for playerB in xrange(self.num_players):
                 if random.random() < self.state.detection_prob['h']:
                     self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
 
@@ -145,11 +147,11 @@ class Game(object):
         player = move['player']
         theplayer = self.players[move['player']]
         
-        self.state.players_own[player][move['from']] += 1
+        self.players[player].own[move['from']] += 1
         #if random.random() < self.state.detection_prob['b']:
             #self.detected(move['from'], "{} added a backdoor to machine {}".format(self.state.players_names[player],
                                   #                                            move['from']))
-        for playerB in xrange(self.state.num_players):
+        for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
                 self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
@@ -172,7 +174,7 @@ class Game(object):
         #if random.random() < self.state.detection_prob['p']:
            # self.detected(move['from'], "{} patched machine {}".format(self.state.players_names[move['player']],
                          #                                         move['from']))
-        for playerB in xrange(self.state.num_players):
+        for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['p']:
                 self.detected( playerB,  "Player {} patched machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
@@ -189,19 +191,19 @@ class Game(object):
                 player.own[move['user']] = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.state.players_names[player].upper()))
                 #ddos results into news
-                for p in xrange(self.state.num_players):
+                for p in xrange(self.num_players):
                     self.state.news[p].append("{} HAS SUCCESSFULLY DDOSED {}".format(self.state.players_names[player].upper(), self.state.players_names[move['user']].upper() ))
             elif you_str < them_str:
                 theplayer.say( "YOU LOST THE DDOS -- YOU ARE ELIMINATED")
                 theplayer.own = {}#need?[player]
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.state.players_names[player]))
                 #announces in the news about the ddos activity
-                for p in xrange(self.state.num_players):
+                for p in xrange(self.num_players):
 				    self.state.news[p].append("{} UNSUCCESSFULLY DDOSED {}".format(self.state.players_names[player].upper(), self.state.players_names[move['user']].upper() ))
             else:
                 theplayer.say( "DDOS was a tie")
                 self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.state.players_names[player]))
-                for p in xrange(self.state.num_players):
+                for p in xrange(self.num_players):
                     self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIRE".format(self.state.players_names[player].upper(), self.state.players_names[move['user']].upper() ))
         else:
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
@@ -223,13 +225,13 @@ class Game(object):
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
-            player.start_round()   # did they get a new exploit?
+            player.start_round()   # did they get a new exploit?f
             
             player.update_output()  # show screen
             if player.status == 'won':
                 break
             elif player.status == 'out':
-                self.state.player = (self.state.player + 1) % self.state.num_players
+                self.state.player = (self.state.player + 1) % self.num_players
                 continue
             
             moves = player.get_moves()
