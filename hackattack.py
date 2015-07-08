@@ -204,10 +204,12 @@ class Game(object):
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
     '''def new_patches(self):
+        x = random.choice(state.OSs)
+        y = random.randint(0,4)
         if random.random()<=.15:
             for i in xrange(state.num_hosts):
-                if state.board_OSs == random.choice(state.OSs):         
-                     state.board_vuln[].remove.(random.randint(0,4)])'''
+                if state.board_OSs[i] == x:         
+                     state.board_vuln[i].remove.(y)'''
             #h for h in range(state.num_hosts)
             #state.board_vuln[0].remove.(random.randint(0,4))
     def mainloop(self):
