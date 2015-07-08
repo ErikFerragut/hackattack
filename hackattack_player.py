@@ -33,6 +33,9 @@ class Player(object):
         s=self.game.state
         words = move_str.lower().split()
 
+        if len(words) == 0:
+            return
+        
         if words[0].lower() == 'd':        
             if len(words) != 2:
                 print "Follow format: (D)DoS <user>"
@@ -81,24 +84,25 @@ class Player(object):
             if len(words) != 4:
                 print "Follow format: <acting-machine> (H)ack <machine> <exploit>"
                 return
-            try:
-                mac2 = int(words[2])
-            except:
+            
+            if not words[2].isdigit():
                 print "Target machine must be an integer"
                 return
+            else:
+                mac2 = int(words[2])
+
             if mac2 not in xrange(s.num_hosts):
                 print "Invalid target"
                 return
-            try:
-                # print "debug:", words[2], words[2][0], words[2][1:]
-                # print int(words[2][1:])
-                if not any([ e[0][0] == words[3][0:1].upper() and e[1] == int(words[3][1:])
-                        for e in s.players_expl[s.player] ]):
-                    print "Not a valid exploit"
+
+            if words[3][1:].isdigit():
+                if not words[3].upper() in s.players_expl[s.player]:
+                    print "Not you exploit"
                     return
-            except:
+            else:
                 print "Third word must be letter followed by number (no space)"
                 return
+            
             move['to'] = mac2
             move['exploit'] = words[3].upper()
             return move
@@ -108,12 +112,11 @@ class Player(object):
             if len(words) != 3:
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
-            try:
-                if not any([ e[0][0] == words[2][0].upper() and e[1] == int(words[2][1:])
-                        for e in s.players_expl[s.player] ]):
+            if words[2][1:].isdigit():
+                if not words[2].upper() in s.players_expl[s.player]:
                     print "Must apply a patch for an exploit you have"
                     return
-            except:
+            else:
                 print "Third word must be a letter followed by a number (no space)"
                 return
             move['exploit'] = words[2].upper()
