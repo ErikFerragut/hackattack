@@ -9,7 +9,8 @@ class Player(object):
         self.status = 'in'  # other status values are 'out' and 'won'
         self.own = {start:1}
         self.log = []
-        
+        self.players_expl = []
+
         # show title screen until someone hits a key
         print "HACK ATTACK!\n\n"
 
