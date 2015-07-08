@@ -33,6 +33,9 @@ class Player(object):
         s=self.game.state
         words = move_str.lower().split()
 
+        if len(word) == 0:
+            return
+        
         if words[0].lower() == 'd':        
             if len(words) != 2:
                 print "Follow format: (D)DoS <user>"
@@ -110,7 +113,7 @@ class Player(object):
                 return
             try:
                 if not any([ e[0][0] == words[2][0].upper() and e[1] == int(words[2][1:])
-                        for e in s.players_expl[s.player] ]):
+                        for e in self.players_expl[s.player] ]):
                     print "Must apply a patch for an exploit you have"
                     return
             except:

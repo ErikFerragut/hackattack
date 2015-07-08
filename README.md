@@ -50,6 +50,9 @@ Player to store knowledge in knowledge system
 
 
 ## known bugs
+None
+
+## Recently fixed bugs
 ### when enter is repeatedly pressed, it causes this error
 Select a move:
 Traceback (most recent call last):

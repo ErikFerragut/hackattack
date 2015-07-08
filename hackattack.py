@@ -61,7 +61,7 @@ class Game(object):
         player = self.players[move['player']]
         for s in xrange(self.num_players):
             if s != self.state.player:
-                if move['from'] in self.game.players_own[s] and self.game.players_own[s][move['from']] > 0:
+                if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
                     #num_removed = 10000
                     print "Player {} accounts {}".format(s, self.game.players_own[s][move['from']])
                     #print self.game.players_own[s][player]
