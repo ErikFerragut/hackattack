@@ -53,7 +53,7 @@ class Game(object):
     def working_attacks(self,player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
         # print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
-        return [ e for e in self.state.players_expl[player]
+        return [ e for e in players.self.players_expl[player]
                  if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
                  
     def do_scan(self, move):
@@ -122,7 +122,7 @@ class Game(object):
             theplayer.say("Hack succeeded")
             for playerB in xrange(self.num_players):
                 if random.random() < self.state.detection_prob['h']:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(player.name, move['to'], move['from']))
+                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(player, move['to'], move['from']))
 
         
             # add access
