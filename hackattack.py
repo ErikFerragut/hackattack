@@ -29,7 +29,7 @@ from hackattack_player import *
 
 class Game(object):
     def __init__(self):
-        self.num_players = 5
+        self.num_players = 2
         self.state = GameState(self)
         self.move_funcs = {'r':self.do_recon, 'c':self.do_clean, 'h':self.do_hack,
                            'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos, 's' : self.do_scan}
@@ -54,7 +54,7 @@ class Game(object):
         '''return a list of the short codes for attacks player has that work on machine'''
         # print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
         return [ e for e in self.players[player].players_expl
-                 if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
+                 if self.state.board_os[host][0] == e[0] and int(e[1:]) not in self.state.board_patches[host] ]
                  
     def do_scan(self, move):
         
@@ -184,7 +184,7 @@ class Game(object):
         if move['exploit'][0].upper() == self.state.board_os[move['from']][0]:
             patch_id = int(move['exploit'][1:])
             if patch_id in self.state.board_vuln[move['from']]:
-                self.state.board_vuln[move['from']].remove(patch_id)
+                self.state.board_vuln[move['from']].append(patch_id)
                 theplayer.say("Vulnerability patched")
             else:
                 theplayer.say("Vulnerability was already patched")
@@ -237,9 +237,9 @@ class Game(object):
             for i in xrange(self.state.num_hosts):
                 if self.state.board_os[i] == x:
                     try:
-                        self.state.board_vuln[i].remove(y)
+                        self.state.board_vuln[i].append(y)
                     except:
-                        L = 0
+                        pass
 
     def mainloop(self):
         self.state.player = 0
