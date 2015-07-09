@@ -102,7 +102,9 @@ class Game(object):
         # check for detection
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['r']:
-                self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['to'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                
+                    self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['to'], move['from']))
 
     def do_clean(self,move):
         player = self.players[move['player']]
@@ -139,8 +141,10 @@ class Game(object):
             theplayer.say("Hack succeeded")
             for playerB in xrange(self.num_players):
                 if random.random() < self.state.detection_prob['h']:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
-        
+                    if move['from'] in self.players[playerB].own:
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                    elif move['to'] in self.players[playerB].own:
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
             # add access
             if move['to'] not in theplayer.own:
                 theplayer.own[move['to']] = 1  #tookout [player]
@@ -149,10 +153,13 @@ class Game(object):
         else:
             theplayer.say("Hack failed")
             for playerB in xrange(self.num_players):
-                if random.random() < self.state.detection_prob['h']:
-                    self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
-
-        
+                #if random.random() < self.state.detection_prob['h']:
+                    #self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                elif move['to'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                
 
     def do_backdoor(self,move):
         player = move['player']
@@ -164,7 +171,8 @@ class Game(object):
                                   #                                            move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
-                self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
         theplayer.say("One backdoor added to machine {}; you now have {}".format(move['from'],
                                                                       theplayer.own[move['from']]))
@@ -187,7 +195,8 @@ class Game(object):
                          #                                         move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['p']:
-                self.detected( playerB,  "Player {} patched machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} patched machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
     def do_ddos(self,move):
         # do you have the trace you need
@@ -228,13 +237,14 @@ class Game(object):
                     self.state.board_vuln[i].remove(y)
                 except:
                     L = 0
+
     def mainloop(self):
         self.state.player = 0
 
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
-            self.new_patches()
+            #self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
