@@ -29,7 +29,7 @@ from hackattack_player import *
 
 class Game(object):
     def __init__(self):
-        self.num_players = 2
+        self.num_players = 4
         self.state = GameState(self)
         self.move_funcs = {'r':self.do_recon, 'c':self.do_clean, 'h':self.do_hack,
                            'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos, 's' : self.do_scan}
@@ -180,8 +180,8 @@ class Game(object):
         theplayer = self.players[move['player']]
         if move['exploit'][0].upper() == self.state.board_os[move['from']][0]:
             patch_id = int(move['exploit'][1:])
-            if patch_id in self.state.board_vuln[move['from']]:
-                self.state.board_vuln[move['from']].append(patch_id)
+            if patch_id in self.state.board_patches[move['from']]:
+                self.state.board_patches[move['from']].append(patch_id)
                 theplayer.say({'text':"Vulnerability patched", 'machine':move['from'], 'patched':patch_id, 'fullname':move['exploit']})
             else:
                 theplayer.say({'text':"Vulnerability was already patched", 'machine':move['from'], 'patched':patch_id, 'fullname':move['exploit']})
