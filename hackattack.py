@@ -232,8 +232,8 @@ class Game(object):
             
     def new_patches(self):
         x = random.choice(self.state.OSs)
-        y = random.randint(0,4)
-        if random.random()<=.15:
+        y = random.randint(0, 4)
+        if random.random()<= 1.01:
             for i in xrange(self.state.num_hosts):
                 if self.state.board_os[i] == x:
                     try:
@@ -247,7 +247,7 @@ class Game(object):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
-            #self.new_patches()
+            self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
