@@ -25,6 +25,7 @@ failed hack attempts~~
 1. Store what each player knows in the Player class
 2. Store all moves and move results
 3. Formalize the say method and store what was said
+4. Find this Easter Egg!!!!!! :)
 
 ### New user interface
 1. Design the information display to show all knowledge (update_output)
