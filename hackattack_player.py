@@ -246,4 +246,6 @@ class Player(object):
 
     def say(self, thing_to_say):
         self.log.append(thing_to_say)
+        # add it to a list for machines that are involved
+        # store inferred information
         print thing_to_say['text']
