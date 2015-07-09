@@ -210,7 +210,7 @@ class Player(object):
                 move_str = raw_input("\nSelect a move: ")
                 if len(move_str) > 0 and move_str[0].upper() == 'L':
                     print "LOG".center(30,'=')
-                    print "\n".join(self.log)
+                    print "\n".join(map(str, self.log))
                     continue
                 move = self.parse_move(move_str)
                 if move != None and move['action'] != 'd' and move['from'] in [ m['from'] for m in moves]:
@@ -232,4 +232,4 @@ class Player(object):
 
     def say(self, thing_to_say):
         self.log.append(thing_to_say)
-        print thing_to_say
+        print thing_to_say['text']
