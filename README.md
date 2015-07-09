@@ -49,11 +49,17 @@ Player to store knowledge in knowledge system
 3. Incorporate new UI into player client
 
 
+
 #a
 None
+
+## known bugs
+hackattack.player line 123 errors the program before it can give the error message
+
+if you start with W0 you can still find W0 again
 
 ## Recently fixed bugs
 
 ### ~~when enter is repeatedly pressed, it causes this error~~
 
-### if you start with W0 you can still find W0 again
+
