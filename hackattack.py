@@ -52,7 +52,7 @@ class Game(object):
         
     def working_attacks(self,player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
-        print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
+        # print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
         return [ e for e in self.state.players_expl[player]
                  if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
                  
@@ -65,6 +65,7 @@ class Game(object):
             
             if s != self.state.player:
                 if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
+
                     #num_removed = 10000
                     print "Player {} accounts {}".format(s, self.players[s].own[move['from']])
                     #print self.game.players_own[s][player]
@@ -81,6 +82,9 @@ class Game(object):
                 
                 #if self.players[s].own[player][move['from']] is self.players[s].own[playerB]:
                     #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
+
+                    
+                    
                         
                     #if self.game.players_own[s][move['from']] == 0:
                     #self.game.players_own[s].pop(move['from'])
@@ -216,13 +220,13 @@ class Game(object):
         else:
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
-    '''def new_patches(self) :
-        if random.random()<.15:
-            if state.board_OSs == random.choice(state.OSs)
-            one patched = random.randint(0,4)            
-            remove.state.board_vuln[0]
-            for i in xrange(state.num_hosts)'''
-    '''still working on above'''
+    '''def new_patches(self):
+        if random.random()<=.15:
+            for i in xrange(state.num_hosts):
+                if state.board_OSs == random.choice(state.OSs):         
+                     state.board_vuln[].remove.(random.randint(0,4)])'''
+            #h for h in range(state.num_hosts)
+            #state.board_vuln[0].remove.(random.randint(0,4))
     def mainloop(self):
         self.state.player = 0
 
