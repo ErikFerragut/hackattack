@@ -19,7 +19,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 5. ~~Make it so there are arbitrarily many exploits with different probabilities~~
 6. Tinker with probabilities, such as more likely to be detected on
 failed hack attempts
-7. Each player checks for detection separately
+7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
 1. Store what each player knows in the Player class
