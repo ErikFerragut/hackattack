@@ -86,7 +86,7 @@ class Game(object):
     def do_recon(self,move):
         player = self.players[move['player']]
         player.say({'text':"Machine {} is running the {} OS".format(move['to'], self.state.board_os[move['to']]),
-                    'machine':move['to'], 'OS':self.state.board_os[move['to']]})
+                    'action':'r', 'machine':move['to'], 'OS':self.state.board_os[move['to']]})
         openings = self.working_attacks(move['player'], move['to'])
         if len(openings) == 0:
             player.say({'text':"You have no exploits for that machine.", 'machine':move['to'], 'exploitable with':[]}) 

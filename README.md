@@ -22,9 +22,11 @@ failed hack attempts~~
 7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
-1. Store what each player knows in the Player class
-2. Store all moves and move results
-3. Formalize the say method and store what was said
+1. Store events by machine
+2. ~~Store all moves and move results~~
+3. ~~Formalize the say method and store what was said~~
+4. Store known info (e.g., OS, patches, accounts) from events
+5. Make "detected" and "news" use say function
 
 ### New user interface
 1. Design the information display to show all knowledge (update_output)
@@ -50,13 +52,13 @@ Player to store knowledge in knowledge system
 
 
 
-#a
-None
 
 ## known bugs
-hackattack.player line 123 errors the program before it can give the error message
+1. hackattack.player line 123 errors the program before it can give the error message
 
-if you start with W0 you can still find W0 again
+2. if you start with W0 you can still find W0 again
+
+3. hackattack.py line 68 in do_scan uses old form of players own
 
 ## Recently fixed bugs
 
