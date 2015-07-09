@@ -35,6 +35,7 @@ class Game(object):
                            'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos, 's' : self.do_scan}
         
         self.state.players_names = [ "Player {}".format(i)
+        
                                      for i in xrange(self.num_players) ]
         
         start = set([])
@@ -231,7 +232,7 @@ class Game(object):
     def new_patches(self):
         x = random.choice(self.state.OSs)
         y = random.randint(0, 4)
-        if random.random()<= 1.01:
+        if random.random()<= 0.15:
             for i in xrange(self.state.num_hosts):
                 if self.state.board_os[i] == x:
                     try:
