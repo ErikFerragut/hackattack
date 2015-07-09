@@ -15,16 +15,17 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 1. ~~Announce DDoS as news~~
 2. ~~Don't learn OS on failed hack attempts~~
 3. ~~Create a deep recon move to detect accounts on your machine~~
-4. From time to time, most common exploit gets patched
+4. ~~From time to time, most common exploit gets patched~~
 5. ~~Make it so there are arbitrarily many exploits with different probabilities~~
-6. Tinker with probabilities, such as more likely to be detected on
-failed hack attempts
-7. Each player checks for detection separately
+6. ~~Tinker with probabilities, such as more likely to be detected on
+failed hack attempts~~
+7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
 1. Store what each player knows in the Player class
 2. Store all moves and move results
 3. Formalize the say method and store what was said
+4. Find this Easter Egg!!!!!! :)
 
 ### New user interface
 1. Design the information display to show all knowledge (update_output)
