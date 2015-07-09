@@ -28,9 +28,6 @@ class GameState(object):
                               if random.random() < self.vuln_prob ]
                        for h in xrange(self.num_hosts) ]
 
-
-        
-            
         self.players_traced = [ set([]) for i in xrange(self.game.num_players) ]  # original
         self.news = { p:[] for p in xrange(self.game.num_players) }
 
