@@ -128,7 +128,7 @@ class Game(object):
 
     def do_hack(self,move):
         theplayer = self.players[move['player']]
-        
+        self.state.detection_prob['h'] = 0.15
         player = move['player']
         worked = move['exploit'] in self.working_attacks(player, move['to'])
         # detected? -- do it first so you don't learn if you were detected
@@ -151,6 +151,8 @@ class Game(object):
             else:
                 theplayer.own[move['to']] += 1
         else:
+            
+            self.state.detection_prob['h'] = self.state.detection_prob['h'] * 3
             theplayer.say("Hack failed")
             for playerB in xrange(self.num_players):
                 #if random.random() < self.state.detection_prob['h']:

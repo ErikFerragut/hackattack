@@ -17,8 +17,8 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 3. ~~Create a deep recon move to detect accounts on your machine~~
 4. From time to time, most common exploit gets patched
 5. ~~Make it so there are arbitrarily many exploits with different probabilities~~
-6. Tinker with probabilities, such as more likely to be detected on
-failed hack attempts
+6. ~~Tinker with probabilities, such as more likely to be detected on
+failed hack attempts~~
 7. ~~Each player checks for detection separately~~
 
 ### Knowledge system

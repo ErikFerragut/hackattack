@@ -9,7 +9,7 @@ class GameState(object):
         self.vuln_prob = 0.8
         self.player = 0
 
-        self.detection_prob = { 'r':1.00, 'h':1.00, 'b':1.00, 'p':1.00, 's' : 1.00 }
+        self.detection_prob = { 'r':0.05, 'h':0.20, 'b':0.15, 'p':0.25, 's' : 0.30 }
 
         self.OSs = ['Linux', 'Windows', 'Mac', 'Solaris']
 
