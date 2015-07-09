@@ -120,7 +120,7 @@ class Player(object):
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
             if words[2][1:].isdigit():
-                if not words[2].upper() in s.players_expl[s.player]:
+                if not words[2].upper() in self.players_expl:
                     print "Must apply a patch for an exploit you have"
                     return
             else:
@@ -152,9 +152,9 @@ class Player(object):
         ## check for a new exploit
         if random.random() <= 1./6:
             ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-            while ne in self.players_expl[s.player]:
+            while ne in self.players_expl:
                 ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-            s.players_expl[s.player].append( ne )
+            self.players_expl.append(ne)#[s.player]
             print "\nYou found a new exploit! ", ne
     
     def update_output(self):
