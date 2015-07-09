@@ -25,7 +25,6 @@ failed hack attempts~~
 1. Store what each player knows in the Player class
 2. Store all moves and move results
 3. Formalize the say method and store what was said
-4. Find this Easter Egg!!!!!! :)
 
 ### New user interface
 1. Design the information display to show all knowledge (update_output)
@@ -50,24 +49,17 @@ Player to store knowledge in knowledge system
 3. Incorporate new UI into player client
 
 
+
+#a
+None
+
 ## known bugs
 hackattack.player line 123 errors the program before it can give the error message
 
+if you start with W0 you can still find W0 again
+
 ## Recently fixed bugs
-### when enter is repeatedly pressed, it causes this error
 
-Select a move:
-Traceback (most recent call last):
-  File "hackattack.py", line 210, in <module>
-    g.mainloop()
-  File "hackattack.py", line 190, in mainloop
-    moves = player.get_moves()
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-202, in get_moves
-    move = self.parse_move(move_str)
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-34, in parse_move
-    if words[0].lower() == 'd':
-IndexError: list index out of range
+### ~~when enter is repeatedly pressed, it causes this error~~
 
-### if you start with W0 you can still find W0 again
+
