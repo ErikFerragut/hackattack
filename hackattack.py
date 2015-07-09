@@ -228,10 +228,10 @@ class Game(object):
         else:
             theplayer.say( "You need a trace before you can ddos (this output signifies a logic error!)")
             
-        def new_patches(self):
-            for i in xrange(num_hosts):
-                if board_OSs[i] == x:
-                    board_vuln[i].remove(y)
+        #def new_patches(self):
+         #   for i in xrange(num_hosts):
+          #      if board_OSs[i] == x:
+           #         board_vuln[i].remove(y)
             
     def mainloop(self):
         self.state.player = 0
@@ -239,7 +239,7 @@ class Game(object):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
-            self.new_patches()
+            #self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
