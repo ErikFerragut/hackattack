@@ -4,7 +4,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 ## to do items
 
 ### Finish modularizing the code
-1. move variables having to do with players to the player class (see GameState init) ~~players_own num_players~~
+1. ~~move variables having to do with players to the player class (see GameState init)~~
 2. ~~change do_ functions to use player.say() instead of print~~
 3. ~~move non-output parts from updateoutput to mainloop~~
 4. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
@@ -15,11 +15,11 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 1. ~~Announce DDoS as news~~
 2. ~~Don't learn OS on failed hack attempts~~
 3. ~~Create a deep recon move to detect accounts on your machine~~
-4. From time to time, most common exploit gets patched
+4. ~~From time to time, most common exploit gets patched~~
 5. ~~Make it so there are arbitrarily many exploits with different probabilities~~
-6. Tinker with probabilities, such as more likely to be detected on
-failed hack attempts
-7. Each player checks for detection separately
+6. ~~Tinker with probabilities, such as more likely to be detected on
+failed hack attempts~~
+7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
 1. Store what each player knows in the Player class
@@ -49,22 +49,17 @@ Player to store knowledge in knowledge system
 3. Incorporate new UI into player client
 
 
-## known bugs
+
+#a
 None
 
-## Recently fixed bugs
-### when enter is repeatedly pressed, it causes this error
+## known bugs
+hackattack.player line 123 errors the program before it can give the error message
 
-Select a move:
-Traceback (most recent call last):
-  File "hackattack.py", line 210, in <module>
-    g.mainloop()
-  File "hackattack.py", line 190, in mainloop
-    moves = player.get_moves()
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-202, in get_moves
-    move = self.parse_move(move_str)
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-34, in parse_move
-    if words[0].lower() == 'd':
-IndexError: list index out of range
+if you start with W0 you can still find W0 again
+
+## Recently fixed bugs
+
+### ~~when enter is repeatedly pressed, it causes this error~~
+
+

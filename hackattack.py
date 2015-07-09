@@ -2,7 +2,7 @@
 #
 # plans:
 # V 2.0 - added knowledge system
-# Future verseion in unknown order:
+# Future version in unknown order:
 #  - network game
 #  - private/public messaging capability
 #  - optional gui, maybe curses (maybe as a plug-in?)
@@ -53,24 +53,31 @@ class Game(object):
     def working_attacks(self,player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
         # print "player {}'s exploits are {} (vuln = {})".format(player, self.state.players_expl[player], self.state.board_vuln[host])
-        return [ e for e in self.state.players_expl[player]
+        return [ e for e in self.players[player].players_expl
                  if self.state.board_os[host][0] == e[0] and int(e[1:]) in self.state.board_vuln[host] ]
                  
     def do_scan(self, move):
+        
         #player = move['player']
         #player2 = self.state.player[move['to']]
         player = self.players[move['player']]
         for s in xrange(self.num_players):
+            
             if s != self.state.player:
                 if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
                     player.say({'text':"Player {} accounts {}".format(s, self.game.players_own[s][move['from']]),
                                 'player':s, 'machine':move['from'], 'has accounts':self.game.players_own[s][move['from']]})
                     
-        for playerB in xrange(self.num_players):            
-            if random.random() < self.state.detection_prob['r']:
-                if self.game.players_own[player][move['from']] is self.game.players_own[playerB]:
-                    self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
-                        
+        for playerB in xrange(self.num_players):
+            
+            if random.random() < self.state.detection_prob['s']:
+                #for s in xrange(self.num_players):
+                #for b in xrange(self.players[s].own[playerB]):
+                    if move['from'] in self.players[playerB].own:
+                        self.detected( playerB,  "Player {} scanned machine {} from machine {}".format(player.name, move['player'], move['from']))    
+                
+                #if self.players[s].own[player][move['from']] is self.players[s].own[playerB]:
+                    #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                     #if self.game.players_own[s][move['from']] == 0:
                     #self.game.players_own[s].pop(move['from'])
                     #print "Player {} has accounts".format(self.state.players_names[s])
@@ -90,7 +97,9 @@ class Game(object):
         # check for detection
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['r']:
-                self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['to'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                
+                    self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['to'], move['from']))
 
     def do_clean(self,move):
         player = self.players[move['player']]
@@ -115,6 +124,7 @@ class Game(object):
 
     def do_hack(self,move):
         theplayer = self.players[move['player']]
+        self.state.detection_prob['h'] = 0.15
         player = move['player']
         worked = move['exploit'] in self.working_attacks(player, move['to'])
         # detected? -- do it first so you don't learn if you were detected
@@ -126,8 +136,10 @@ class Game(object):
             theplayer.say({'text':"Hack succeeded", 'hacked':move['to'], 'with':move['exploit'], 'from':move['from']})
             for playerB in xrange(self.num_players):
                 if random.random() < self.state.detection_prob['h']:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(player.name, move['to'], move['from']))
-        
+                    if move['from'] in self.players[playerB].own:
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                    elif move['to'] in self.players[playerB].own:
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
             # add access
             if move['to'] not in theplayer.own:
                 theplayer.own[move['to']] = 1  #tookout [player]
@@ -135,11 +147,16 @@ class Game(object):
                 theplayer.own[move['to']] += 1
         else:
             theplayer.say({'text':"Hack failed", 'failed hack':move['to'], 'with':move['exploit'], 'from':move['from']})
+            self.state.detection_prob['h'] = self.state.detection_prob['h'] * 3
+            
             for playerB in xrange(self.num_players):
-                if random.random() < self.state.detection_prob['h']:
-                    self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
-
-        
+                #if random.random() < self.state.detection_prob['h']:
+                    #self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                elif move['to'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                
 
     def do_backdoor(self,move):
         player = move['player']
@@ -151,7 +168,8 @@ class Game(object):
                                   #                                            move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
-                self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
         theplayer.say({'text':"One backdoor added to machine {}; you now have {}".format(move['from'],
                                                                       theplayer.own[move['from']]),
@@ -175,7 +193,8 @@ class Game(object):
                          #                                         move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['p']:
-                self.detected( playerB,  "Player {} patched machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                if move['from'] in self.players[playerB].own:
+                    self.detected( playerB,  "Player {} patched machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
     def do_ddos(self,move):
         # do you have the trace you need
@@ -209,15 +228,17 @@ class Game(object):
         else:
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             
-    '''def new_patches(self):
-        x = random.choice(state.OSs)
+    def new_patches(self):
+        x = random.choice(self.state.OSs)
         y = random.randint(0,4)
         if random.random()<=.15:
-            for i in xrange(state.num_hosts):
-                if state.board_OSs[i] == x:         
-                     state.board_vuln[i].remove.(y)'''
-            #h for h in range(state.num_hosts)
-            #state.board_vuln[0].remove.(random.randint(0,4))
+            for i in xrange(self.state.num_hosts):
+                if self.state.board_os[i] == x:
+                    try:
+                        self.state.board_vuln[i].remove(y)
+                    except:
+                        L = 0
+
     def mainloop(self):
         self.state.player = 0
 

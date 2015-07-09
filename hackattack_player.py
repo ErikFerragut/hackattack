@@ -10,23 +10,27 @@ class Player(object):
         self.own = {start:1}
         self.log = []
         
+        E = set([])
+        while len(E)<4:
+            E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
+        self.players_expl = list(E)
 
+        if self.name == 'Player 0':
+            # show title screen until someone hits a key
+            print "HACK ATTACK!\n\n"
 
-        # show title screen until someone hits a key
-        print "HACK ATTACK!\n\n"
+            # look at http://www.network-science.de/ascii/ for more fonts
+            # I like o8, poison.  This is smslant
+            print '''
+               __ __         __     ___  __  __           __  
+              / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
+             / _  / _ `/ __/  '_/ / __ / __/ __/ _ `/ __/  '_/
+            /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
+            '''
 
-        # look at http://www.network-science.de/ascii/ for more fonts
-        # I like o8, poison.  This is smslant
-        print '''
-           __ __         __     ___  __  __           __  
-          / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
-         / _  / _ `/ __/  '_/ / __ / __/ __/ _ `/ __/  '_/
-        /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
-        '''
-
-        raw_input("\n\n\nPress enter to begin.")
-        # give players names.  PROBLEM: commands and data still use numbers to specify players!
-        # players_names = [ raw_input("Enter name for player {} of {}: ".format(i+1, num_players)).strip() for i in xrange(num_players) ]
+            raw_input("\n\n\nPress enter to begin.")
+            # give players names.  PROBLEM: commands and data still use numbers to specify players!
+            # players_names = [ raw_input("Enter name for player {} of {}: ".format(i+1, num_players)).strip() for i in xrange(num_players) ]
 
     def parse_move(self,move_str):
         
@@ -99,8 +103,8 @@ class Player(object):
                 return
 
             if words[3][1:].isdigit():
-                if not words[3].upper() in s.players_expl[s.player]:
-                    print "Not you exploit"
+                if not words[3].upper() in self.players_expl:
+                    print "Not your exploit"
                     return
             else:
                 print "Third word must be letter followed by number (no space)"
@@ -116,7 +120,7 @@ class Player(object):
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
             if words[2][1:].isdigit():
-                if not words[2].upper() in s.players_expl[s.player]:
+                if not words[2].upper() in self.players_expl:
                     print "Must apply a patch for an exploit you have"
                     return
             else:
@@ -124,7 +128,16 @@ class Player(object):
                 return
             move['exploit'] = words[2].upper()
             return move
-        
+            
+            
+            
+            
+            
+            
+            
+            
+            
+       
         elif move['action'] == 's':
             return move
                 
@@ -148,9 +161,9 @@ class Player(object):
         ## check for a new exploit
         if random.random() <= 1./6:
             ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-            while ne in s.players_expl[s.player]:
+            while ne in self.players_expl:
                 ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-            s.players_expl[s.player].append( ne )
+            self.players_expl.append(ne)#[s.player]
             print "\nYou found a new exploit! ", ne
     
     def update_output(self):
@@ -182,7 +195,7 @@ class Player(object):
                     v, 's' if v > 1 else '', k, s.board_os[k])
             
         print "\nYour exploits:"
-        for e in s.players_expl[s.player]:
+        for e in self.players_expl:
             print "{}{} - {} exploit # {}".format(e[0][0], e[1], e[0], e[1])
 
         print "\nTraced players: {}".format( "None" if len(s.players_traced[s.player]) == 0
