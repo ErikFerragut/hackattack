@@ -50,7 +50,7 @@ Player to store knowledge in knowledge system
 
 
 ## known bugs
-None
+hackattack.player line 123 errors the program before it can give the error message
 
 ## Recently fixed bugs
 ### when enter is repeatedly pressed, it causes this error

@@ -104,7 +104,7 @@ class Player(object):
 
             if words[3][1:].isdigit():
                 if not words[3].upper() in self.players_expl:
-                    print "Not you exploit"
+                    print "Not your exploit"
                     return
             else:
                 print "Third word must be letter followed by number (no space)"
