@@ -7,6 +7,7 @@ class GameState(object):
         self.exploits_per_os = 5
         self.start_with_exploits = 4
         self.vuln_prob = 0.8
+        self.player = 0
 
         self.detection_prob = { 'r':0.05, 'h':0.10, 'b':0.15, 'p':0.25, 's' : 0.30 }
 
@@ -26,10 +27,7 @@ class GameState(object):
         self.board_vuln = [ [ i for i in range(self.exploits_per_os)
                               if random.random() < self.vuln_prob ]
                        for h in xrange(self.num_hosts) ]
-
-
-
- #4b82aa8529fa5545ee6e35bd4d55f76c129aaecb
+                       
         self.players_expl = []
         for i in xrange(self.game.num_players):
             E = set([])
