@@ -2,7 +2,7 @@
 #
 # plans:
 # V 2.0 - added knowledge system
-# Future verseion in unknown order:
+# Future version in unknown order:
 #  - network game
 #  - private/public messaging capability
 #  - optional gui, maybe curses (maybe as a plug-in?)
