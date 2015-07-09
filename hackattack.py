@@ -160,7 +160,7 @@ class Game(object):
                 if move['from'] in self.players[playerB].own:
                     self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 elif move['to'] in self.players[playerB].own:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                    self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 
 
     def do_backdoor(self,move):
