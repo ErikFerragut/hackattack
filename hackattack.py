@@ -233,12 +233,13 @@ class Game(object):
     def new_patches(self):
         x = random.choice(self.state.OSs)
         y = random.randint(0,4)
-        for i in xrange(self.state.num_hosts):
-            if self.state.board_os[i] == x:
-                try:
-                    self.state.board_vuln[i].remove(y)
-                except:
-                    L = 0
+        if random.random()<=.15:
+            for i in xrange(self.state.num_hosts):
+                if self.state.board_os[i] == x:
+                    try:
+                        self.state.board_vuln[i].remove(y)
+                    except:
+                        L = 0
 
     def mainloop(self):
         self.state.player = 0
