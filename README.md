@@ -4,7 +4,7 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 ## to do items
 
 ### Finish modularizing the code
-1. move variables having to do with players to the player class (see GameState init) ~~players_own num_players~~
+1. ~~move variables having to do with players to the player class (see GameState init)~~
 2. ~~change do_ functions to use player.say() instead of print~~
 3. ~~move non-output parts from updateoutput to mainloop~~
 4. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
@@ -49,8 +49,11 @@ Player to store knowledge in knowledge system
 3. Incorporate new UI into player client
 
 
-## known bugs
+#a
 None
 
 ## Recently fixed bugs
+
 ### ~~when enter is repeatedly pressed, it causes this error~~
+
+### if you start with W0 you can still find W0 again
