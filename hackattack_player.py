@@ -21,6 +21,7 @@ class Player(object):
 
             # look at http://www.network-science.de/ascii/ for more fonts
             # I like o8, poison.  This is smslant
+            print 'me hacky attacky :)'
             print '''
                __ __         __     ___  __  __           __  
               / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
