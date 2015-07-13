@@ -29,7 +29,7 @@ from hackattack_player import *
 
 class Game(object):
     def __init__(self):
-        self.num_players = 4
+        self.num_players = 2
         self.state = GameState(self)
         self.move_funcs = {'r':self.do_recon, 'c':self.do_clean, 'h':self.do_hack,
                            'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos, 's' : self.do_scan}
@@ -66,8 +66,8 @@ class Game(object):
             
             if s != self.state.player:
                 if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
-                    player.say({'text':"Player {} accounts {}".format(s, self.game.players_own[s][move['from']]),
-                                'player':s, 'machine':move['from'], 'has accounts':self.game.players_own[s][move['from']]})
+                    player.say({'text':"Player {} accounts {}".format(s, self.players[s].own[move['from']]),
+                                'player':s, 'machine':move['from'], 'has accounts':self.players[s].own[move['from']]})
                     
         for playerB in xrange(self.num_players):
             

@@ -58,7 +58,7 @@ Player to store knowledge in knowledge system
 
 2. if you start with W0 you can still find W0 again
 
-3. hackattack.py line 68 in do_scan uses old form of players own
+3. ~~hackattack.py line 68 in do_scan uses old form of players own~~
 
 ## Recently fixed bugs
 
