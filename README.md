@@ -22,10 +22,11 @@ failed hack attempts~~
 7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
-1. Store what each player knows in the Player class
-2. Store all moves and move results
-3. Formalize the say method and store what was said
-4. Find this Easter Egg!!!!!! :)
+1. ~~Store events by machine~~
+2. ~~Store all moves and move results~~
+3. ~~Formalize the say method and store what was said~~
+4. ~~Store known info (e.g., OS, patches, accounts) from events~~
+5. Make "detected" and "news" use say function
 
 ### New user interface
 1. Design the information display to show all knowledge (update_output)
@@ -34,10 +35,10 @@ failed hack attempts~~
 4. Test UI separately
 
 ### Load and save game
-1. Develop serialize and deserialize functions for GameState and
-Player to store knowledge in knowledge system
+1. ~~Develop serialize and deserialize functions for GameState and
+Player to store knowledge in knowledge system~~
 2. Automatically save game after each player
-3. Allow some way to load a saved game
+3. ~~Allow some way to load a saved game~~
 
 ### Artificial intelligence
 1. Create a simple/random AI by making a variation of Player
@@ -48,26 +49,31 @@ Player to store knowledge in knowledge system
 1. Create a Player type that sends info and gets moves from a client
 2. Create the player client
 3. Incorporate new UI into player client
+4. Players can choose custom names
+
+
 
 
 ## known bugs
+
 hackattack.player line 123 errors the program before it can give the error message
 ## doesn't clarify hack success in detection / news
+
+1. ~~hackattack.player line 123 errors the program before it can give the error message~~
+
+2. ~~Given enough time, one could have multiples or duplicates of any exploit. the while block on line 168 doesn't work 
+because ne isn't appended yet
+tl;dr : you can get 2 of the same exploit~~
+
+3. ~~hackattack.py line 68 in do_scan uses old form of players own~~
+4. ~~skips turn if OS of patch is wrong but you own it~~ 
+5. ~~if x in hackattack_util is greater than .75, the program crashes~~
+6. Knowledge system doesnt show home pc in known operating systems
+7. things displayed in news are not incorporated into the knowledge system
+8. ~~ on line 203, may bug out.... unknown debug item printed every turn: this should be removed e.g. {0,[],[]}~~
+
 ## Recently fixed bugs
-### when enter is repeatedly pressed, it causes this error
 
-Select a move:
-Traceback (most recent call last):
-  File "hackattack.py", line 210, in <module>
-    g.mainloop()
-  File "hackattack.py", line 190, in mainloop
-    moves = player.get_moves()
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-202, in get_moves
-    move = self.parse_move(move_str)
-  File "C:\Users\Nathan\Documents\GitHub\hackattack\hackattack_player.py", line
-34, in parse_move
-    if words[0].lower() == 'd':
-IndexError: list index out of range
+### ~~when enter is repeatedly pressed, it causes this error~~
 
-### if you start with W0 you can still find W0 again
+
