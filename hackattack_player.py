@@ -23,7 +23,7 @@ class Player(object):
         self.traced = []   # list of players
         
         E = set([])
-        while len(E)<4:
+        while len(E)<20:
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
 
@@ -177,7 +177,7 @@ class Player(object):
                 
             while ne in self.players_expl:
                 ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-                    
+                
             self.players_expl.append(ne)#[s.player]
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
