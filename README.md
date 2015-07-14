@@ -35,10 +35,10 @@ failed hack attempts~~
 4. Test UI separately
 
 ### Load and save game
-1. Develop serialize and deserialize functions for GameState and
-Player to store knowledge in knowledge system
+1. ~~Develop serialize and deserialize functions for GameState and
+Player to store knowledge in knowledge system~~
 2. Automatically save game after each player
-3. Allow some way to load a saved game
+3. ~~Allow some way to load a saved game~~
 
 ### Artificial intelligence
 1. Create a simple/random AI by making a variation of Player
