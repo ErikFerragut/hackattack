@@ -54,7 +54,7 @@ Player to store knowledge in knowledge system~~
 
 
 ## known bugs
-1. hackattack.player line 123 errors the program before it can give the error message
+1. ~~hackattack.player line 123 errors the program before it can give the error message~~
 
 2. Given enough time, one could have multiples or duplicates of any exploit. the while block on line 168 doesn't work 
 because ne isn't appended yet
