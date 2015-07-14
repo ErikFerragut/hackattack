@@ -233,7 +233,7 @@ class Player(object):
                     self.min_accounts[m][p] if self.min_accounts[m][p] == self.max_accounts[m][p]
                     else 'maybe some')
                 
-        print "Known OSs:", "None" if len(self.oss) == 0 else ""
+        print "Known OSes:", "None" if len(self.oss) == 0 else ""
         for m,os in self.oss.iteritems():
             print '   Machine {} runs {}'.format(m, os)
 
@@ -256,7 +256,7 @@ class Player(object):
         print "<acting-machine> (H)ack <machine> <exploit>"
         print "<acting-machine> (B)ackdoor"
         print "<acting-machine> (P)atch <exploit>"
-        print "<acting-machine> (S)can <machine>"
+        print "<acting-machine> (S)can"
         print "(L)ogreview"
         print "(D)DoS <user>"
         print "(Q)uitAfterSave <filename>"
