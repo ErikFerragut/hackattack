@@ -7,9 +7,10 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 1. ~~move variables having to do with players to the player class (see GameState init)~~
 2. ~~change do_ functions to use player.say() instead of print~~
 3. ~~move non-output parts from updateoutput to mainloop~~
-4. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
-5. Make it so it works more uniformly for one screen and many
-6. Allow for player types (AI?) or other parameters (IP?) to be specified up front
+4. Create config file that it reads to set player names, probabilities, and other constants 
+
+### Develop test code
+1. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
 
 ### Game mechanics
 1. ~~Announce DDoS as news~~
@@ -33,6 +34,7 @@ failed hack attempts~~
 2. Create a new way to grab moves (parse_moves)
 3. Have a way to show move results (say)
 4. Test UI separately
+5. Make it so it works more uniformly for one screen and many
 
 ### Load and save game
 1. ~~Develop serialize and deserialize functions for GameState and
