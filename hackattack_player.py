@@ -1,8 +1,6 @@
 import random
 import hackattack_util
-
 from collections import defaultdict as ddict
-
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
@@ -23,7 +21,7 @@ class Player(object):
         self.traced = []   # list of players
         
         E = set([])
-        while len(E)<20:
+        while len(E)<4:
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
 
@@ -139,19 +137,24 @@ class Player(object):
         elif move['action'] == 'b':
             return move
         elif move['action'] == 'p':
+            move['exploit'] = words[2].upper()
             if len(words) != 3:
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
-            if words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
+            elif words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
                 print "Must apply a patch for an exploit you have"
                 return
+            #elif
+                #print "Third word must be a letter followed by a number (no space)"
+                #return
+            #elif move['exploit'][0].upper() == self.game.state.board_os[move['from']][0]:
+                #print 'Wrong Os'
+                #return
+                #the above has an error when it references board_os
             else:
-                print "Third word must be a letter followed by a number (no space)"
-                return
-            
-            move['exploit'] = words[2].upper()
-            #if words[2].lower() == words[0][self.boardOSs]:
-            return move
+                #move['exploit'] = words[2].upper()
+                #if words[2].lower() == words[0][self.boardOSs]:
+                return move
         elif move['action'] == 's':
             return move
                 
