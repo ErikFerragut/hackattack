@@ -49,6 +49,7 @@ Player to store knowledge in knowledge system~~
 1. Create a Player type that sends info and gets moves from a client
 2. Create the player client
 3. Incorporate new UI into player client
+4. Players can choose custom names
 
 
 
