@@ -26,6 +26,8 @@ import random
 import time
 from hackattack_gamestate import *
 from hackattack_player import *
+import sys
+
 
 class Game(object):
     def __init__(self):
@@ -121,7 +123,7 @@ class Game(object):
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
-                            self.state.players_traced[move['player']].add(p)
+                            self.state.players_traced[move['player']].append(p)
                             player.say({'text':"You traced {}!".format(self.state.players_names[p]), 'player':p, 'type':'trace'})
                             
         player.say({'text':"Clean completed on machine {}".format(move['from'])})
@@ -252,8 +254,6 @@ class Game(object):
                         pass
 
     def mainloop(self):
-        self.state.player = 0
-
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
@@ -272,6 +272,13 @@ class Game(object):
             
             moves = player.get_moves()
 
+            # handle save and load moves
+            if moves[0]['action'] == 'q':
+                open(moves[0]['filename'], 'w').write( self.state.to_json() )
+                print "Game saved as file {}".format(moves[0]['filename'])
+                print "Reload using  'python hackattack.py {}'".format(moves[0]['filename'])
+                break
+
             ### do all the actions and provide results
 
             player.say({'text':"\nMove results:"})
@@ -288,6 +295,13 @@ class Game(object):
             self.state.player = (self.state.player + 1) % self.num_players
 
 
+
 if __name__ == '__main__':
     g=Game()
+    if len(sys.argv) > 1:
+        S = '\n'.join(open(sys.argv[1], 'r').readlines())
+        g.state.from_json(S)
+    else:
+        self.state.player = 0
+
     g.mainloop()
