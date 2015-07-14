@@ -246,7 +246,7 @@ class Player(object):
         print "<acting-machine> (S)can <machine>"
         print "(L)ogreview"
         print "(D)DoS <user>"
-        print "Save and (Q)uit <filename>"
+        print "(Q)uitAndSave <filename>"
         
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)

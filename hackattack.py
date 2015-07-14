@@ -302,6 +302,6 @@ if __name__ == '__main__':
         S = '\n'.join(open(sys.argv[1], 'r').readlines())
         g.state.from_json(S)
     else:
-        self.state.player = 0
+        g.state.player = 0
 
     g.mainloop()
