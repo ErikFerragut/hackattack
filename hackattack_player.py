@@ -67,7 +67,13 @@ class Player(object):
                 print "You can only DDoS a player after you have traced them"
                 return
             return {'action':'d', 'user':user, 'player':s.player}
-        
+
+        if words[0].lower() == 'q':
+            if len(words) != 2:
+                print "Follow format: (Q)uit <save_file>"
+                return
+            return {'action':'q', 'filename':words[1]}
+                                        
         if len(words) < 2:
             print "Follow format: <acting-machine> <action> ... --or-- (D)DoS <user>"
             return
@@ -166,7 +172,8 @@ class Player(object):
             while ne in self.players_expl:
                 ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
             self.players_expl.append(ne)#[s.player]
-            self.news.append('You found a new exploit! ' + ne)
+            self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
+                      'exploit':ne})
     
     def update_output(self):
         # to do:
@@ -182,7 +189,8 @@ class Player(object):
         if self.status == 'won':
             print "You won!"
             return
-            
+
+        print s.news            
         if len(s.news[s.player]) == 0:
             print "No news to report on round {}".format(s.game_round)
         else:
@@ -238,6 +246,7 @@ class Player(object):
         print "<acting-machine> (S)can <machine>"
         print "(L)ogreview"
         print "(D)DoS <user>"
+        print "Save and (Q)uit <filename>"
         
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
@@ -250,7 +259,7 @@ class Player(object):
                     print "\n".join(map(str, self.log))
                     continue
                 move = self.parse_move(move_str)
-                if move != None and move['action'] != 'd' and move['from'] in [ m['from'] for m in moves]:
+                if move != None and move['action'] not in 'dq' and move['from'] in [ m['from'] for m in moves]:
                     print "Each machine can only have one move"
                     killed = [ m for m in moves if m['from'] == move['from'] ][0]
                     print "Replacing {} with {}".format(killed, move)
@@ -258,6 +267,10 @@ class Player(object):
             if move['action'] == 'd':
                 moves = [move]
                 print "DDoS is your only move this turn"
+                break
+            elif move['action'] == 'q':
+                moves = [move]
+                print "Saving and quitting"
                 break
             else:
                 moves.append(move)
