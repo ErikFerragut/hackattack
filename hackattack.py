@@ -238,7 +238,7 @@ class Game(object):
                 theplayer.say({'text':"DDOS was a tie", 'ddoser':move['player'], 'ddosee':move['user'], 'result':'tie'})
                 self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.state.players_names[player]))
                 for p in xrange(self.num_players):
-                    self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIRE".format(self.state.players_names[player].upper(), self.state.players_names[move['user']].upper() ))
+                    self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIE".format(self.state.players_names[player].upper(), self.state.players_names[move['user']].upper() ))
         else:
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             

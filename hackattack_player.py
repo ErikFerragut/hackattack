@@ -55,7 +55,7 @@ class Player(object):
 
         if len(words) == 0:
             return
-        
+         
         if words[0].lower() == 'd':        
             if len(words) != 2:
                 print "Follow format: (D)DoS <user>"
@@ -104,6 +104,9 @@ class Player(object):
                 return
             move['to'] = mac2
             return move
+        elif move['action'] == 'updownupdownleftrightleftrightabab':
+            print 'password accepted'
+            return
         elif move['action'] == 'c':
             return move
         elif move['action'] == 'h':
@@ -197,7 +200,7 @@ class Player(object):
             print "You won!"
             return
 
-        print s.news            
+        #print s.news            
         if len(s.news[s.player]) == 0:
             print "No news to report on round {}".format(s.game_round)
         else:

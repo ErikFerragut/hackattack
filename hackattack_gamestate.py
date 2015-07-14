@@ -52,11 +52,11 @@ class GameState(object):
         return json.dumps(savethis)
 
     def from_json(self, s):
-        # reload variable, convert any dict keys from str to nonstring as nec.
+        # reload variable, convert any dict keys from str to nonstring as fnec.
         j = json.loads(s)
         self.__dict__.update(j['state'])
         self.board_os = map(str, self.board_os)
-        self.news = { int(k):v for k,v in self.news.iteritems() }
+        #self.news = { int(k):v for k,v in self.news.iteritems() }
         self.game.__dict__.update(j['game'])
         for i in j['players']:
             P = self.game.players[int(i)]
