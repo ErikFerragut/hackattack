@@ -128,6 +128,7 @@ class Player(object):
             else:
                 print "Third word must be letter followed by number (no space)"
                 return
+                #:)
             
             move['to'] = mac2
             move['exploit'] = words[3].upper()
