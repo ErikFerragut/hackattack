@@ -52,7 +52,7 @@ Player to store knowledge in knowledge system
 
 ## known bugs
 hackattack.player line 123 errors the program before it can give the error message
-
+## doesn't clarify hack success in detection / news
 ## Recently fixed bugs
 ### when enter is repeatedly pressed, it causes this error
 

@@ -26,6 +26,7 @@ import random
 import time
 from hackattack_gamestate import *
 from hackattack_player import *
+from hackattack_tk import *
 
 class Game(object):
     def __init__(self):
@@ -42,7 +43,7 @@ class Game(object):
             start.add(random.randrange(self.state.num_hosts))
         start = list(start)
         random.shuffle(start)
-        self.players = [ Player(self, name,s) for name,s in zip(self.state.players_names, start) ]
+        self.players = [ Player_Tk(self, name,s) for name,s in zip(self.state.players_names, start) ]
         
 
 
@@ -243,11 +244,10 @@ class Game(object):
 
     def mainloop(self):
         self.state.player = 0
-
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
-            #self.new_patches()
+            self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
 
@@ -264,6 +264,8 @@ class Game(object):
 
             ### do all the actions and provide results
 
+            
+            
             player.say("\nMove results:")
             for move in moves:
                 player.say("You did move {}".format(move))
@@ -279,5 +281,7 @@ class Game(object):
 
 
 if __name__ == '__main__':
+    #pygameSay("test")
+    #pygame.display.update()
     g=Game()
     g.mainloop()
