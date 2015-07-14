@@ -22,10 +22,10 @@ failed hack attempts~~
 7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
-1. Store events by machine
+1. ~~Store events by machine~~
 2. ~~Store all moves and move results~~
 3. ~~Formalize the say method and store what was said~~
-4. Store known info (e.g., OS, patches, accounts) from events
+4. ~~Store known info (e.g., OS, patches, accounts) from events~~
 5. Make "detected" and "news" use say function
 
 ### New user interface
@@ -35,10 +35,10 @@ failed hack attempts~~
 4. Test UI separately
 
 ### Load and save game
-1. Develop serialize and deserialize functions for GameState and
-Player to store knowledge in knowledge system
+1. ~~Develop serialize and deserialize functions for GameState and
+Player to store knowledge in knowledge system~~
 2. Automatically save game after each player
-3. Allow some way to load a saved game
+3. ~~Allow some way to load a saved game~~
 
 ### Artificial intelligence
 1. Create a simple/random AI by making a variation of Player
