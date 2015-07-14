@@ -56,9 +56,13 @@ Player to store knowledge in knowledge system
 ## known bugs
 1. hackattack.player line 123 errors the program before it can give the error message
 
-2. if you start with W0 you can still find W0 again
+2. Given enough time, one could have multiples or duplicates of any exploit. the while block on line 168 doesn't work 
+because ne isn't appended yet
+tl;dr : you can get 2 of the same exploit
 
 3. ~~hackattack.py line 68 in do_scan uses old form of players own~~
+4. skips turn if OS of patch is wrong but you own it 
+5. if x in hackattack_util is greater than .75, the program crashes
 
 ## Recently fixed bugs
 

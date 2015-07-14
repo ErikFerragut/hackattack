@@ -1,6 +1,6 @@
 import random
 import hackattack_util
-
+import hackattack_gamestate
 class Player(object):
     '''Handle all server-side interactions with the user'''
     def __init__(self, game, name, start):
@@ -127,9 +127,13 @@ class Player(object):
             else:
                 print "Third word must be a letter followed by a number (no space)"
                 return
-            move['exploit'] = words[2].upper()
-            return move
             
+            move['exploit'] = words[2].upper()
+            #if words[2].lower() == words[0][self.boardOSs]:
+            return move
+            #else:
+             #  print "there is a bug"
+              # return
             
             
             
@@ -160,10 +164,14 @@ class Player(object):
             
         
         ## check for a new exploit
-        if random.random() <= 1./6:
+        if random.random() <= 1. / 6:
+        
             ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
+            #self.players_expl.append(ne)
+                
             while ne in self.players_expl:
                 ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
+                    
             self.players_expl.append(ne)#[s.player]
             print "\nYou found a new exploit! ", ne
     

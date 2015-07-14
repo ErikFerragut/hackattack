@@ -9,3 +9,4 @@ def pick_exp_int():
         x -= prob
         prob *=.5
     return i-1
+#pick_exp_int()
