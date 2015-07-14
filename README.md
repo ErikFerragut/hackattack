@@ -64,7 +64,7 @@ tl;dr : you can get 2 of the same exploit~~
 4. ~~skips turn if OS of patch is wrong but you own it~~ 
 5. ~~if x in hackattack_util is greater than .75, the program crashes~~
 6. Knowledge system doesnt show home pc in known OOOOOOOOSSSSSSSSEEEEEEEESSSSSS
-7. things displayed in news are not incorporated into te knowledge system
+7. things displayed in news are not incorporated into the knowledge system
 8. unknown debug item printed every turn: this should be removed e.g. {0,[],[]}
 
 ## Recently fixed bugs
