@@ -66,8 +66,10 @@ class Game(object):
             
             if s != self.state.player:
                 if move['from'] in self.players[s].own and self.players[s].own[move['from']] > 0:
-                    player.say({'text':"Player {} accounts {}".format(s, self.players[s].own[move['from']]),
-                                'player':s, 'machine':move['from'], 'has accounts':self.players[s].own[move['from']]})
+                    player.say({'text':"Player {} accounts {}".format(s,
+                                self.players[s].own[move['from']]),
+                                'player':s, 'machine':move['from'], 'type':'accounts',
+                                'has accounts':self.players[s].own[move['from']]})
                     
         for playerB in xrange(self.num_players):
             
@@ -86,14 +88,15 @@ class Game(object):
                     
     def do_recon(self,move):
         player = self.players[move['player']]
-        player.say({'text':"Machine {} is running the {} OS".format(move['to'], self.state.board_os[move['to']]),
+        player.say({'text':"Machine {} is running the {} OS".format(move['to'],
+                    self.state.board_os[move['to']]), 'type':'os',
                     'action':'r', 'machine':move['to'], 'OS':self.state.board_os[move['to']]})
         openings = self.working_attacks(move['player'], move['to'])
         if len(openings) == 0:
-            player.say({'text':"You have no exploits for that machine.", 'machine':move['to'], 'exploitable with':[]}) 
+            player.say({'text':"You have no exploits for that machine.", 'machine':move['to'], 'exploitable with':[], 'type':'exploits'}) 
         else:
             player.say({'text':"You can hack it with {}".format(openings), 'machine':move['to'],
-                        'exploitable with':[o for o in openings]})
+                        'exploitable with':[o for o in openings], 'type':'exploits'})
 
         # check for detection
         for playerB in xrange(self.num_players):
@@ -112,14 +115,14 @@ class Game(object):
                     if self.players[p].own[move['from']] == 0:
                         self.players[p].own.pop(move['from'])
                     player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.state.players_names[p]),
-                                'machine':move['from'], 'accounts removed':num_removed, 'player':p})
+                                'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
                         self.state.players_names[move['player']], num_removed, move['from']))
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
                             self.state.players_traced[move['player']].add(p)
-                            player.say({'text':"You traced {}!".format(self.state.players_names[p])})
+                            player.say({'text':"You traced {}!".format(self.state.players_names[p]), 'player':p, 'type':'trace'})
                             
         player.say({'text':"Clean completed on machine {}".format(move['from'])})
 
@@ -136,9 +139,11 @@ class Game(object):
         if worked:
             theplayer.say({'text':"Hack succeeded", 'hacked':move['to'], 'with':move['exploit'], 'from':move['from']})
             for playerB in xrange(self.num_players):
+                if playerB == move['player']:
+                    continue   # don't tell someone what they themselves did
                 if random.random() < self.state.detection_prob['h']:
                     if move['from'] in self.players[playerB].own:
-                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                        self.detected( playerB,  "{} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                     elif move['to'] in self.players[playerB].own:
                         self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
             # add access
@@ -147,7 +152,9 @@ class Game(object):
             else:
                 theplayer.own[move['to']] += 1
         else:
-            theplayer.say({'text':"Hack failed", 'failed hack':move['to'], 'with':move['exploit'], 'from':move['from']})
+            theplayer.say({'text':"Hack failed", 'machine':move['to'],
+                           'with':move['exploit'], 'from':move['from'],
+                           'type':'failed hack'})
             self.state.detection_prob['h'] = self.state.detection_prob['h'] * 3
             
             for playerB in xrange(self.num_players):
@@ -172,9 +179,10 @@ class Game(object):
                 if move['from'] in self.players[playerB].own:
                     self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
 
-        theplayer.say({'text':"One backdoor added to machine {}; you now have {}".format(move['from'],
-                                                                      theplayer.own[move['from']]),
-                        'machine':move['from'], 'have accounts':theplayer.own[move['from']]})
+        theplayer.say({'text':"One backdoor added to machine {}; you now have {}".format(
+            move['from'], theplayer.own[move['from']]),
+            'machine':move['from'], 'type':'backdoor',
+            'have accounts':theplayer.own[move['from']]})
         
     def do_patch(self,move):
         theplayer = self.players[move['player']]
@@ -182,12 +190,15 @@ class Game(object):
             patch_id = int(move['exploit'][1:])
             if patch_id in self.state.board_patches[move['from']]:
                 self.state.board_patches[move['from']].append(patch_id)
-                theplayer.say({'text':"Vulnerability patched", 'machine':move['from'], 'patched':patch_id, 'fullname':move['exploit']})
+                theplayer.say({'text':"Vulnerability patched", 'machine':move['from'],
+                               'patched':patch_id, 'fullname':move['exploit'],
+                               'type':'patch'})
             else:
-                theplayer.say({'text':"Vulnerability was already patched", 'machine':move['from'], 'patched':patch_id, 'fullname':move['exploit']})
+                theplayer.say({'text':"Vulnerability was already patched",
+                               'machine':move['from'], 'patched':patch_id,
+                               'fullname':move['exploit'], 'type':'patch'})
         else:
-            theplayer.say({'text':"Failed patch due to OS mismatch of {} on {}".format(move['exploit'],
-                                                                       self.state.board_os[move['from']])})
+            theplayer.say({'text':"Failed patch due to OS mismatch of {} on {}".format(move['exploit'], self.state.board_os[move['from']])})
 
         #if random.random() < self.state.detection_prob['p']:
            # self.detected(move['from'], "{} patched machine {}".format(self.state.players_names[move['player']],
@@ -265,7 +276,7 @@ class Game(object):
 
             player.say({'text':"\nMove results:"})
             for move in moves:
-                player.say({'text':"You did move {}".format(move), 'move':move})
+                # player.say({'text':"You did move {}".format(move), 'move':move})
                 if move['action'] in self.move_funcs:
                     self.move_funcs[move['action']](move)
                 else:

@@ -22,10 +22,10 @@ failed hack attempts~~
 7. ~~Each player checks for detection separately~~
 
 ### Knowledge system
-1. Store events by machine
+1. ~~Store events by machine~~
 2. ~~Store all moves and move results~~
 3. ~~Formalize the say method and store what was said~~
-4. Store known info (e.g., OS, patches, accounts) from events
+4. ~~Store known info (e.g., OS, patches, accounts) from events~~
 5. Make "detected" and "news" use say function
 
 ### New user interface
