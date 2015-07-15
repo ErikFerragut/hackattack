@@ -40,11 +40,8 @@ class Player(object):
             '''
 
             raw_input("\n\n\nPress enter to begin.")
-            # give players names.  PROBLEM: commands and data still use numbers to specify players!
-            # players_names = [ raw_input("Enter name for player {} of {}: ".format(i+1, num_players)).strip() for i in xrange(num_players) ]
 
     def parse_move(self,move_str):
-        
         """Return move {'from':from_machine, 'to':to_machine, 'player':player,
         'exploit':exploit, 'user':target_user, 'action':action} based on an input
         of the form 'machine action parameters' and for player (global variable)"""
@@ -172,7 +169,7 @@ class Player(object):
         s = self.game.state
         # for each player (if they haven't lost)
         ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
+        raw_input("\n"*100 + "Ready {}? ".format(self.game.player_names[s.player]))
             
         
         ## check for a new exploit
@@ -197,7 +194,7 @@ class Player(object):
         s = self.game.state
         ### output stuff to update the player
         if self.status == 'out':
-            print "{} is out".format(s.players_names[s.player])
+            print "{} is out".format(self.game.player_names[s.player])
             return
         if self.status == 'won':
             print "You won!"

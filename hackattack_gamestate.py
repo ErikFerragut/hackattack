@@ -20,7 +20,7 @@ class GameState(object):
             for i in xrange(self.exploits_per_os):
                 self.all_exploits.append( (o,i) )'''
         self.all_exploits = [ (o,i) for o in self.OSs for i in xrange(self.exploits_per_os) ]
-        
+
         self.num_hosts = 5*self.game.num_players
 
 
