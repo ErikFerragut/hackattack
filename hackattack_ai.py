@@ -73,3 +73,51 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for machines that are involved
         # store inferred information
+        
+class NathanAI(AI):
+    def __init__(self, game, name, start):
+        super(NathanAI, self).__init__()
+        self.counter = 0
+        
+    def get_moves(self):
+        moves = []
+        
+        for p in self.own:
+            
+            # decide whether to fortify or expand
+            unpatched_exploits = [ e for e in self.players_expl 
+                 if e[0] == self.oss[p] and int(e[1:]) not in self.patches[p] ]
+            if len(unpatched_exploits) > 0: # fortify
+                moves.append({'player':self.game.state.player,
+                              'action':'b', 'from':p})
+            else:                     # expand
+                moves.append({'player':self.game.state.player,
+                              'action':'h', 'from':p,
+                              'to':random.randint(0,self.game.state.num_hosts),
+                              'exploit':random.choice(self.players_expl)})
+        return moves
+class EthanAI(AI):
+    import random
+    def __init__(self, game, name, start):
+        super(EthanAI, self).__init__()
+        easy_hacks = []
+        easy_hacks.append(computer if you have an exploit for known OS and a player is on it)
+        turns_since_c = []
+    def func1()
+        when len(moves) < len(self.own)            
+            if ?.known accounts = self.own:
+                if len(easy_hacks) = 0:
+                    use other computer to backdoor by hacking then clean on original computer
+                else clean
+            elif len(easy_hacks) > 0:
+                do them
+            else do recon you don't know
+        return moves
+    def func2():
+        if ?.known accounts = self.own:
+                use other computer to backdoor by hacking then clean on original computer
+        if turns_since_c > random.randint(2,3)
+        
+    if len(self.own) < 3:
+        moves = func1
+        
