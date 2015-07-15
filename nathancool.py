@@ -5,6 +5,6 @@ class Nathan(AI):
         for p in self.own:
             # decide whether to fortify or expand
             
-                moves.append({'player':self.game.state.player,
-                              'action':'b', 'from':p})
+            moves.append({'player':self.game.state.player,
+                          'action':'b', 'from':p})
         return moves
