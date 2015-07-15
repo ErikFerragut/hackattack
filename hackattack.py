@@ -33,7 +33,7 @@ import sys
 class Game(object):
     def __init__(self):
         # all players
-        player_types = [ Player, AI, AI ]
+        player_types = [ Player, AI ]
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
         
@@ -46,7 +46,7 @@ class Game(object):
         self.player_names = [ "Player {}".format(i)
                                      for i in xrange(self.num_players) ]
         
-        self.state = GameState(self)
+        self.state = GameState(self) 
         self.players = [ P(self, name, s)
                          for P,name,s in zip(player_types, self.player_names, start) ]
 

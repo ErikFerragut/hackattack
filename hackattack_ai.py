@@ -73,3 +73,15 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for machines that are involved
         # store inferred information
+class Andrew(AI):
+    def get_moves(self):
+        import random
+        moves = []
+        for p in self.own:
+            # decide whether to fortify or expand
+            if vuln == []:
+                moves.append({'player': self.game.state.player, 'action' : 'r', 'from' : p, 'to' : random.randint(0, self.game.state.num_hosts)}) 
+            else:
+                moves.append({'player':self.game.state.player,
+                              'action':'b', 'from':p})
+        return moves
