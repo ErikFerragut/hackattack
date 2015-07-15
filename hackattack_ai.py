@@ -107,13 +107,16 @@ class EthanAI(AI):
         easy_hacks.append(computer if you have an exploit for known OS and a player is on it)
         turns_since_c
     def func1():
-        when len(moves) < len(self.own)            
+        when len(moves) < len(self.own)#:           
             if #any in self.known accounts = any in self.own:
                 if len(easy_hacks) = 0:
                     use other computer to backdoor by hacking then clean on original computer
                 else clean
             elif len(easy_hacks) > 0:
-                do them
+                moves.append({'player':self.game.state.player,
+                                  'action':'h', 'from':p,
+                                  'to':random.choice(easy_hacks),
+                                  'exploit':random expl with OS the same as target})
             else moves.append({'player':self.game.state.player,
                                'action':r, 'from':p,
                                'to'rendom.randint(0,self.game.state.num_hosts)})#should not recon computers in known OSes
@@ -135,7 +138,8 @@ class EthanAI(AI):
             elif war possible:
                 start war
             else return recon
-        
+
+    update_lists    
     if len(self.own) < 3:
         moves = func1
     if len(self.own) >2 and <13
