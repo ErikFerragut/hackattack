@@ -137,7 +137,7 @@ class EthanAI(AI):
                 do them
             elif war possible:
                 start war
-            else return recon'''
+            else return recon'''    
 
     update_lists    
     if len(self.own) < 3:
