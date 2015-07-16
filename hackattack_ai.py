@@ -178,6 +178,7 @@ class JacobAI(AI):
                               'exploit':random.choice(self.players_expl)})'''
 
 class NathanAI(AI):
+    import random
     def __init__(self, game, name, start):
         super(NathanAI, self).__init__(game, name, start)
         self.counter = 0
@@ -188,17 +189,17 @@ class NathanAI(AI):
         for p in self.own:
             
             # decide if patching is possible
-            print self.oss, self.players_expl, self.game.state.board_patches[p], "!!!"
+            #print self.oss, self.players_expl, self.game.state.board_patches[p], "!!!"
             unpatched_exploits = [ e for e in self.players_expl 
                  if e[0] == self.oss[p][0] and self.patches[p][int(e[1:])] != True ]
             if len(unpatched_exploits) > 0: # fortify
                 moves.append({'player':self.game.state.player,'from':p,
                               'action':'p', 'exploit':random.choice(unpatched_exploits)})
-           elif self.counter == 0:
-                self.counter = 1
-                moves.append({'player':self.game.state.player,'from':p, 'action':'p', 'recon': self.own)
-           else:                     # expand
-                moves.append({'player':self.game.state.player,
+            #elif self.counter == 0 and len(unpatched_exploits) == 0:
+            #    self.counter = 1
+            #    moves.append({'player':self.game.state.player,'from':p, 'action':'r', 'to':random.choice(self.own)})
+            else:                     # expand
+                 moves.append({'player':self.game.state.player,
                               'action':'b', 'from':p})
                 
         return moves
@@ -230,12 +231,13 @@ class EthanAI(AI):
                                'to'rendom.randint(0,self.game.state.num_hosts)})#should not recon computers in known OSes
         return moves
     def war():
-        '''recon target if not already done
+        recon target if not already done
         hack target with three computers
         if some remain but you were cleaned hack with 1 - number removed
         if some remain and not cleaned clean then scan if nothing detected
         if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan'''
-    def func2():
+'''
+        def func2():
         when len(moves) < len(self.own) 
             if ?.known accounts = self.own:
                     use other computer to backdoor by hacking then clean on original computer
@@ -251,15 +253,15 @@ class EthanAI(AI):
     if len(self.own) < 3:
         moves = func1
     if len(self.own) >2 and <13
-        moves = func2
-                    '''if random.random() < 0.3: # fortify
-                    moves.append({'player':self.game.state.player,
-                                  'action':'b', 'from':p})
-                else:                     # expand
-                    moves.append({'player':self.game.state.player,
-                                  'action':'h', 'from':p,
-                                  'to':random.randint(0,self.game.state.num_hosts),
-                                  'exploit':random.choice(self.players_expl)})'''
+        moves = func2'''
+        #######'''if random.random() < 0.3: # fortify
+                  ####  moves.append({'player':self.game.state.player,
+                           #       'action':'b', 'from':p})
+              ##  else:                     # expand
+                  #  moves.append({'player':self.game.state.player,
+                       #           'action':'h', 'from':p,
+                       #           'to':random.randint(0,self.game.state.num_hosts),
+                       #           'exploit':random.choice(self.players_expl)})'''
         
 class Andrew(AI):
     def get_moves(self):
@@ -274,5 +276,4 @@ class Andrew(AI):
                               'action':'b', 'from':p})
         return moves
 
-'''
 
