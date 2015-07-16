@@ -8,8 +8,7 @@ class NetPlayer(Player):
         # List to keep track of socket descriptors
         self.CONNECTION_LIST = []
         self.RECV_BUFFER = 4096 # Advisable to keep it as an exponent of 2
-        self.PORT = 5000
-     
+        self.PORT = 5000 
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # this has no effect, why ?
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -37,13 +36,13 @@ class NetPlayer(Player):
         # do post stuff
 
     def display(self, string):
-        try:
-            self.sock.send(message)
-        except:
+       # try:
+	 self.sock.send(str(string))
+       # except:
             # broken socket connection may be, chat client pressed ctrl+c for example
-            self.CONNECTION_LIST.remove(self.sock)
-	    self.sock.close()
-            print "Client (%s, %s) is offline" % self.addr
+           # self.CONNECTION_LIST.remove(self.sock)
+	   # self.sock.close()
+           # print "Client (%s, %s) is offline" % self.addr
 
     def raw_input(self, string):
         self.display(string)
