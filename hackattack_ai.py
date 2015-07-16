@@ -102,25 +102,57 @@ class EthanAI(AI):
     def __init__(self, game, name, start):
         super(EthanAI, self).__init__()
         easy_hacks = []
+        turns_since_c = ()
+        recon = moves.append({'player':self.game.state.player,'action':r, 'from':p,'to'random.randint(0,self.game.state.num_hosts)})#should not recon computers in known OSes
+    def update_lists():
         easy_hacks.append(computer if you have an exploit for known OS and a player is on it)
-        turns_since_c = []
-    def func1()
-        when len(moves) < len(self.own)            
-            if ?.known accounts = self.own:
+        turns_since_c
+    def func1():
+        when len(moves) < len(self.own)#:           
+            if #any in self.known accounts = any in self.own:
                 if len(easy_hacks) = 0:
                     use other computer to backdoor by hacking then clean on original computer
                 else clean
             elif len(easy_hacks) > 0:
-                do them
-            else do recon you don't know
+                moves.append({'player':self.game.state.player,
+                                  'action':'h', 'from':p,
+                                  'to':random.choice(easy_hacks),
+                                  'exploit':random expl with OS the same as target})
+            else moves.append({'player':self.game.state.player,
+                               'action':r, 'from':p,
+                               'to'rendom.randint(0,self.game.state.num_hosts)})#should not recon computers in known OSes
         return moves
+    def war():
+        '''recon target if not already done
+        hack target with three computers
+        if some remain but you were cleaned hack with 1 - number removed
+        if some remain and not cleaned clean then scan if nothing detected
+        if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan'''
     def func2():
-        if ?.known accounts = self.own:
-                use other computer to backdoor by hacking then clean on original computer
-        if turns_since_c > random.randint(2,3)
-        
+        when len(moves) < len(self.own) 
+            if ?.known accounts = self.own:
+                    use other computer to backdoor by hacking then clean on original computer
+            elif turns_since_c > random.randint(2,3)
+                clean
+            elif len(easy_hacks) > 0:
+                do them
+            elif war possible:
+                start war
+            else return recon
+
+    update_lists    
     if len(self.own) < 3:
         moves = func1
+    if len(self.own) >2 and <13
+        moves = func2
+                    '''if random.random() < 0.3: # fortify
+                    moves.append({'player':self.game.state.player,
+                                  'action':'b', 'from':p})
+                else:                     # expand
+                    moves.append({'player':self.game.state.player,
+                                  'action':'h', 'from':p,
+                                  'to':random.randint(0,self.game.state.num_hosts),
+                                  'exploit':random.choice(self.players_expl)})'''
         
 class Andrew(AI):
     def get_moves(self):
