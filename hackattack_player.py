@@ -37,12 +37,12 @@ class Player(object):
             # look at http://www.network-science.de/ascii/ for more fonts
             # I like o8, poison.  This is smslant
             
-            self.display({'text': '''
+            self.display('''
                __ __         __     ___  __  __           __  
               / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
              / _  / _ `/ __/  '_/ / __ / __/ __/ _ `/ __/  '_/
             /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
-            '''})
+            ''')
 
             raw_input("\n\n\nPress enter to begin.")
 
