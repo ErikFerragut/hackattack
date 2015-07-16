@@ -83,6 +83,7 @@ class NathanAI(AI):
         moves = []
         
         for p in self.own:
+            
             # decide if patching is possible
             print self.oss, self.players_expl, self.game.state.board_patches[p], "!!!"
             unpatched_exploits = [ e for e in self.players_expl 
@@ -90,7 +91,10 @@ class NathanAI(AI):
             if len(unpatched_exploits) > 0: # fortify
                 moves.append({'player':self.game.state.player,'from':p,
                               'action':'p', 'exploit':random.choice(unpatched_exploits)})
-            else:                     # expand
+           elif self.counter == 0:
+                self.counter = 1
+                moves.append({'player':self.game.state.player,'from':p, 'action':'p', 'recon': self.own)
+           else:                     # expand
                 moves.append({'player':self.game.state.player,
                               'action':'b', 'from':p})
                 
