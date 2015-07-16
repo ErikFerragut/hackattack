@@ -27,7 +27,7 @@ import time
 from hackattack_gamestate import *
 
 from hackattack_player import *
-from hackattack_tk import *
+#from hackattack_tk import *
 from hackattack_ai import *
 from hackattack_NetPlayer import *
 #from hackattack_ai import *
@@ -38,7 +38,7 @@ class Game(object):
     def __init__(self):
         # all players
 
-        player_types = [ Player, NetPlayer ]
+        player_types = [ Player, EthanAI ]
 
 
         self.num_players = len(player_types)

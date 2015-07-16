@@ -73,8 +73,7 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for machines that are involved
         # store inferred information
-        
-class NathanAI(AI):
+"""class NathanAI(AI):
     def __init__(self, game, name, start):
         super(NathanAI, self).__init__()
         self.counter = 0
@@ -95,30 +94,33 @@ class NathanAI(AI):
                               'action':'p', 'from':p,
                               'to':random.randint(0,self.game.state.num_hosts),
                               'exploit':random.choice(self.players_expl)})
-        return moves
+        return moves"""
 class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
         super(EthanAI, self).__init__()
         self.easy_hacks = []
         self.turns_since_c = {n:0 for n in self.own} 
-        self.recon = moves.append({'player':self.game.state.player,'action':r, 'from':p,'to'random.randint(0,self.game.state.num_hosts)})
-        #should not recon computers in known OSes
     def update_lists():
         #self.easy_hacks.append(m for m in self.patches if any [l == False for l in self.patches[m]]
-            for i in self.turns_since_c:
-                self.turns_since_c[i] += 1
+        for i in xrange(self.own):
+            if i not in self.turns_since_c:
+                self.turns_since_c.append({i:0})
+        for h in self.turns_since_c:
+            self.turns_since_c[h] += 1
         return
     def func1():
-        when len(moves) < len(self.own)#:           
-            for i in xrange(self.own) if i in self.known_accounts:
-                {'player':self.game.state.player,'action':'c', 'from':i}
+        #DDoS
+        while len(moves) < len(self.own):           
+            for i in xrange(self.own):
+                if i in self.known_accounts:
+                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
                 #if len(easy_hacks) = 0:
                     #use other computer to backdoor by hacking then clean on original computer
                 # else clean
             if len(easy_hacks) > 0:
                 moves.append({'player':self.game.state.player,'action':'h', 'from':p,'to':#j in random.choice(easy_hacks),'exploit':h in self.players_expl if [h] in [j]})
-            else moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'#i in self.game.state.num_hosts if i not in known_OSes)})
+            else moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'#y in self.game.state.num_hosts if y not in known_OSes)})
             #should not recon computers in known OSes
         return moves
     #def war():
@@ -128,8 +130,8 @@ class EthanAI(AI):
         if some remain and not cleaned clean then scan if nothing detected
         if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan'''
     #def func2():
-        '''when len(moves) < len(self.own) 
-            if ?.known accounts = self.own:
+        when len(moves) < len(self.own) 
+            if self.known accounts = self.own:
                     use other computer to backdoor by hacking then clean on original computer
             elif turns_since_c > random.randint(2,3)
                 clean
@@ -137,13 +139,13 @@ class EthanAI(AI):
                 do them
             elif war possible:
                 start war
-            else return recon'''    
+            else return recon
 
-    update_lists    
+    update_lists()    
     if len(self.own) < 3:
         moves = func1
-    if len(self.own) >2 and <13
-        moves = func2
+    #if len(self.own) >2 and <13
+        #moves = func2
                     '''if random.random() < 0.3: # fortify
                     moves.append({'player':self.game.state.player,
                                   'action':'b', 'from':p})
