@@ -1,8 +1,6 @@
 import random
 import hackattack_util
-
 from collections import defaultdict as ddict
-
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
@@ -23,7 +21,7 @@ class Player(object):
         self.traced = []   # list of players
         
         E = set([])
-        while len(E)<20:
+        while len(E)<4:
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
         
@@ -47,11 +45,8 @@ class Player(object):
             '''
 
             raw_input("\n\n\nPress enter to begin.")
-            # give players names.  PROBLEM: commands and data still use numbers to specify players!
-            # players_names = [ raw_input("Enter name for player {} of {}: ".format(i+1, num_players)).strip() for i in xrange(num_players) ]
 
     def parse_move(self,move_str):
-        
         """Return move {'from':from_machine, 'to':to_machine, 'player':player,
         'exploit':exploit, 'user':target_user, 'action':action} based on an input
         of the form 'machine action parameters' and for player (global variable)"""
@@ -144,19 +139,24 @@ class Player(object):
         elif move['action'] == 'b':
             return move
         elif move['action'] == 'p':
+            move['exploit'] = words[2].upper()
             if len(words) != 3:
                 print "Follow format: <acting-machine> (P)atch <exploit>"
                 return
-            if words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
+            elif words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
                 print "Must apply a patch for an exploit you have"
                 return
+            #elif
+                #print "Third word must be a letter followed by a number (no space)"
+                #return
+            #elif move['exploit'][0].upper() == self.game.state.board_os[move['from']][0]:
+                #print 'Wrong Os'
+                #return
+                #the above has an error when it references board_os
             else:
-                print "Third word must be a letter followed by a number (no space)"
-                return
-            
-            move['exploit'] = words[2].upper()
-            #if words[2].lower() == words[0][self.boardOSs]:
-            return move
+                #move['exploit'] = words[2].upper()
+                #if words[2].lower() == words[0][self.boardOSs]:
+                return move
         elif move['action'] == 's':
             return move
                 
@@ -174,7 +174,7 @@ class Player(object):
         s = self.game.state
         # for each player (if they haven't lost)
         ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(s.players_names[s.player]))
+        raw_input("\n"*100 + "Ready {}? ".format(self.game.player_names[s.player]))
             
         
         ## check for a new exploit
@@ -199,7 +199,7 @@ class Player(object):
         s = self.game.state
         ### output stuff to update the player
         if self.status == 'out':
-            print "{} is out".format(s.players_names[s.player])
+            print "{} is out".format(self.game.player_names[s.player])
             return
         if self.status == 'won':
             print "You won!"
