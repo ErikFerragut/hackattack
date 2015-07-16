@@ -32,16 +32,16 @@ class AI(Player):
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
-    def update_output(self):
-        pass
+    #def update_output(self):
+    #   pass
     
 
-    def turn_done(self):
-        pass
+    #def turn_done(self):
+    #   pass
         
     def say(self, said):
         '''How the player class receives messages from the game.'''
-        # print said['text']
+        print said['text']
 
         if 'type' not in said:
             said['type'] = 'not_given'
@@ -77,7 +77,7 @@ class AI(Player):
 class NathanAI(AI):
     import random
     def __init__(self, game, name, start):
-        super(NathanAI, self).__init__()
+        super(NathanAI, self).__init__(game, name, start)
         self.counter = 0
         
     def get_moves(self):
@@ -100,7 +100,7 @@ class NathanAI(AI):
         #elif self.counter == 0 and len(unpatched_exploits) == 0:
             #    self.counter = 1
             #    moves.append({'player':self.game.state.player,'from':p, 'action':'r', 'to':random.choice(self.own)})
-class EthanAI(AI):
+"""class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
         super(EthanAI, self).__init__()
@@ -175,3 +175,4 @@ class Andrew(AI):
                               'action':'b', 'from':p})
         return moves
 
+"""
