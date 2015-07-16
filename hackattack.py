@@ -26,14 +26,15 @@ import random
 import time
 from hackattack_gamestate import *
 from hackattack_player import *
-from hackattack_ai import *
+from hackattack_NetPlayer import *
+#from hackattack_ai import *
 import sys
 
 
 class Game(object):
     def __init__(self):
         # all players
-        player_types = [ Player, AI ]
+        player_types = [ Player, NetPlayer ]
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
         

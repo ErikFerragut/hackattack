@@ -217,7 +217,7 @@ class Player(object):
                 self.display("{} account{} on machine {}, which runs the {} OS".format(
                     v, 's' if v > 1 else '', k, s.board_os[k]))
             
-        self.display("Your exploits:", ", ".join(sorted(self.players_expl)))
+        self.display(("Your exploits:", ", ".join(sorted(self.players_expl))))
         # for e in self.players_expl:
         #     print "{}{} - {} exploit # {}".format(e[0][0], e[1], e[0], e[1])
 
@@ -225,17 +225,17 @@ class Player(object):
                                              else " ".join(map(str, s.players_traced[s.player])) ))
 
         # new knowledge system...
-        self.display("Known accounts:", "None" if len(self.min_accounts) == 0 else "")
+        self.display(("Known accounts:", "None" if len(self.min_accounts) == 0 else ""))
         for m in self.min_accounts:
             self.display('Machine {}:'.format(m))
             for p in self.min_accounts[m]:
-                self.display('   Player {} has {} accounts'.format(p,
+                self.display(('   Player {} has {} accounts'.format(p,
                     self.min_accounts[m][p] if self.min_accounts[m][p] == self.max_accounts[m][p]
-                    else 'maybe some'))
+                    else 'maybe some')))
                 
-        self.display("Known OSes:", "None" if len(self.oss) == 0 else "")
+        self.display(("Known OSes:", "None" if len(self.oss) == 0 else ""))
         for m,os in self.oss.iteritems():
-            self.display('   Machine {} runs {}'.format(m, os))
+            self.display(('   Machine {} runs {}'.format(m, os)))
 
         if len(self.patches) == 0:
             self.display("Known Patches: None")
@@ -244,9 +244,9 @@ class Player(object):
             patched = [ str(p) for p in self.patches[m] if self.patches[m][p] ]
             vuln    = [ str(p) for p in self.patches[m] if not self.patches[m][p] ]
             if len(patched) > 0:
-                self.display("   Patched: " + ', '.join(patched))
+                self.display(("   Patched: " + ', '.join(patched)))
             if len(vuln) > 0:
-                self.display("   Vulnerabilities: " + ', '.join(vuln))
+                self.display(("   Vulnerabilities: " + ', '.join(vuln)))
 
     def get_moves(self):
         s = self.game.state
@@ -269,14 +269,14 @@ class Player(object):
                 move_str = raw_input("\nSelect a move: ")
                 if len(move_str) > 0 and move_str[0].upper() == 'L':
                     self.display("LOG".center(30,'='))
-                    self.display("\n".join(map(str, self.log)))
+                    self.display(("\n".join(map(str, self.log))))
                     continue
                 move = self.parse_move(move_str)
                 if move != None and move['action'] not in 'dq' and move['from'] in [ m['from'] for m in moves]:
                     self.display("Each machine can only have one move")
                     killed = [ m for m in moves if m['from'] == move['from'] ][0]
-                    self.display("Replacing {} with {}".format(killed, move)
-                    moves.remove(killed))
+                    self.display("Replacing {} with {}".format(killed, move))
+                    moves.remove(killed)
             if move['action'] == 'd':
                 moves = [move]
                 self.display("DDoS is your only move this turn")
