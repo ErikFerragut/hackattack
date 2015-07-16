@@ -74,16 +74,26 @@ class AI(Player):
         # add it to a list for machines that are involved
         # store inferred information
         
+class BackDoor(AI):
 
+    def get_moves(self):
+        moves = []
+        for p in self.own:
+            moves.append({'player':self.game.state.player,
+                            'action':'b', 'from':p})
+        return moves
+        
 class JacobAI(AI):
     def __init__(self, game, name, start):
         super(JacobAI, self).__init__(game, name, start)
         self.random_host = random.randint(0,self.game.state.num_hosts-1)
         self.machines = []
         self.counter = 0
-    
+        
     def get_moves(self):
         moves = []
+        counter = self.counter
+        machines = self.machines
         for p in self.own:
             if counter == 0 and self.random_host not in self.machines:
                 moves.append({'player':self.game.state.player,
@@ -96,9 +106,12 @@ class JacobAI(AI):
                         moves.append({'player':self.game.state.player, 
                             'action':'h', 'from':p, 'to':self.random_host})'''
                 #if self.patches[self.random_host][j for j in self.players_expl]==True:
-                [moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.random_host}) for j in self.players_expl if self.patches[self.random_host][j]==False]    
-                
-                if self.random_host not in self.machines:
+                exploits = [ j for j in self.players_expl if self.patches[self.random_host][int(j[1:])]==False]
+                print exploits
+                if len(exploits) > 0:
+                    moves.append({'player':self.game.state.player, 'action':'h', 
+                    'from':p, 'to':self.random_host, 'exploit':exploits[0]}) 
+                elif self.random_host not in self.machines:
                     moves.append({'player':self.game.state.player,
                             'action':'r', 'from':p, 'to':self.random_host})
                     machines.append(self.random_host)
@@ -107,6 +120,7 @@ class JacobAI(AI):
                             'action':'r', 'from':p, 'to':self.random_host})
                     machines.append(self.random_host)
                 self.random_host = random.randint(0,self.game.state.num_hosts-1)
+                print moves
             elif counter == 2 or counter == 4:
                 if self.random_host not in self.machines:
                     moves.append({'player':self.game.state.player,
@@ -122,14 +136,21 @@ class JacobAI(AI):
             elif counter == 3 or counter == 5:
                 #if self.patches[self.machines[j for j in xrange(len(self.machines))][i for i in self.players_expl]==True:
                 #[[moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machine[j]}), del self.machines[j] for j in xrange(len(self.machines))] for (i in self.players_expl) if self.patches[self.machines[j]][i]==False]
+                foundmove = False
                 for j in xrange(len(self.machines)):
                     for i in self.players_expl:
-                        if self.patches[self.machines[j]][i]==False:
-                            moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machine[j]})
+                        if self.patches[self.machines[j]][int(i[1:])]==False and foundmove == False:
+                            moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machines[j], 'exploit':i})
                             del self.machines[j]
-                    '''moves.append({'player':self.game.state.player, 
-                            'action':'h', 'from':p, 'to':self.machine[j]})'''
-                self.random_host = random.randint(0,self.game.state.num_hosts-1)
+                            foundmove = True
+                if not foundmove:
+                    self.random_host = random.randint(0,self.game.state.num_hosts-1)
+                    moves.append({'player':self.game.state.player,
+                        'action':'r', 'from':p, 'to':self.random_host})
+                    machines.append(self.random_host)  
+                    self.random_host = random.randint(0,self.game.state.num_hosts-1)
+
+                
                 #del self.machines[j]
             elif counter == 6 or counter == 8:
                 moves.append({'player':self.game.state.player,
@@ -163,7 +184,7 @@ class JacobAI(AI):
                     self.random_host = random.randint(0,self.game.state.num_hosts-1)
                     del self.machines[j]'''
                 
-        counter +=1        
+        self.counter +=1        
                 
             # decide whether to fortify or expand
             
@@ -226,11 +247,11 @@ class EthanAI(AI):
                                'to'rendom.randint(0,self.game.state.num_hosts)})#should not recon computers in known OSes
         return moves
     def war():
-        '''recon target if not already done
+        ''''''recon target if not already done
         hack target with three computers
         if some remain but you were cleaned hack with 1 - number removed
         if some remain and not cleaned clean then scan if nothing detected
-        if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan'''
+        if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan''''''
     def func2():
         when len(moves) < len(self.own) 
             if ?.known accounts = self.own:
@@ -248,14 +269,14 @@ class EthanAI(AI):
         moves = func1
     if len(self.own) >2 and <13
         moves = func2
-                    '''if random.random() < 0.3: # fortify
+                    ''''''if random.random() < 0.3: # fortify
                     moves.append({'player':self.game.state.player,
                                   'action':'b', 'from':p})
                 else:                     # expand
                     moves.append({'player':self.game.state.player,
                                   'action':'h', 'from':p,
                                   'to':random.randint(0,self.game.state.num_hosts),
-                                  'exploit':random.choice(self.players_expl)})'''
+                                  'exploit':random.choice(self.players_expl)})''''''
         
 class Andrew(AI):
     def get_moves(self):
