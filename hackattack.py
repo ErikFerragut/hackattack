@@ -33,7 +33,7 @@ import sys
 class Game(object):
     def __init__(self):
         # all players
-        player_types = [ Player, AI ]
+        player_types = [ Player, NathanAI ]
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
         

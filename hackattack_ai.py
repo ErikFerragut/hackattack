@@ -32,16 +32,16 @@ class AI(Player):
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
-    def update_output(self):
-        pass
+    # def update_output(self):
+        # pass
     
 
-    def turn_done(self):
-        pass
+    # def turn_done(self):
+        # pass
         
     def say(self, said):
         '''How the player class receives messages from the game.'''
-        # print said['text']
+        print said['text']
 
         if 'type' not in said:
             said['type'] = 'not_given'
@@ -76,26 +76,27 @@ class AI(Player):
         
 class NathanAI(AI):
     def __init__(self, game, name, start):
-        super(NathanAI, self).__init__()
+        super(NathanAI, self).__init__(game, name, start)
         self.counter = 0
         
     def get_moves(self):
         moves = []
         
         for p in self.own:
-            
-            # decide whether to fortify or expand
+            # decide if patching is possible
+            print self.oss, self.players_expl, self.game.state.board_patches[p], "!!!"
             unpatched_exploits = [ e for e in self.players_expl 
-                 if e[0] == self.oss[p] and int(e[1:]) not in self.patches[p] ]
+                 if e[0] == self.oss[p][0] and self.patches[p][int(e[1:])] != True ]
             if len(unpatched_exploits) > 0: # fortify
-                moves.append({'player':self.game.state.player,
-                              'action':'b', 'from':p})
+                moves.append({'player':self.game.state.player,'from':p,
+                              'action':'p', 'exploit':random.choice(unpatched_exploits)})
             else:                     # expand
                 moves.append({'player':self.game.state.player,
-                              'action':'h', 'from':p,
-                              'to':random.randint(0,self.game.state.num_hosts),
-                              'exploit':random.choice(self.players_expl)})
+                              'action':'b', 'from':p})
+                
         return moves
+
+'''
 class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
@@ -134,3 +135,4 @@ class Andrew(AI):
                               'action':'b', 'from':p})
         return moves
 
+'''

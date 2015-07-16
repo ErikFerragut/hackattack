@@ -15,7 +15,7 @@ class Player(object):
         # knowledge system
         self.min_accounts = ddict(lambda :ddict(str)) # [machine][player] = #
         self.max_accounts = ddict(lambda :ddict(str)) 
-        self.oss = ddict(str)      # [machine] = OS string
+        self.oss = ddict(str, {start:self.game.state.board_os[start]})      # [machine] = OS string
         # True = Patched, False = Vulnerable, undef = unknown
         self.patches = ddict(lambda :ddict(str)) # patches[machine][expl#] = True, False, undef
         self.traced = []   # list of players
