@@ -32,12 +32,14 @@ class AI(Player):
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
-    # def update_output(self):
-        # pass
+
+    """def update_output(self):
+        pass
     
 
-    # def turn_done(self):
-        # pass
+    def turn_done(self):
+        pass"""
+
         
     def say(self, said):
         '''How the player class receives messages from the game.'''
@@ -71,7 +73,7 @@ class AI(Player):
         # to do -- say's for ddos moves
 
         self.log.append(said['text'])
-        # add it to a list for machines that are involved
+        # add it to a list for guy2 that are involved
         # store inferred information
 
         
@@ -243,6 +245,7 @@ class EthanAI(AI):
             self.turns_since_c[h] += 1
         return
     def func1():
+        update_lists()  
         new_num_hosts = num_hosts
         while len(moves) < len(self.own):           
             for i in xrange(self.own):
@@ -261,57 +264,102 @@ class EthanAI(AI):
                     new_num_hosts.remove(h)
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to':random.choice(new_num_hosts)})
         return moves 
-    '''def war():
-        hack target with three computers
-        if some remain but you were cleaned hack with 1 - number removed
-        if some remain and not cleaned clean then scan if nothing detected
-        if all cleaned hack with 7 and follow same procedure, but if still 
-        cleaned label target Nathan'''
-    '''def func2():
-        when len(moves) < len(self.own) 
-            for i in xrange(self.own):
-                if i in self.known_accounts:
-                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
-            elif for h in self.own: turns_since_c[h] > random.randint(2,3):
-                moves.append({'player':self.game.state.player,'action':'c', 'from':h)}
-            elif for l in self.easy_hacks:
-                moves.append({'player':self.game.state.player,'action':'h', 'from':p,'to':#l,'exploit':h in self.players_expl if [h] in [j]})                
-            elif war possible:
-                start war
-            else new_num_hosts = num_hosts
-                for i in xrange(known_OSes):
-                    new_num_hosts.remove(i)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
-        return moves'''
+
     update_lists()    
     if len(self.own) < 3:
         moves = func1
 
     if len(self.own) >2 and len(self.own)<13:
         moves = func2
-    #if random.random() < 0.3: # fortify
-
-    #if len(self.own) >2 and <13
-        #moves = func2
-    '''if random.random() < 0.3: # fortify
-        moves.append({'player':self.game.state.player,
-                      'action':'b', 'from':p})
-    else:                     # expand
-        moves.append({'player':self.game.state.player,
-                      'action':'h', 'from':p,
-                      'to':random.randint(0,self.game.state.num_hosts),
-                      'exploit':random.choice(self.players_expl)})'''
+    
+    return moves
         
 class Andrew(AI):
     def get_moves(self):
+        alreadyreconed = []
         import random
         moves = []
+        
+        
+        for s in xrange(self.game.num_players):
+            if s in self.game.state.players_traced[self.game.state.player]:
+                moves.append({'action' : 'd' , 'user' : self.game.state.player , 'player' : s})
+                print moves
+                return moves
+        
+        
+        
+        
+        
+        
+        amount2 = self.game.state.num_hosts / 2
+        if len(self.own) > amount2:
+            for p in self.own:
+                moves.append({'player' : self.game.state.player, 'action' : 'c', 'from' : p})
+        
+        
+            return moves 
+        
+        # guy = random.randint(0, 9)
+        amount = 1
+        # print guy
+        
+        
         for p in self.own:
-            # decide whether to fortify or expand
-            if vuln == []:
-                moves.append({'player': self.game.state.player, 'action' : 'r', 'from' : p, 'to' : random.randint(0, self.game.state.num_hosts)}) 
-            else:
-                moves.append({'player':self.game.state.player,
-                              'action':'b', 'from':p})
-        return moves
+            for machines in xrange(self.game.state.num_hosts):
+                
+                for exploits in self.players_expl:
+                    
+                    guy2 = random.randint(0, self.game.state.num_hosts)
+                        
+                        
+                    if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
+                        # print 'False'
+                        if amount > len(self.own):
+                            break
+                        amount += 1
+                        print exploits
+                        
+                            
+                        moves.append({'player':self.game.state.player,
+                              'action':'h', 'from':p,
+                              'to': machines,
+                              'exploit': exploits})
+                    elif self.patches[machines][int(exploits[1:])] == True and machines not in self.own:
+                        # print 'True'
+                        if amount > len(self.own):
+                            break
+                        guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                        
+                        while guy3 in self.own or guy3 in alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
+                            
+                            guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                        
+                        
+                        
+                        moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
+                        alreadyreconed.append(guy3)
+               
+        
+        if len(moves) < len(self.own):
+            for p in xrange(len(self.own)):
+                
+                guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                
+                    
+                while guy3 in self.own or alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
+                    
+                    guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                
+                
+                moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
+                alreadyreconed.append(guy3)
+        print moves
+        
+        return moves    
+        #Need to fix list:
+        """
+            1. Doesn't recon same machine twice over period of game 
+            2. Knowns what OS it is hacking with 
+            3. Hacks when it needs to """
 
