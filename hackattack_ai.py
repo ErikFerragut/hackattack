@@ -32,12 +32,14 @@ class AI(Player):
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
-    # def update_output(self):
-        # pass
+
+    """def update_output(self):
+        pass
     
 
-    # def turn_done(self):
-        # pass
+    def turn_done(self):
+        pass"""
+
         
     def say(self, said):
         '''How the player class receives messages from the game.'''
@@ -71,7 +73,7 @@ class AI(Player):
         # to do -- say's for ddos moves
 
         self.log.append(said['text'])
-        # add it to a list for machines that are involved
+        # add it to a list for guy2 that are involved
         # store inferred information
 
         
@@ -262,6 +264,7 @@ class EthanAI(AI):
                     'exploit':random.choice([e for e in self.players_expl 
                     if e[0] == self.oss[l][0] and int(e[1:]) in self.patches[l]])})
                     #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
+<<<<<<< HEAD
             else:
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
@@ -301,17 +304,116 @@ class EthanAI(AI):
                                   'action':'h', 'from':p,
                                   'to':random.randint(0,self.game.state.num_hosts),
                                   'exploit':random.choice(self.players_expl)})'''
+=======
+            else:                
+                for h in xrange(known_OSes):
+                    new_num_hosts.remove(h)
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to':random.choice(new_num_hosts)})
+        return moves 
+
+    update_lists()    
+    if len(self.own) < 3:
+        moves = func1
+
+    if len(self.own) >2 and len(self.own)<13:
+        moves = func2
+    
+    #return moves
+>>>>>>> 27715c3cda044814069e4b4a93b710324721d08c
         
 class Andrew(AI):
     def get_moves(self):
+        
         import random
         moves = []
+        print len(self.own)
+        
+        for s in xrange(self.game.num_players):
+            if s in self.game.state.players_traced[self.game.state.player]:
+                moves.append({'action' : 'd' , 'user' : self.game.state.player , 'player' : s})
+                print moves
+                return moves
+        
+        
+        
+        
+        
+        
+        amount2 = self.game.state.num_hosts / 2
+        if len(self.own) > amount2:
+            for p in self.own:
+                moves.append({'player' : self.game.state.player, 'action' : 'c', 'from' : p})
+        
+        
+            return moves 
+        
+        # guy = random.randint(0, 9)
+        amount = 1
+        # print guy
+        
+        
         for p in self.own:
-            # decide whether to fortify or expand
-            if vuln == []:
-                moves.append({'player': self.game.state.player, 'action' : 'r', 'from' : p, 'to' : random.randint(0, self.game.state.num_hosts)}) 
-            else:
-                moves.append({'player':self.game.state.player,
-                              'action':'b', 'from':p})
-        return moves
+
+            for machines in xrange(self.game.state.num_hosts):
+                
+                for exploits in self.players_expl:
+                    
+                    #guy2 = random.randint(0, self.game.state.num_hosts)
+
+                        
+                    if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
+                        # print 'False'
+                        if amount > len(self.own):
+                            break
+                        amount += 1
+                        print exploits
+                        
+                            
+                        moves.append({'player':self.game.state.player,
+                              'action':'h', 'from':p,
+                              'to': machines,
+                              'exploit': exploits})
+                    elif self.patches[machines][int(exploits[1:])] == True and machines not in self.own:
+                        # print 'True'
+                        if amount > len(self.own):
+                            break
+                        amount += 1
+                        guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                        
+                        while guy3 in self.own or guy3 in self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
+                            
+                            guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                        
+                        
+                        
+                        moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
+                        self.game.alreadyreconed.append(guy3)
+                        print self.game.alreadyreconed
+               
+        
+        print len(self.own)
+        print len(moves)
+        print len(self.own) - len(moves)
+        if len(moves) < len(self.own):
+            for p in xrange(len(self.own) - len(moves)):
+                
+                guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                for exploits in self.players_expl:
+                    
+                    while guy3 in self.own or self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
+                    
+                        guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                
+                
+                moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
+                self.game.alreadyreconed.append(guy3)
+                print self.game.alreadyreconed
+        print moves
+        
+        return moves    
+        #Need to fix list:
+        """
+            1. Doesn't recon same machine twice over period of game 
+            2. Knowns what OS it is hacking with """
+
 
