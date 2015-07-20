@@ -32,21 +32,14 @@ class AI(Player):
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
-<<<<<<< HEAD
+
     """def update_output(self):
         pass
     
 
     def turn_done(self):
         pass"""
-=======
-    # def update_output(self):
-        # pass
-    
 
-    # def turn_done(self):
-        # pass
->>>>>>> origin/master
         
     def say(self, said):
         '''How the player class receives messages from the game.'''
@@ -338,7 +331,7 @@ class Andrew(AI):
         
         
         for p in self.own:
-<<<<<<< HEAD
+
             
             
             for machines in xrange(self.game.state.num_hosts):
@@ -346,7 +339,7 @@ class Andrew(AI):
                 for exploits in self.players_expl:
                     
                     guy2 = random.randint(0, self.game.state.num_hosts)
-                        
+
                         
                     if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
                         # print 'False'
@@ -407,13 +400,4 @@ class Andrew(AI):
             
             
         
-=======
-            # decide whether to fortify or expand
-            if vuln == []:
-                moves.append({'player': self.game.state.player, 'action' : 'r', 'from' : p, 'to' : random.randint(0, self.game.state.num_hosts)}) 
-            else:
-                moves.append({'player':self.game.state.player,
-                              'action':'b', 'from':p})
-        return moves
 
->>>>>>> origin/master
