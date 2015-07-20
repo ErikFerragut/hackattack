@@ -36,6 +36,7 @@ import sys
 
 class Game(object):
     
+<<<<<<< HEAD
     
     def __init__(self):
 
@@ -45,7 +46,9 @@ class Game(object):
         player_types = [ Player, Andrew ]
 
 
+
         self.num_players = len(player_types)
+        
         num_hosts = 5*self.num_players
         
         start = set([])
