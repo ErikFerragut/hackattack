@@ -25,15 +25,24 @@
 import random
 import time
 from hackattack_gamestate import *
-from hackattack_player import *
-from hackattack_ai import *
-import sys
 
+from hackattack_player import *
+#from hackattack_tk import *
+from hackattack_ai import *
+from hackattack_NetPlayer import *
+#from hackattack_ai import *
+
+import sys
 
 class Game(object):
     def __init__(self):
         # all players
+<<<<<<< HEAD
         player_types = [ Player, Andrew ]
+=======
+
+        player_types = [ Player , JacobAI ]
+>>>>>>> origin/master
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
         
@@ -42,9 +51,12 @@ class Game(object):
             start.add(random.randrange(num_hosts))
         start = list(start)
         random.shuffle(start)
+        #self.players = [ Player_Tk(self, name,s) for name,s in zip(self.state.players_names, start) ]
+
 
         self.player_names = [ "Player {}".format(i)
                                      for i in xrange(self.num_players) ]
+
         
         self.state = GameState(self) 
         self.players = [ P(self, name, s)
@@ -288,6 +300,7 @@ class Game(object):
             ### do all the actions and provide results
 
             player.say({'text':"\nMove results:"})
+
             for move in moves:
                 # player.say({'text':"You did move {}".format(move), 'move':move})
                 if move['action'] in self.move_funcs:
@@ -303,6 +316,8 @@ class Game(object):
 
 
 if __name__ == '__main__':
+    #pygameSay("test")
+    #pygame.display.update()
     g=Game()
     if len(sys.argv) > 1:
         S = '\n'.join(open(sys.argv[1], 'r').readlines())

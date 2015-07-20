@@ -15,7 +15,7 @@ class Player(object):
         # knowledge system
         self.min_accounts = ddict(lambda :ddict(str)) # [machine][player] = #
         self.max_accounts = ddict(lambda :ddict(str)) 
-        self.oss = ddict(str)      # [machine] = OS string
+        self.oss = ddict(str, {start:self.game.state.board_os[start]})      # [machine] = OS string
         # True = Patched, False = Vulnerable, undef = unknown
         self.patches = ddict(lambda :ddict(str)) # patches[machine][expl#] = True, False, undef
         self.traced = []   # list of players
@@ -24,23 +24,31 @@ class Player(object):
         while len(E)<4:
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
+        
+        
+        
+        
+        
 
         if self.name == 'Player 0':
             # show title screen until someone hits a key
-            print "HACK ATTACK!\n\n"
+            self.say({'text': "HACK ATTACK!\n\n"})
 
             # look at http://www.network-science.de/ascii/ for more fonts
             # I like o8, poison.  This is smslant
             
-            print '''
+            self.display('''
                __ __         __     ___  __  __           __  
               / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
              / _  / _ `/ __/  '_/ / __ / __/ __/ _ `/ __/  '_/
             /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
-            '''
+            ''')
 
             raw_input("\n\n\nPress enter to begin.")
 
+    def display(self, string):
+        print string
+        
     def parse_move(self,move_str):
         """Return move {'from':from_machine, 'to':to_machine, 'player':player,
         'exploit':exploit, 'user':target_user, 'action':action} based on an input
@@ -53,78 +61,78 @@ class Player(object):
          
         if words[0].lower() == 'd':        
             if len(words) != 2:
-                print "Follow format: (D)DoS <user>"
+                self.display("Follow format: (D)DoS <user>")
                 return
             try:
                 user = int(words[1])
             except:
-                print "Must specify a user by number"
+                self.display("Must specify a user by number")
                 return
             if user not in s.players_traced[s.player]:
-                print "You can only DDoS a player after you have traced them"
+                self.display("You can only DDoS a player after you have traced them")
                 return
             return {'action':'d', 'user':user, 'player':s.player}
 
         if words[0].lower() == 'q':
             if len(words) != 2:
-                print "Follow format: (Q)uit <save_file>"
+                self.display("Follow format: (Q)uit <save_file>")
                 return
             return {'action':'q', 'filename':words[1]}
                                         
         if len(words) < 2:
-            print "Follow format: <acting-machine> <action> ... --or-- (D)DoS <user>"
+            self.display("Follow format: <acting-machine> <action> ... --or-- (D)DoS <user>")
             return
 
         try:
             move = { 'from': int(words[0]), 'action': words[1][0], 'player':s.player,  }
         except:
-            print "Must indicate source of move first (as int) and then action (by letter)"
+            self.display("Must indicate source of move first (as int) and then action (by letter)")
             return
 
         if move['from'] not in self.own:#new change
-            print "You must specify only a machine that you own"
+            self.display("You must specify only a machine that you own")
             return
         
         if move['action'] == 'r':
             if len(words) != 3:
-                print "Follow format: <acting-machine> (R)econ <machine>"
+                self.display("Follow format: <acting-machine> (R)econ <machine>")
                 return
             try:
                 mac2 = int(words[2])
             except:
-                print "Target machine must be an integer"
+                self.display("Target machine must be an integer")
                 return
             if mac2 not in xrange(s.num_hosts):
-                print "Invalid target"
+                self.display("Invalid target")
                 return
             move['to'] = mac2
             return move
         elif move['action'] == 'updownupdownleftrightleftrightabab':
-            print 'password accepted'
+            self.display('password accepted')
             return
         elif move['action'] == 'c':
             return move
         elif move['action'] == 'h':
             if len(words) != 4:
-                print "Follow format: <acting-machine> (H)ack <machine> <exploit>"
+                self.display("Follow format: <acting-machine> (H)ack <machine> <exploit>")
                 return
             
             if not words[2].isdigit():
-                print "Target machine must be an integer"
+                self.display("Target machine must be an integer")
                 return
             else:
                 mac2 = int(words[2])
 
             if mac2 not in xrange(s.num_hosts):
-                print "Invalid target"
+                self.display("Invalid target")
                 return
 
             if words[3][1:].isdigit():
                 if not words[3].upper() in self.players_expl:
-                    print "Not your exploit"
+                    self.display("Not your exploit")
                     return
             else:
-                print "Third word must be letter followed by number (no space)"
+                self.display("Third word must be letter followed by number (no space)")
                 return
                 #:)
             
@@ -136,10 +144,10 @@ class Player(object):
         elif move['action'] == 'p':
             move['exploit'] = words[2].upper()
             if len(words) != 3:
-                print "Follow format: <acting-machine> (P)atch <exploit>"
+                self.display("Follow format: <acting-machine> (P)atch <exploit>")
                 return
             elif words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
-                print "Must apply a patch for an exploit you have"
+                self.display("Must apply a patch for an exploit you have")
                 return
             #elif
                 #print "Third word must be a letter followed by a number (no space)"
@@ -156,7 +164,7 @@ class Player(object):
             return move
                 
         else:
-            print "Invalid action"
+            self.display("Invalid action")
             return
 
     def update_status(self):
@@ -194,69 +202,69 @@ class Player(object):
         s = self.game.state
         ### output stuff to update the player
         if self.status == 'out':
-            print "{} is out".format(self.game.player_names[s.player])
+            self.display("{} is out".format(self.game.player_names[s.player]))
             return
         if self.status == 'won':
-            print "You won!"
+            self.display("You won!")
             return
 
         #print s.news            
         if len(s.news[s.player]) == 0:
-            print "No news to report on round {}".format(s.game_round)
+            self.display("No news to report on round {}".format(s.game_round))
         else:
-            print "\n   ".join(["ROUND {} NEWS!".format(s.game_round)] + s.news[s.player])
+            self.display("\n   ".join(["ROUND {} NEWS!".format(s.game_round)] + s.news[s.player]))
             s.news[s.player] = []
 
         ## show them what they have
-        print "Your access:"
+        self.display("Your access:")
         for k,v in self.own.iteritems(): #self.own = {start:1} at start
             if v > 0:
-                print "{} account{} on machine {}, which runs the {} OS".format(
-                    v, 's' if v > 1 else '', k, s.board_os[k])
+                self.display("{} account{} on machine {}, which runs the {} OS".format(
+                    v, 's' if v > 1 else '', k, s.board_os[k]))
             
-        print "Your exploits:", ", ".join(sorted(self.players_expl))
+        self.display(("Your exploits:", ", ".join(sorted(self.players_expl))))
         # for e in self.players_expl:
         #     print "{}{} - {} exploit # {}".format(e[0][0], e[1], e[0], e[1])
 
-        print "Traced players: {}".format( "None" if len(s.players_traced[s.player]) == 0
-                                             else " ".join(map(str, s.players_traced[s.player])) )
+        self.display("Traced players: {}".format( "None" if len(s.players_traced[s.player]) == 0
+                                             else " ".join(map(str, s.players_traced[s.player])) ))
 
         # new knowledge system...
-        print "Known accounts:", "None" if len(self.min_accounts) == 0 else ""
+        self.display(("Known accounts:", "None" if len(self.min_accounts) == 0 else ""))
         for m in self.min_accounts:
-            print 'Machine {}:'.format(m)
+            self.display('Machine {}:'.format(m))
             for p in self.min_accounts[m]:
-                print '   Player {} has {} accounts'.format(p,
+                self.display(('   Player {} has {} accounts'.format(p,
                     self.min_accounts[m][p] if self.min_accounts[m][p] == self.max_accounts[m][p]
-                    else 'maybe some')
+                    else 'maybe some')))
                 
-        print "Known OSes:", "None" if len(self.oss) == 0 else ""
+        self.display(("Known OSes:", "None" if len(self.oss) == 0 else ""))
         for m,os in self.oss.iteritems():
-            print '   Machine {} runs {}'.format(m, os)
+            self.display(('   Machine {} runs {}'.format(m, os)))
 
         if len(self.patches) == 0:
-            print "Known Patches: None"
+            self.display("Known Patches: None")
         for m in self.patches:
-            print "Machine {} Patches:".format(m)
+            self.display("Machine {} Patches:".format(m))
             patched = [ str(p) for p in self.patches[m] if self.patches[m][p] ]
             vuln    = [ str(p) for p in self.patches[m] if self.patches[m][p] == False ]
             if len(patched) > 0:
-                print "   Patched: " + ', '.join(patched)
+                self.display(("   Patched: " + ', '.join(patched)))
             if len(vuln) > 0:
-                print "   Vulnerabilities: " + ', '.join(vuln)
+                self.display(("   Vulnerabilities: " + ', '.join(vuln)))
 
     def get_moves(self):
         s = self.game.state
         ## have them assign a move to each owned machine (or do DDoS)
-        print "<acting-machine> (R)econ <machine>"
-        print "<acting-machine> (C)lean"
-        print "<acting-machine> (H)ack <machine> <exploit>"
-        print "<acting-machine> (B)ackdoor"
-        print "<acting-machine> (P)atch <exploit>"
-        print "<acting-machine> (S)can"
-        print "(L)ogreview"
-        print "(D)DoS <user>"
-        print "(Q)uitAfterSave <filename>"
+        self.display("<acting-machine> (R)econ <machine>")
+        self.display("<acting-machine> (C)lean")
+        self.display("<acting-machine> (H)ack <machine> <exploit>")
+        self.display("<acting-machine> (B)ackdoor")
+        self.display("<acting-machine> (P)atch <exploit>")
+        self.display("<acting-machine> (S)can")
+        self.display("(L)ogreview")
+        self.display("(D)DoS <user>")
+        self.display("(Q)uitAfterSave <filename>")
         
         moves = []  # a list of moves, each is a dictionaries
         # std move format: acting-maching player action parameters (machine/exploit/user)
@@ -265,22 +273,22 @@ class Player(object):
             while move == None:
                 move_str = raw_input("\nSelect a move: ")
                 if len(move_str) > 0 and move_str[0].upper() == 'L':
-                    print "LOG".center(30,'=')
-                    print "\n".join(map(str, self.log))
+                    self.display("LOG".center(30,'='))
+                    self.display(("\n".join(map(str, self.log))))
                     continue
                 move = self.parse_move(move_str)
                 if move != None and move['action'] not in 'dq' and move['from'] in [ m['from'] for m in moves]:
-                    print "Each machine can only have one move"
+                    self.display("Each machine can only have one move")
                     killed = [ m for m in moves if m['from'] == move['from'] ][0]
-                    print "Replacing {} with {}".format(killed, move)
+                    self.display("Replacing {} with {}".format(killed, move))
                     moves.remove(killed)
             if move['action'] == 'd':
                 moves = [move]
-                print "DDoS is your only move this turn"
+                self.display("DDoS is your only move this turn")
                 break
             elif move['action'] == 'q':
                 moves = [move]
-                print "Saving and quitting"
+                self.display("Saving and quitting")
                 break
             else:
                 moves.append(move)
@@ -288,11 +296,11 @@ class Player(object):
 
     def turn_done(self):
         raw_input("\nPress enter to clear screen ")
-        print "\n"*100
+        self.display("\n"*100)
 
     def say(self, said):
         '''How the player class receives messages from the game.'''
-        print said['text']
+        self.display(said['text'])
 
         if 'type' not in said:
             said['type'] = 'not_given'

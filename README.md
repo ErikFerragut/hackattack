@@ -7,9 +7,10 @@ hackattack is a game developed for the purpose of cyber conflict modeling
 1. ~~move variables having to do with players to the player class (see GameState init)~~
 2. ~~change do_ functions to use player.say() instead of print~~
 3. ~~move non-output parts from updateoutput to mainloop~~
-4. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
-5. Make it so it works more uniformly for one screen and many
-6. Allow for player types (AI?) or other parameters (IP?) to be specified up front
+4. Create config file that it reads to set player names, probabilities, and other constants 
+
+### Develop test code
+1. Develop test code: maybe start with a random seed and feed in fixed commands and check output?
 
 ### Game mechanics
 1. ~~Announce DDoS as news~~
@@ -33,6 +34,7 @@ failed hack attempts~~
 2. Create a new way to grab moves (parse_moves)
 3. Have a way to show move results (say)
 4. Test UI separately
+5. Make it so it works more uniformly for one screen and many
 
 ### Load and save game
 1. ~~Develop serialize and deserialize functions for GameState and
@@ -55,6 +57,10 @@ Player to store knowledge in knowledge system~~
 
 
 ## known bugs
+
+hackattack.player line 123 errors the program before it can give the error message
+## doesn't clarify hack success in detection / news
+
 1. ~~hackattack.player line 123 errors the program before it can give the error message~~
 
 2. ~~Given enough time, one could have multiples or duplicates of any exploit. the while block on line 168 doesn't work 
@@ -66,7 +72,7 @@ tl;dr : you can get 2 of the same exploit~~
 5. ~~if x in hackattack_util is greater than .75, the program crashes~~
 6. Knowledge system doesnt show home pc in known operating systems
 7. things displayed in news are not incorporated into the knowledge system
-8. ~~ on line 203, may bug out.... unknown debug item printed every turn: this should be removed e.g. {0,[],[]}~~
+8. ~~on line 203, may bug out.... unknown debug item printed every turn: this should be removed e.g. {0,[],[]}~~
 
 ## Recently fixed bugs
 
