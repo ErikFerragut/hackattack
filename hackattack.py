@@ -36,7 +36,7 @@ import sys
 
 class Game(object):
     
-    alreadyreconed = []
+    
     def __init__(self):
 
     

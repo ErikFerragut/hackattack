@@ -230,7 +230,7 @@ class NathanAI(AI):
                               'to':random.randint(0,self.game.state.num_hosts),
                               'exploit':random.choice(self.players_expl)})
         return moves"""
-class EthanAI(AI):
+"""class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
         super(EthanAI, self).__init__(game, name, start)
@@ -272,9 +272,14 @@ class EthanAI(AI):
     if len(self.own) >2 and len(self.own)<13:
         moves = func2
     
-    #return moves
+    #return moves"""
         
 class Andrew(AI):
+
+    
+    def __init__(self, game, name, start):
+        super(Andrew, self).__init__(game, name, start)
+        self.alreadyreconed = []
     def get_moves(self):
         
         import random
@@ -333,15 +338,15 @@ class Andrew(AI):
                         amount += 1
                         guy3 = random.randint(0, self.game.state.num_hosts - 1)
                         
-                        while guy3 in self.own or guy3 in self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
+                        while guy3 in self.own or guy3 in self.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
                             
                             guy3 = random.randint(0, self.game.state.num_hosts - 1)
                         
                         
                         
                         moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
-                        self.game.alreadyreconed.append(guy3)
-                        print self.game.alreadyreconed
+                        self.alreadyreconed.append(guy3)
+                        print self.alreadyreconed
                
         
         print len(self.own)
@@ -353,14 +358,14 @@ class Andrew(AI):
                 guy3 = random.randint(0, self.game.state.num_hosts - 1)
                 for exploits in self.players_expl:
                     
-                    while guy3 in self.own or self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
+                    while guy3 in self.own or self.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
                     
                         guy3 = random.randint(0, self.game.state.num_hosts - 1)
                 
                 
                 moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
-                self.game.alreadyreconed.append(guy3)
-                print self.game.alreadyreconed
+                self.alreadyreconed.append(guy3)
+                print self.alreadyreconed
         print moves
         
         return moves    
