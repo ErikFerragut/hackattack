@@ -231,7 +231,7 @@ class NathanAI(AI):
 class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
-        super(EthanAI, self).__init__()
+        super(EthanAI, self).__init__(game, name, start)
         self.easy_hacks = []
         self.turns_since_c = {n:0 for n in self.own} 
     def update_lists():
@@ -259,7 +259,7 @@ class EthanAI(AI):
             else:                
                 for h in xrange(known_OSes):
                     new_num_hosts.remove(h)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to':random.choice(new_num_hosts)})
         return moves 
     '''def war():
         hack target with three computers
@@ -281,26 +281,26 @@ class EthanAI(AI):
             else new_num_hosts = num_hosts
                 for i in xrange(known_OSes):
                     new_num_hosts.remove(i)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})'''
-        return moves
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
+        return moves'''
     update_lists()    
     if len(self.own) < 3:
         moves = func1
 
-    if len(self.own) >2 and <13
+    if len(self.own) >2 and len(self.own)<13:
         moves = func2
-                    ''''''if random.random() < 0.3: # fortify
+    #if random.random() < 0.3: # fortify
 
     #if len(self.own) >2 and <13
         #moves = func2
-                    '''if random.random() < 0.3: # fortify
-                    moves.append({'player':self.game.state.player,
-                                  'action':'b', 'from':p})
-                else:                     # expand
-                    moves.append({'player':self.game.state.player,
-                                  'action':'h', 'from':p,
-                                  'to':random.randint(0,self.game.state.num_hosts),
-                                  'exploit':random.choice(self.players_expl)})'''
+    '''if random.random() < 0.3: # fortify
+        moves.append({'player':self.game.state.player,
+                      'action':'b', 'from':p})
+    else:                     # expand
+        moves.append({'player':self.game.state.player,
+                      'action':'h', 'from':p,
+                      'to':random.randint(0,self.game.state.num_hosts),
+                      'exploit':random.choice(self.players_expl)})'''
         
 class Andrew(AI):
     def get_moves(self):
