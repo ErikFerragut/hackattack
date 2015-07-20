@@ -159,9 +159,9 @@ class JacobAI(AI):
                 moves.append({'player':self.game.state.player,
                             'action':'b', 'from':p})
             elif self.counter == 9:
-                if False:#there is a trace:
+                if len(self.game.state.players_traced) > 0:#there is a trace:
                     moves.append({'player':self.game.state.player,
-                                'action':'d', 'from':p, 'to':random.choice(traced_player)})
+                                'action':'d', 'from':p, 'to':random.choice(self.game.state.players_traced)})
                 else:
                     #[moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machine[j]}), del self.machines[j] for j in xrange(len(self.machines)) for i in self.players_expl if self.patches[self.machines[j]][i]==False]
                     foundmove = False
