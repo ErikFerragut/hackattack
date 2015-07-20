@@ -251,7 +251,7 @@ class EthanAI(AI):
         self.update_lists()
         while len(self.moves) < len(self.own):           
             for i in self.own:
-                if i in self.known_accounts:
+                #if i in self.min_accounts:
                     moves.append({'player':self.game.state.player,'action':'c', 'from':i})
                 #if len(easy_hacks) = 0:
                     #use other computer to backdoor by hacking then clean on original computer
@@ -264,7 +264,6 @@ class EthanAI(AI):
                     'exploit':random.choice([e for e in self.players_expl 
                     if e[0] == self.oss[l][0] and int(e[1:]) in self.patches[l]])})
                     #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
-<<<<<<< HEAD
             else:
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
@@ -304,22 +303,6 @@ class EthanAI(AI):
                                   'action':'h', 'from':p,
                                   'to':random.randint(0,self.game.state.num_hosts),
                                   'exploit':random.choice(self.players_expl)})'''
-=======
-            else:                
-                for h in xrange(known_OSes):
-                    new_num_hosts.remove(h)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to':random.choice(new_num_hosts)})
-        return moves 
-
-    update_lists()    
-    if len(self.own) < 3:
-        moves = func1
-
-    if len(self.own) >2 and len(self.own)<13:
-        moves = func2
-    
-    #return moves
->>>>>>> 27715c3cda044814069e4b4a93b710324721d08c
         
 class Andrew(AI):
     def get_moves(self):
