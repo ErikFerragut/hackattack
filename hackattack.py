@@ -38,9 +38,12 @@ class Game(object):
     
     alreadyreconed = []
     def __init__(self):
+
+    
         # all players
         
         player_types = [ Player, Andrew ]
+
 
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
