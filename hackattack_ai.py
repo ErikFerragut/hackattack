@@ -234,19 +234,21 @@ class EthanAI(AI):
         super(EthanAI, self).__init__(game, name, start)
         self.easy_hacks = []
         self.turns_since_c = {n:0 for n in self.own} 
-    def update_lists():
+        
+    def update_lists(self):
         self.easy_hacks = [m for m in self.patches if any([l == False for l in self.patches[m]])]
-        for i in xrange(self.own):
+        for i in self.own:
             if i not in self.turns_since_c:
                 self.turns_since_c.append({i:0})
         for h in self.turns_since_c:
             self.turns_since_c[h] += 1
         return
-    def func1():
-        update_lists()  
-        new_num_hosts = num_hosts
-        while len(moves) < len(self.own):           
-            for i in xrange(self.own):
+        
+    def get_moves(self):
+        self.moves = []
+        self.update_lists()
+        while len(self.moves) < len(self.own):           
+            for i in self.own:
                 if i in self.known_accounts:
                     moves.append({'player':self.game.state.player,'action':'c', 'from':i})
                 #if len(easy_hacks) = 0:
@@ -254,14 +256,17 @@ class EthanAI(AI):
                 # else clean
             if len(self.easy_hacks) > 0:
                 for l in self.easy_hacks:
-                    moves.append({'player':self.game.state.player,'action':'h',
-                    'from':p,'to':l,'exploit':random.choice(self.players_expl)})
+                    print "!"*20, p, l, self.players_expl, self.patches[l], self.oss[l][0]
+                    time.sleep(5)
+                    moves.append({'player':self.game.state.player,'action':'h','from':p,'to':l,
+                    'exploit':random.choice([e for e in self.players_expl 
+                    if e[0] == self.oss[l][0] and int(e[1:]) in self.patches[l]])})
                     #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
-            else:                
-                for h in xrange(known_OSes):
-                    new_num_hosts.remove(h)
-                #moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to':random.choice(new_num_hosts)})
+            else:
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,
+                'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
         return moves
+        
     '''def war():
         hack target with three computers
         if some remain but you were cleaned hack with 1 - number removed
