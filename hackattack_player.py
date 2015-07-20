@@ -239,7 +239,7 @@ class Player(object):
         for m in self.patches:
             print "Machine {} Patches:".format(m)
             patched = [ str(p) for p in self.patches[m] if self.patches[m][p] ]
-            vuln    = [ str(p) for p in self.patches[m] if not self.patches[m][p] ]
+            vuln    = [ str(p) for p in self.patches[m] if self.patches[m][p] == False ]
             if len(patched) > 0:
                 print "   Patched: " + ', '.join(patched)
             if len(vuln) > 0:

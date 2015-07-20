@@ -33,7 +33,7 @@ import sys
 class Game(object):
     def __init__(self):
         # all players
-        player_types = [ Player, AI ]
+        player_types = [ Player, Andrew ]
         self.num_players = len(player_types)
         num_hosts = 5*self.num_players
         
@@ -225,26 +225,26 @@ class Game(object):
             you_str = len(theplayer.own)
             them_str = len(otherplayer.own)
             if you_str > them_str:
-                theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.state.player_names[move['user']].upper()),
+                theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
                 player.own[move['user']] = {}
-                self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.state.player_names[player].upper()))
+                self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
-                    self.state.news[p].append("{} HAS SUCCESSFULLY DDOSED {}".format(self.state.player_names[player].upper(), self.state.player_names[move['user']].upper() ))
+                    self.state.news[p].append("{} HAS SUCCESSFULLY DDOSED {}".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
             elif you_str < them_str:
                 theplayer.say({'text':"YOU LOST THE DDOS -- YOU ARE ELIMINATED",
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'lost'})
                 theplayer.own = {}#need?[player]
-                self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.state.player_names[player]))
+                self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.player_names[player]))
                 #announces in the news about the ddos activity
                 for p in xrange(self.num_players):
-                    self.state.news[p].append("{} UNSUCCESSFULLY DDOSED {}".format(self.state.player_names[player].upper(), self.state.player_names[move['user']].upper() ))
+                    self.state.news[p].append("{} UNSUCCESSFULLY DDOSED {}".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
             else:
                 theplayer.say({'text':"DDOS was a tie", 'ddoser':move['player'], 'ddosee':move['user'], 'result':'tie'})
-                self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.state.player_names[player]))
+                self.state.news[move['user']].append("{} tried to DDoS you but it was tie".format(self.player_names[player]))
                 for p in xrange(self.num_players):
-                    self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIE".format(self.state.player_names[player].upper(), self.state.player_names[move['user']].upper() ))
+                    self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIE".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
         else:
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             
