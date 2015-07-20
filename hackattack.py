@@ -35,9 +35,11 @@ from hackattack_NetPlayer import *
 import sys
 
 class Game(object):
+    
+    alreadyreconed = []
     def __init__(self):
         # all players
-
+        
         player_types = [ Player, Andrew ]
 
         self.num_players = len(player_types)

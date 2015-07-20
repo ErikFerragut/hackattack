@@ -301,10 +301,10 @@ class EthanAI(AI):
         
 class Andrew(AI):
     def get_moves(self):
-        alreadyreconed = []
+        
         import random
         moves = []
-        
+        print len(self.own)
         
         for s in xrange(self.game.num_players):
             if s in self.game.state.players_traced[self.game.state.player]:
@@ -338,7 +338,7 @@ class Andrew(AI):
                 
                 for exploits in self.players_expl:
                     
-                    guy2 = random.randint(0, self.game.state.num_hosts)
+                    #guy2 = random.randint(0, self.game.state.num_hosts)
 
                         
                     if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
@@ -357,31 +357,37 @@ class Andrew(AI):
                         # print 'True'
                         if amount > len(self.own):
                             break
+                        amount += 1
                         guy3 = random.randint(0, self.game.state.num_hosts - 1)
                         
-                        while guy3 in self.own or guy3 in alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
+                        while guy3 in self.own or guy3 in self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
                             
                             guy3 = random.randint(0, self.game.state.num_hosts - 1)
                         
                         
                         
                         moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
-                        alreadyreconed.append(guy3)
+                        self.game.alreadyreconed.append(guy3)
+                        print self.game.alreadyreconed
                
         
+        print len(self.own)
+        print len(moves)
+        print len(self.own) - len(moves)
         if len(moves) < len(self.own):
-            for p in xrange(len(self.own)):
+            for p in xrange(len(self.own) - len(moves)):
                 
                 guy3 = random.randint(0, self.game.state.num_hosts - 1)
-                
+                for exploits in self.players_expl:
                     
-                while guy3 in self.own or alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
+                    while guy3 in self.own or self.game.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:
                     
-                    guy3 = random.randint(0, self.game.state.num_hosts - 1)
+                        guy3 = random.randint(0, self.game.state.num_hosts - 1)
                 
                 
                 moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
-                alreadyreconed.append(guy3)
+                self.game.alreadyreconed.append(guy3)
+                print self.game.alreadyreconed
         print moves
         
         return moves    
