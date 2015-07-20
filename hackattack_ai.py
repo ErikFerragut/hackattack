@@ -306,12 +306,13 @@ class Andrew(AI):
         
         
         for p in self.own:
+
             for machines in xrange(self.game.state.num_hosts):
                 
                 for exploits in self.players_expl:
                     
                     guy2 = random.randint(0, self.game.state.num_hosts)
-                        
+
                         
                     if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
                         # print 'False'
@@ -360,6 +361,6 @@ class Andrew(AI):
         #Need to fix list:
         """
             1. Doesn't recon same machine twice over period of game 
-            2. Knowns what OS it is hacking with 
-            3. Hacks when it needs to """
+            2. Knowns what OS it is hacking with """
+
 
