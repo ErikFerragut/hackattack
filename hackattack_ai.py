@@ -233,7 +233,7 @@ class EthanAI(AI):
         self.easy_hacks = []
         self.turns_since_c = {n:0 for n in self.own} 
     def update_lists():
-        self.easy_hacks.append(m for m in self.patches if any [l == False for l in self.patches[m]])
+        self.easy_hacks = [m for m in self.patches if any ([l == False for l in self.patches[m]])]
         for i in xrange(self.own):
             if i not in self.turns_since_c:
                 self.turns_since_c.append({i:0})
@@ -241,6 +241,7 @@ class EthanAI(AI):
             self.turns_since_c[h] += 1
         return
     def func1():
+        new_num_hosts = num_hosts
         while len(moves) < len(self.own):           
             for i in xrange(self.own):
                 if i in self.known_accounts:
@@ -248,19 +249,23 @@ class EthanAI(AI):
                 #if len(easy_hacks) = 0:
                     #use other computer to backdoor by hacking then clean on original computer
                 # else clean
-            elif for l in self.easy_hacks:
-                moves.append({'player':self.game.state.player,'action':'h', 'from':p,'to':l,'exploit':#h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
-            else new_num_hosts = num_hosts
-                for i in xrange(known_OSes):
-                    new_num_hosts.remove(i)
+            if len(self.easy_hacks) > 0:
+                for l in self.easy_hacks:
+                    moves.append({'player':self.game.state.player,'action':'h',
+                    'from':p,'to':l,'exploit':random.choice(self.players_expl)})
+                    #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
+            else:                
+                for h in xrange(known_OSes):
+                    new_num_hosts.remove(h)
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
         return moves 
     '''def war():
         hack target with three computers
         if some remain but you were cleaned hack with 1 - number removed
         if some remain and not cleaned clean then scan if nothing detected
-        if all cleaned hack with 7 and follow same procedure, but if still cleaned label target Nathan'''
-    def func2():
+        if all cleaned hack with 7 and follow same procedure, but if still 
+        cleaned label target Nathan'''
+    '''def func2():
         when len(moves) < len(self.own) 
             for i in xrange(self.own):
                 if i in self.known_accounts:
@@ -274,7 +279,7 @@ class EthanAI(AI):
             else new_num_hosts = num_hosts
                 for i in xrange(known_OSes):
                     new_num_hosts.remove(i)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})'''
         return moves
     update_lists()    
     if len(self.own) < 3:
@@ -287,14 +292,13 @@ class EthanAI(AI):
     #if len(self.own) >2 and <13
         #moves = func2
                     '''if random.random() < 0.3: # fortify
->>>>>>> 19b884a03fecd478edd2f87a95d6a6861f2abd96
                     moves.append({'player':self.game.state.player,
                                   'action':'b', 'from':p})
                 else:                     # expand
                     moves.append({'player':self.game.state.player,
                                   'action':'h', 'from':p,
                                   'to':random.randint(0,self.game.state.num_hosts),
-                                  'exploit':random.choice(self.players_expl)})''''''
+                                  'exploit':random.choice(self.players_expl)})'''
         
 class Andrew(AI):
     def get_moves(self):
