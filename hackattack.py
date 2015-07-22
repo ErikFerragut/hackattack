@@ -36,7 +36,7 @@ import sys
 
 class Game(object):
     
-<<<<<<< HEAD
+
     
     def __init__(self):
 
