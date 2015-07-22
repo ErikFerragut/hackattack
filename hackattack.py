@@ -35,10 +35,13 @@ from hackattack_NetPlayer import *
 import sys
 
 class Game(object):
-    
-    alreadyreconed = []
     def __init__(self):
-        player_types = [ Player , EthanAI ]
+        # all players
+        
+        player_types = [ Player, Andrew ]
+
+
+
         self.num_players = len(player_types)
         
         num_hosts = 5*self.num_players
@@ -100,7 +103,7 @@ class Game(object):
                     #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                     #if self.game.players_own[s][move['from']] == 0:
                     #self.game.players_own[s].pop(move['from'])
-                    #print "Player {} has accounts".format(self.state.player_names[s])
+                    #print "Player {} has accounts".format(self.player_names[s])
                     #print self.game.players_own
                     
     def do_recon(self,move):
@@ -131,15 +134,15 @@ class Game(object):
                     self.players[p].own[move['from']] -= num_removed
                     if self.players[p].own[move['from']] == 0:
                         self.players[p].own.pop(move['from'])
-                    player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.state.player_names[p]),
+                    player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.player_names[p]),
                                 'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
-                        self.state.player_names[move['player']], num_removed, move['from']))
+                            self.player_names[move['player']], num_removed, move['from']))
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
                             self.state.players_traced[move['player']].append(p)
-                            player.say({'text':"You traced {}!".format(self.state.player_names[p]), 'player':p, 'type':'trace'})
+                            player.say({'text':"You traced {}!".format(self.player_names[p]), 'player':p, 'type':'trace'})
                             
         player.say({'text':"Clean completed on machine {}".format(move['from'])})
 
@@ -151,7 +154,7 @@ class Game(object):
         # detected? -- do it first so you don't learn if you were detected
         #if random.random() < self.state.detection_prob['h']:
            # self.detected(move['to'], "{} {}successfully hacked machine {} from {}".format(
-             # self.state.player_names[player], "" if worked else "un", move['to'], move['from']))
+             # self.player_names[player], "" if worked else "un", move['to'], move['from']))
         
         if worked:
             theplayer.say({'text':"Hack succeeded", 'hacked':move['to'], 'with':move['exploit'], 'from':move['from']})
@@ -190,7 +193,7 @@ class Game(object):
         
         self.players[player].own[move['from']] += 1
         #if random.random() < self.state.detection_prob['b']:
-            #self.detected(move['from'], "{} added a backdoor to machine {}".format(self.state.player_names[player],
+            #self.detected(move['from'], "{} added a backdoor to machine {}".format(self.player_names[player],
                                   #                                            move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
@@ -219,7 +222,7 @@ class Game(object):
             theplayer.say({'text':"Failed patch due to OS mismatch of {} on {}".format(move['exploit'], self.state.board_os[move['from']])})
 
         #if random.random() < self.state.detection_prob['p']:
-           # self.detected(move['from'], "{} patched machine {}".format(self.state.player_names[move['player']],
+           # self.detected(move['from'], "{} patched machine {}".format(self.player_names[move['player']],
                          #                                         move['from']))
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['p']:
