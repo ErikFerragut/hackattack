@@ -239,9 +239,10 @@ class EthanAI(AI):
         
     def update_lists(self):
         self.easy_hacks = [m for m in self.patches if any([l == False for l in self.patches[m]])]
+        print "easy hacks:", self.easy_hacks
         for i in self.own:
             if i not in self.turns_since_c:
-                self.turns_since_c.append({i:0})
+                self.turns_since_c.update({i:0})
         for h in self.turns_since_c:
             self.turns_since_c[h] += 1
         return
@@ -249,25 +250,36 @@ class EthanAI(AI):
     def get_moves(self):
         self.moves = []
         self.update_lists()
-        while len(self.moves) < len(self.own):           
-            for i in self.own:
-                #if i in self.min_accounts:
-                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
+        self.own2 = [m for m in self.own.keys()]
+        while 0 < len(self.own2):  
+            for i in self.own2:
+                print "{} <{}>".format(i, self.min_accounts[i])
+                if len(self.min_accounts[i]) > 0 and \
+                  any([self.min_accounts[i][u] != '' and self.min_accounts[i][u] > 0 for u in self.min_accounts[i]]):
+                    self.moves.append({'player':self.game.state.player,'action':'c', 'from':i})
+                    self.own2.remove(i)
                 #if len(easy_hacks) = 0:
                     #use other computer to backdoor by hacking then clean on original computer
                 # else clean
+            if len(self.own2) == 0:
+                break
             if len(self.easy_hacks) > 0:
                 for l in self.easy_hacks:
-                    print "!"*20, p, l, self.players_expl, self.patches[l], self.oss[l][0]
-                    time.sleep(5)
-                    moves.append({'player':self.game.state.player,'action':'h','from':p,'to':l,
+                    #print "!"*20, p, l, self.players_expl, self.patches[l], self.oss[l][0]
+                    #time.sleep(5)
+                    q = random.choice(self.own2)
+                    self.moves.append({'player':self.game.state.player,'action':'h','from':q,'to':l,
                     'exploit':random.choice([e for e in self.players_expl 
                     if e[0] == self.oss[l][0] and int(e[1:]) in self.patches[l]])})
+                    self.own2.remove(q)
+                    self.easy_hacks.remove(l)
                     #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
             else:
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,
-                'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-        return moves
+                v = random.choice(self.own2)
+                self.moves.append({'player':self.game.state.player,'action':'r', 'from':v,
+                'to':random.choice(list(set(xrange(self.game.state.num_hosts)).difference(list(self.own))))})
+                self.own2.remove(v)        
+        return self.moves
         
     '''def war():
         hack target with three computers

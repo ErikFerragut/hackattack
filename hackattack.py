@@ -162,7 +162,8 @@ class Game(object):
                     if move['from'] in self.players[playerB].own:
                         self.detected( playerB,  "{} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                     elif move['to'] in self.players[playerB].own:
-                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".
+                        format(theplayer.name, move['to'], move['from']))
             # add access
             if move['to'] not in theplayer.own:
                 theplayer.own[move['to']] = 1  #tookout [player]
@@ -178,7 +179,7 @@ class Game(object):
                 #if random.random() < self.state.detection_prob['h']:
                     #self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 if move['from'] in self.players[playerB].own:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                    self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 elif move['to'] in self.players[playerB].own:
                     self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 
