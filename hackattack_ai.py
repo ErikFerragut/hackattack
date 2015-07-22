@@ -418,7 +418,7 @@ class Andrew(AI):
                         print exploits
                         while exploits[0] not in self.game.state.board_os[machines][0] or exploits not in self.players_expl:
                             print "I tried"
-                            exploits[0] = random.choice(self.itemlistA)
+                            exploits[0] = random.choice("L" , "M" , "S" , "W")
                             
                         moves.append({'player':self.game.state.player,
                               'action':'h', 'from':p,
