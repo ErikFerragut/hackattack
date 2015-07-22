@@ -280,18 +280,18 @@ class NathanAI(AI):
     
     #return moves"""
 
-          """  else:
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,
-                'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-        return moves"""
-        
-    '''def war():
+    # """     else:
+    #             moves.append({'player':self.game.state.player,'action':'r', 'from':p,
+    #             'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
+    #     return moves"""
+
+'''   def war():
         hack target with three computers
         if some remain but you were cleaned hack with 1 - number removed
         if some remain and not cleaned clean then scan if nothing detected
         if all cleaned hack with 7 and follow same procedure, but if still 
         cleaned label target Nathan'''
-    '''def func2():
+'''   def func2():
         when len(moves) < len(self.own) 
             for i in xrange(self.own):
                 if i in self.known_accounts:
@@ -311,7 +311,7 @@ class NathanAI(AI):
         #func1()
     #if len(self.own) >2 and <13
         #moves = func2
-    '''if random.random() < 0.3: # fortify
+'''    if random.random() < 0.3: # fortify
                     moves.append({'player':self.game.state.player,
                                   'action':'b', 'from':p})
                 else:                     # expand

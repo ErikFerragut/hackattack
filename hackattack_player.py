@@ -311,9 +311,11 @@ class Player(object):
             self.oss[said['machine']] = said['OS']
         elif said['type'] == 'exploits':
             for e in self.players_expl:
-                if e[0] == self.oss[said['machine']][0]:
-                    self.patches[said['machine']][int(e[1:])] = \
-                        (e not in said['exploitable with'])
+                if e[0] == self.oss[int(said['machine'])][0]:
+                    if e in said['exploitable with']:
+                        self.patches[said['machine']][int(e[1:])] = False
+                    else:
+                        self.patches[said['machine']][int(e[1:])] = True
         elif said['type'] == 'clean':
             if said['accounts removed'] == self.own[said['machine']]:
                 self.min_accounts[said['machine']][said['player']] = 0
