@@ -33,12 +33,12 @@ class AI(Player):
                       'exploit':ne})
     
 
-    """def update_output(self):
-        pass
+    # def update_output(self):
+        # pass
     
 
-    def turn_done(self):
-        pass"""
+    # def turn_done(self):
+        # pass
 
         
     def say(self, said):
@@ -75,7 +75,7 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for guy2 that are involved
         # store inferred information
-
+"""
         
 class BackDoor(AI):
 
@@ -207,7 +207,7 @@ class NathanAI(AI):
     def __init__(self, game, name, start):
         super(NathanAI, self).__init__(game, name, start)
 
-"""class NathanAI(AI):
+class NathanAI(AI):
 def __init__(self, game, name, start):
 super(NathanAI, self).__init__()
 
@@ -229,19 +229,19 @@ moves.append({'player':self.game.state.player,
 'action':'p', 'from':p,
 'to':random.randint(0,self.game.state.num_hosts),
 'exploit':random.choice(self.players_expl)})
-return moves"""
-"""class EthanAI(AI):
+return moves
+class EthanAI(AI):
 import random
 def __init__(self, game, name, start):
 super(EthanAI, self).__init__(game, name, start)
 self.easy_hacks = []
 self.turns_since_c = {n:0 for n in self.own} 
 
-<<<<<<< HEAD
-    # """     else:
+"""
+    #      #else:
     #             moves.append({'player':self.game.state.player,'action':'r', 'from':p,
     #             'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-    #     return moves"""
+    #     return moves
 
 '''   def war():
         hack target with three computers
@@ -277,7 +277,7 @@ self.turns_since_c = {n:0 for n in self.own}
                                   'action':'h', 'from':p,
                                   'to':random.randint(0,self.game.state.num_hosts),
                                   'exploit':random.choice(self.players_expl)})'''
-=======
+"""
 def update_lists(self):
 self.easy_hacks = [m for m in self.patches if any([l == False for l in self.patches[m]])]
 for i in self.own:
@@ -319,13 +319,13 @@ moves = func1
 if len(self.own) >2 and len(self.own)<13:
 moves = func2
 
-#return moves"""
+#return moves
 
-"""  else:
+  else:
 moves.append({'player':self.game.state.player,'action':'r', 'from':p,
 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-return moves"""
-
+return moves
+"""
 '''def war():
 hack target with three computers
 if some remain but you were cleaned hack with 1 - number removed
@@ -360,7 +360,7 @@ moves.append({'player':self.game.state.player,
 'action':'h', 'from':p,
 'to':random.randint(0,self.game.state.num_hosts),
 'exploit':random.choice(self.players_expl)})'''
->>>>>>> 395754ead4182a06059fa55e67bbfb89b9b7d7ff
+
 
         
 class Andrew(AI):
@@ -403,22 +403,22 @@ class Andrew(AI):
         
         for p in self.own:
 
-            for machines in xrange(self.game.state.num_hosts):
+            for machines in xrange(self.game.state.num_hosts - 1):
                 
                 for exploits in self.players_expl:
                     
                     #guy2 = random.randint(0, self.game.state.num_hosts)
 
                         
-                    if self.patches[machines][int(exploits[1:])] == False and machines not in self.own:
-                        # print 'False'
+                    if self.patches[machines][int(exploits[1:])] == False and machines not in self.own and exploits[0] == self.oss[machines][0]:
+                        print 'False'
                         if amount > len(self.own):
                             break
                         amount += 1
                         print exploits
-                        while exploits[0] not in self.game.state.board_os[machines][0] or exploits not in self.players_expl:
+                        """while exploits[0] not in self.game.state.board_os[machines][0] or exploits not in self.players_expl:
                             print "I tried"
-                            exploits[0] = random.choice("L" , "M" , "S" , "W")
+                            exploits[0] = random.choice(self.itemlistA)"""
                             
                         moves.append({'player':self.game.state.player,
                               'action':'h', 'from':p,
@@ -464,9 +464,9 @@ class Andrew(AI):
         
         return moves    
         #Need to fix list:
-        """
-            1.# Doesn't recon same machine twice over period of game 
-            2.# Knowns what OS it is hacking with
-            3.# Stall Bug"""
+        
+            #1.# Doesn't recon same machine twice over period of game 
+            #2.# Knowns what OS it is hacking with
+            #3.# Stall Bug
 
 
