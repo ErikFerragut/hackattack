@@ -412,17 +412,17 @@ class Andrew(AI):
         
         import random
         moves = []
-        print len(self.own)
         
-        for s in xrange(self.game.num_players):
-            if s in self.game.state.players_traced[self.game.state.player]:
-                moves.append({'action' : 'd' , 'user' : self.game.state.player , 'player' : s})
-                print moves
-                return moves
-        
-        
+        if self.game.num_players > 1:   
+            for s in xrange(self.game.num_players):
+                if s in self.game.state.players_traced[self.game.state.player]:
+                    moves.append({'action' : 'd' , 'user' : s , 'player' : self.game.state.player})
+                    
+                    return moves
         
         
+        
+        self.whatmoved = []
         
         
         amount2 = self.game.state.num_hosts / 2
@@ -434,9 +434,9 @@ class Andrew(AI):
             return moves 
             
         
-        # guy = random.randint(0, 9)
+        
         amount = 1
-        # print guy
+        
         
         
         for p in self.own:
@@ -445,66 +445,46 @@ class Andrew(AI):
                 
                 for exploits in self.players_expl:
                     
-                    #guy2 = random.randint(0, self.game.state.num_hosts)
+                    
 
                         
                     if self.patches[machines][int(exploits[1:])] == False and machines not in self.own and exploits[0] == self.oss[machines][0]:
-                        print 'False'
+                        
                         if amount > len(self.own):
                             break
                         amount += 1
-                        print exploits
-                        """while exploits[0] not in self.game.state.board_os[machines][0] or exploits not in self.players_expl:
-                            print "I tried"
-                            exploits[0] = random.choice(self.itemlistA)"""
+                        
+                        
                             
                         moves.append({'player':self.game.state.player,
                               'action':'h', 'from':p,
                               'to': machines,
                               'exploit': exploits})
-                    """elif self.patches[machines][int(exploits[1:])] == True and machines not in self.own:
-                        # print 'True'
-                        if amount > len(self.own):
-                            break
-                        amount += 1
-                        guy3 = random.randint(0, self.game.state.num_hosts - 1)
-                        
-                        while guy3 in self.own or guy3 in self.alreadyreconed or self.patches[guy3][int(exploits[1:])] == True:  
-                            print "me likes pie"
-                            guy3 = random.randint(0, self.game.state.num_hosts - 1)
-                        
-                        
-                        
-                        moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : guy3})
-                        self.alreadyreconed.append(guy3)
-                        print self.alreadyreconed"""
-               
-        print "42"
-        print len(self.own)
-        print len(moves)
-        print len(self.own) - len(moves)
+                        self.whatmoved.append(p)
+
+        
+        
         if len(moves) < len(self.own):
             for p in xrange(len(self.own) - len(moves)):
                 
-                for i in xrange(self.game.state.num_hosts - 1):
+                for i in xrange(self.game.state.num_hosts - 1):-
                     if i not in self.own and i not in self.alreadyreconed:
-                        
-                
-                
+                 
                         moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : i})
+                        self.whatmoved.append(p)
                         self.alreadyreconed.append(i)
                         if len(moves) >= len(self.own):
                             return moves
+                     
+            if len(moves) < len(self.own):
+                for c in self.own:
+                    if c not in self.whatmoved: 
+                        moves.append({'player' : self.game.state.player, 'action' : 'b', 'from' : c})
+                        self.whatmoved.append(c)
                 
-                
-                #print self.alreadyreconed
-        print moves
+        
         
         return moves    
-        #Need to fix list:
         
-            #1.# Doesn't recon same machine twice over period of game 
-            #2.# Knowns what OS it is hacking with
-            #3.# Stall Bug
 
 

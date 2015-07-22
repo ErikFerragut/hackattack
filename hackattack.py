@@ -259,6 +259,7 @@ class Game(object):
                 for p in xrange(self.num_players):
                     self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIE".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
         else:
+        
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             
     def new_patches(self):
