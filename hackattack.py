@@ -38,7 +38,7 @@ class Game(object):
     def __init__(self):
         # all players
         
-        player_types = [ Player, Andrew ]
+        player_types = [ Player, EthanAI ]
 
 
 
@@ -198,7 +198,8 @@ class Game(object):
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
                 if move['from'] in self.players[playerB].own:
-                    self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                    self.detected( playerB,  "Player {} backdoored machine {}".format(
+                    theplayer.name, move['from']))
 
         theplayer.say({'text':"One backdoor added to machine {}; you now have {}".format(
             move['from'], theplayer.own[move['from']]),
