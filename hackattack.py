@@ -25,10 +25,10 @@
 import random
 import time
 from hackattack_gamestate import *
-
+from AndrewAI import *
 from hackattack_player import *
 #from hackattack_tk import *
-from hackattack_ai import *
+#from hackattack_ai import *
 from hackattack_NetPlayer import *
 #from hackattack_ai import *
 
@@ -38,7 +38,7 @@ class Game(object):
     def __init__(self):
         # all players
         
-        player_types = [ Player, Andrew ]
+        player_types = [ Player, Andrews ]
 
 
 
