@@ -127,7 +127,7 @@ class Andrews(AI):
                                   'exploit': exploits})
                             self.whatmoved.append(p)
         if len(moves) < len(self.own):
-            for p in xrange(len(self.own) - len(moves)):
+            for p in self.own:
                 if p not in self.whatmoved:    
                     for i in xrange(self.game.state.num_hosts - 1):
                         if i not in self.own and i not in self.alreadyreconed:
