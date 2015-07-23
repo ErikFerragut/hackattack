@@ -28,9 +28,9 @@ from hackattack_gamestate import *
 from AndrewAI import *
 from hackattack_player import *
 #from hackattack_tk import *
-from hackattack_ai import *
-from hackattack_NetPlayer import *
 #from hackattack_ai import *
+from hackattack_NetPlayer import *
+from hackattack_ai import *
 from AndrewNathan import *
 import sys
 from collections import Counter
