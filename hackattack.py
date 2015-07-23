@@ -52,7 +52,7 @@ class Game(object):
 =======
 >>>>>>> ca463878353516fc1b0d98a8f3fc3a49bc65437d
 
-        player_types = [ Player, Andrews]
+        player_types = [ Andrews, JacobAI]
 
         self.num_players = len(player_types)
         
