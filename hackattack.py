@@ -41,7 +41,7 @@ class Game(object):
         # all players
         
 
-        player_types = [ Player, AndrewNathan]
+        player_types = [ Andrews, Andrews ]
 
 
 
@@ -246,7 +246,7 @@ class Game(object):
             if you_str > them_str:
                 theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
-                theplayer.own[move['user']] = {}
+                otherplayer.own = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
@@ -254,7 +254,7 @@ class Game(object):
             elif you_str < them_str:
                 theplayer.say({'text':"YOU LOST THE DDOS -- YOU ARE ELIMINATED",
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'lost'})
-                theplayer.own = {}#need?[player]
+                theplayer.own = {}
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.player_names[player]))
                 #announces in the news about the ddos activity
                 for p in xrange(self.num_players):
@@ -279,7 +279,7 @@ class Game(object):
                     except:
                         pass
 
-    def mainloop(self, max_rounds=1000):
+    def mainloop(self, max_rounds=100):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
