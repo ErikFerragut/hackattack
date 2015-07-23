@@ -89,14 +89,16 @@ class Andrews(AI):
     def __init__(self, game, name, start):
         super(Andrews, self).__init__(game, name, start)
         self.alreadyreconed = []
+        self.DDOSED = []
         self.itemlistA = [ "L", "S", "M", "W"]
     def get_moves(self):
         import random
         moves = []
         if self.game.num_players > 1:   
             for s in xrange(self.game.num_players):
-                if s in self.game.state.players_traced[self.game.state.player]:
+                if s in self.game.state.players_traced[self.game.state.player] and s not in self.DDOSED:
                     moves.append({'action' : 'd' , 'user' : s , 'player' : self.game.state.player})
+                    self.DDOSED.append(s)
                     return moves
         self.whatmoved = []
         amount2 = self.game.state.num_hosts / 2

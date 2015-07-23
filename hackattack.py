@@ -38,7 +38,7 @@ class Game(object):
     def __init__(self):
         # all players
         
-        player_types = [ Player, ]
+        player_types = [ Player, Andrews]
 
 
 
