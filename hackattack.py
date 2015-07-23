@@ -40,7 +40,7 @@ class Game(object):
     def __init__(self):
 
 
-        player_types = [ Andrews, EthanAI]
+        player_types = [ EthanAI, Andrews]
 
         self.num_players = len(player_types)
         

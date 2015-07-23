@@ -272,6 +272,8 @@ class EthanAI(AI):
                     if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
                     self.own2.remove(q)
                     self.easy_hacks.remove(l)
+                    if len(self.own2) == 0:
+                        break                        
             if len(self.own2) > 0:
                 v = random.choice(self.own2)
                 self.moves.append({'player':self.game.state.player,'action':'r', 'from':v,
@@ -286,8 +288,8 @@ class EthanAI(AI):
                   any([self.min_accounts[i][u] != '' and self.min_accounts[i][u] > 0 for u in self.min_accounts[i]]):
                     self.moves.append({'player':self.game.state.player,'action':'c', 'from':i})
                     self.own2.remove(i)            
-            if len(self.own2) == 0:
-                break  
+                    if len(self.own2) == 0:
+                        break  
             if len(self.easy_hacks) > 0:
                 for l in self.easy_hacks:
                     q = random.choice(self.own2)
@@ -296,6 +298,8 @@ class EthanAI(AI):
                     if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
                     self.own2.remove(q)
                     self.easy_hacks.remove(l)
+                    if len(self.own2) == 0:
+                        break
             for y in self.own2:
                 if self.turns_since_c[y] > 2:
                     self.moves.append({'player':self.game.state.player,'action':'c', 'from':y})
@@ -312,7 +316,7 @@ class EthanAI(AI):
         self.moves = []
         if len(self.own) < 3:
             self.moves = self.func1()
-        if len(self.own) > 2 and len(self.own) < 10:
+        if len(self.own) > 2 and len(self.own) < self.state.num_hosts - 1:
             self.moves = self.func2()
         if len(self.own) > 9:
             for j in self.own:
