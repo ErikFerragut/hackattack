@@ -272,7 +272,7 @@ class EthanAI(AI):
                     if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
                     self.own2.remove(q)
                     self.easy_hacks.remove(l)
-            if self.own2 > 0:
+            if len(self.own2) > 0:
                 v = random.choice(self.own2)
                 self.moves.append({'player':self.game.state.player,'action':'r', 'from':v,
                 'to':random.choice(list(set(xrange(self.game.state.num_hosts)).difference(list(self.own))))})
@@ -310,10 +310,13 @@ class EthanAI(AI):
     def get_moves(self):
         self.update_lists()
         self.moves = []
-        #if len(self.own) < 3:
-            #moves = self.func1()
-        if len(self.own) > 0:
-            moves = self.func2()   
+        if len(self.own) < 3:
+            self.moves = self.func1()
+        if len(self.own) > 2 and len(self.own) < 10:
+            self.moves = self.func2()
+        if len(self.own) > 9:
+            for j in self.own:
+                self.moves.append({'player':self.game.state.player,'action':'c', 'from':j})
         if self.moves == []:
             for i in self.own:
                 self.moves.append({'player':self.game.state.player,'action':'b', 'from':i})            

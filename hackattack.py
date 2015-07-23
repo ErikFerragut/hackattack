@@ -31,13 +31,7 @@ from hackattack_player import *
 #from hackattack_ai import *
 from hackattack_NetPlayer import *
 from hackattack_ai import *
-<<<<<<< HEAD
-
-=======
-
 from AndrewNathan import *
-
->>>>>>> ca463878353516fc1b0d98a8f3fc3a49bc65437d
 import sys
 from collections import Counter
 
@@ -45,14 +39,8 @@ class Game(object):
 
     def __init__(self):
         # all players
-<<<<<<< HEAD
-        
-        player_types = [BackDoor, EthanAI]
 
-=======
->>>>>>> ca463878353516fc1b0d98a8f3fc3a49bc65437d
-
-        player_types = [ Andrews, JacobAI]
+        player_types = [ Andrews, EthanAI]
 
         self.num_players = len(player_types)
         
