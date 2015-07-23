@@ -33,12 +33,12 @@ class AI(Player):
                       'exploit':ne})
     
 
-    """def update_output(self):
-        pass
+    # def update_output(self):
+        # pass
     
 
-    def turn_done(self):
-        pass"""
+    # def turn_done(self):
+        # pass
 
         
     def say(self, said):
@@ -75,7 +75,6 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for guy2 that are involved
         # store inferred information
-
         
 class BackDoor(AI):
 
@@ -210,15 +209,10 @@ class JacobAI(AI):
                               'action':'h', 'from':p,
                               'to':random.randint(0,self.game.state.num_hosts-1),
                               'exploit':random.choice(self.players_expl)})'''
-
+'''
 class NathanAI(AI):
     def __init__(self, game, name, start):
         super(NathanAI, self).__init__(game, name, start)
-
-"""class NathanAI(AI):
-    def __init__(self, game, name, start):
-        super(NathanAI, self).__init__()
-
         self.counter = 0
         
     def get_moves(self):
@@ -228,8 +222,8 @@ class NathanAI(AI):
             
             # decide whether to fortify or expand
             unpatched_exploits = [ e for e in self.players_expl 
-                 if e[0] == self.'''oss'''[p] and int(e[1:]) not in self.patches[p] ]
-            if len(unpatched_exploits) !> 0: # fortify
+                 if e[0] == self.oss[p] and int(e[1:]) not in self.patches[p] ]
+            if len(unpatched_exploits) > 0: # fortify
                 moves.append({'player':self.game.state.player,
                               'action':'b', 'from':p})
             else:                     # expand
@@ -237,8 +231,9 @@ class NathanAI(AI):
                               'action':'p', 'from':p,
                               'to':random.randint(0,self.game.state.num_hosts),
                               'exploit':random.choice(self.players_expl)})
-        return moves"""
-"""class EthanAI(AI):
+        return moves'''
+        
+class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
         super(EthanAI, self).__init__(game, name, start)
@@ -246,10 +241,12 @@ class NathanAI(AI):
         self.turns_since_c = {n:0 for n in self.own} 
         
     def update_lists(self):
-        self.easy_hacks = [m for m in self.patches if any([l == False for l in self.patches[m]])]
+        self.easy_hacks = [m for m in self.patches if any([self.patches[m][l] == False for l in self.patches[m]])]
+        self.easy_hacks = [m for m in self.easy_hacks if m not in self.own]
+        print "easy hacks:", self.easy_hacks
         for i in self.own:
             if i not in self.turns_since_c:
-                self.turns_since_c.append({i:0})
+                self.turns_since_c.update({i:0})
         for h in self.turns_since_c:
             self.turns_since_c[h] += 1
         return
@@ -257,21 +254,30 @@ class NathanAI(AI):
     def get_moves(self):
         self.moves = []
         self.update_lists()
-        while len(self.moves) < len(self.own):           
-            for i in self.own:
-                #if i in self.min_accounts:
-                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
+        self.own2 = [m for m in self.own.keys()]
+        while 0 < len(self.own2):  
+            for i in self.own2:
+                print "{} <{}>".format(i, self.min_accounts[i])
+                if len(self.min_accounts[i]) > 0 and \
+                  any([self.min_accounts[i][u] != '' and self.min_accounts[i][u] > 0 for u in self.min_accounts[i]]):
+                    self.moves.append({'player':self.game.state.player,'action':'c', 'from':i})
+                    self.own2.remove(i)
                 #if len(easy_hacks) = 0:
                     #use other computer to backdoor by hacking then clean on original computer
                 # else clean
+            if len(self.own2) == 0:
+                break
             if len(self.easy_hacks) > 0:
                 for l in self.easy_hacks:
-                    print "!"*20, p, l, self.players_expl, self.patches[l], self.oss[l][0]
-                    time.sleep(5)
-                    moves.append({'player':self.game.state.player,'action':'h','from':p,'to':l,
+                    #print "!"*20, p, l, self.players_expl, self.patches[l], self.oss[l][0]
+                    #time.sleep(5)
+                    q = random.choice(self.own2)
+                    self.moves.append({'player':self.game.state.player,'action':'h','from':q,'to':l,
                     'exploit':random.choice([e for e in self.players_expl 
-                    if e[0] == self.oss[l][0] and int(e[1:]) in self.patches[l]])})
+                    if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
+                    self.own2.remove(q)
                     #h in players_expl if h[0] = known_OSes[l: ]}) players_expl is a list of tueples 
+
 
             else:                
                 for h in xrange(known_OSes):
@@ -392,8 +398,46 @@ class Andrew(AI):
         
         return moves    
         #Need to fix list:
-        """
+       
             1. Doesn't recon same machine twice over period of game 
-            2. Knowns what OS it is hacking with """
+            2. Knowns what OS it is hacking with 
 
+
+
+            else:
+                v = random.choice(self.own2)
+                self.moves.append({'player':self.game.state.player,'action':'r', 'from':v,
+                'to':random.choice(list(set(xrange(self.game.state.num_hosts)).difference(list(self.own))))})
+                self.own2.remove(v)        
+                
+        print "Moves", self.moves
+        
+        return self.moves        
+    '''def war():
+        hack target with three computers
+        if some remain but you were cleaned hack with 1 - number removed
+        if some remain and not cleaned clean then scan if nothing detected
+        if all cleaned hack with 7 and follow same procedure, but if still 
+        cleaned label target Nathan'''
+
+    '''def func2():
+        when len(moves) < len(self.own) 
+            for i in xrange(self.own):
+                if i in self.known_accounts:
+                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
+            elif for h in self.own: turns_since_c[h] > random.randint(2,3):
+                moves.append({'player':self.game.state.player,'action':'c', 'from':h)}
+            elif for l in self.easy_hacks:
+                moves.append({'player':self.game.state.player,'action':'h', 'from':p,'to':#l,'exploit':h in self.players_expl if [h] in [j]})                
+            elif war possible:
+                start war
+            else new_num_hosts = num_hosts
+                for i in xrange(known_OSes):
+                    new_num_hosts.remove(i)
+                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
+        return moves'''  """
+    #if len(self.own) < 3:
+        #func1()
+    #if len(self.own) >2 and <13
+        #moves = func2
 

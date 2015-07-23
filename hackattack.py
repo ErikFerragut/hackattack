@@ -25,23 +25,24 @@
 import random
 import time
 from hackattack_gamestate import *
-
+from AndrewAI import *
 from hackattack_player import *
 #from hackattack_tk import *
-from hackattack_ai import *
+#from hackattack_ai import *
 from hackattack_NetPlayer import *
 #from hackattack_ai import *
 
 import sys
 
-class Game(object):
-    
-    def __init__(self):
 
-    
+class Game(object):
+
+    def __init__(self):
         # all players
         
-        player_types = [ JacobAI, BackDoor ]
+
+        player_types = [ JacobAI, Andrews, EthanAI ]
+
 
 
 
@@ -140,7 +141,11 @@ class Game(object):
                     player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.player_names[p]),
                                 'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
+<<<<<<< HEAD
                         self.player_names[move['player']], num_removed, move['from']))
+=======
+                            self.player_names[move['player']], num_removed, move['from']))
+>>>>>>> 6141064ba65613bb7ba1e5c9458309abf7111d68
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
@@ -168,7 +173,8 @@ class Game(object):
                     if move['from'] in self.players[playerB].own:
                         self.detected( playerB,  "{} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                     elif move['to'] in self.players[playerB].own:
-                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                        self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".
+                        format(theplayer.name, move['to'], move['from']))
             # add access
             if move['to'] not in theplayer.own:
                 theplayer.own[move['to']] = 1  #tookout [player]
@@ -184,7 +190,7 @@ class Game(object):
                 #if random.random() < self.state.detection_prob['h']:
                     #self.detected( playerB,  "Player {} failed a hack on machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 if move['from'] in self.players[playerB].own:
-                    self.detected( playerB,  "Player {} successfully hacked machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
+                    self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 elif move['to'] in self.players[playerB].own:
                     self.detected( playerB,  "Player {} failed to hack machine {} from machine {}".format(theplayer.name, move['to'], move['from']))
                 
@@ -200,7 +206,8 @@ class Game(object):
         for playerB in xrange(self.num_players):
             if random.random() < self.state.detection_prob['b']:
                 if move['from'] in self.players[playerB].own:
-                    self.detected( playerB,  "Player {} backdoored machine {} from machine {}".format(theplayer.name, move['player'], move['from']))
+                    self.detected( playerB,  "Player {} backdoored machine {}".format(
+                    theplayer.name, move['from']))
 
         theplayer.say({'text':"One backdoor added to machine {}; you now have {}".format(
             move['from'], theplayer.own[move['from']]),
@@ -261,6 +268,7 @@ class Game(object):
                 for p in xrange(self.num_players):
                     self.state.news[move['user']].append("{} DDOSED {} BUT IT WAS A TIE".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
         else:
+        
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             
     def new_patches(self):

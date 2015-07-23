@@ -43,9 +43,9 @@ Player to store knowledge in knowledge system~~
 3. ~~Allow some way to load a saved game~~
 
 ### Artificial intelligence
-1. Create a simple/random AI by making a variation of Player
-2. Create an evaluation function for a player's knowledge
-3. Implement an probabilistic alpha-beta pruning k-ply search
+1. ~~Create a simple/random AI by making a variation of Player~~
+2. Create an evaluation function for a player's knowledge -- requires total code refactoring!
+3. Implement an probabilistic alpha-beta pruning k-ply search -- requires evaluation function!
 
 ### Networking
 1. Create a Player type that sends info and gets moves from a client
@@ -59,7 +59,7 @@ Player to store knowledge in knowledge system~~
 ## known bugs
 
 hackattack.player line 123 errors the program before it can give the error message
-## doesn't clarify hack success in detection / news
+### doesn't clarify hack success in detection / news
 
 1. ~~hackattack.player line 123 errors the program before it can give the error message~~
 
@@ -70,7 +70,7 @@ tl;dr : you can get 2 of the same exploit~~
 3. ~~hackattack.py line 68 in do_scan uses old form of players own~~
 4. ~~skips turn if OS of patch is wrong but you own it~~ 
 5. ~~if x in hackattack_util is greater than .75, the program crashes~~
-6. Knowledge system doesnt show home pc in known operating systems
+6. ~~Knowledge system doesnt show home pc in known operating systems~~
 7. things displayed in news are not incorporated into the knowledge system
 8. ~~on line 203, may bug out.... unknown debug item printed every turn: this should be removed e.g. {0,[],[]}~~
 9. at ddos, update_status fails (line 173)
