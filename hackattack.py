@@ -42,7 +42,7 @@ class Game(object):
         
 
 
-        player_types = [ JacobAI, AndrewNathan, Andrews]
+        player_types = [ JacobAI, AndrewNathan]
 
 
 

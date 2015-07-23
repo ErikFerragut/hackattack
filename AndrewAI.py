@@ -114,7 +114,7 @@ class Andrews(AI):
                 
         
         for p in self.own:
-            if not in self.whatmoved:    
+            if p not in self.whatmoved:    
                 for machines in xrange(self.game.state.num_hosts - 1):
                     for exploits in self.players_expl:  
                         if self.patches[machines][int(exploits[1:])] == False and machines not in self.own and exploits[0] == self.oss[machines][0]:
