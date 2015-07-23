@@ -316,9 +316,9 @@ class EthanAI(AI):
         self.moves = []
         if len(self.own) < 3:
             self.moves = self.func1()
-        if len(self.own) > 2 and len(self.own) < self.state.num_hosts - 1:
+        if len(self.own) > 2 and len(self.own) < 20:#self.state.num_hosts - 1
             self.moves = self.func2()
-        if len(self.own) > 9:
+        if len(self.own) > 20:
             for j in self.own:
                 self.moves.append({'player':self.game.state.player,'action':'c', 'from':j})
         if self.moves == []:

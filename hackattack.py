@@ -40,7 +40,7 @@ class Game(object):
     def __init__(self):
 
 
-        player_types = [ EthanAI, Andrews]
+        player_types = [ Andrews, EthanAI, JacobAI, AndrewNathan]
 
         self.num_players = len(player_types)
         
@@ -335,7 +335,7 @@ if __name__ == '__main__':
     #pygame.display.update()
 
     if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
-        num_repeat = 100
+        num_repeat = 50
         sys.argv.pop(1)
     else:
         num_repeat = 1
