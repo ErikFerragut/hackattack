@@ -85,75 +85,79 @@ class BackDoor(AI):
             moves.append({'player':self.game.state.player,
                             'action':'b', 'from':p})
         return moves
-        
-class JacobAI(AI):
-    def __init__(self, game, name, start):
-        super(JacobAI, self).__init__(game, name, start)
-        self.random_host = random.randint(0,self.game.state.num_hosts-1)
-        self.machines = []
-        self.counter = 0
-        
+class CleanClass(AI):
+
     def get_moves(self):
         moves = []
         for p in self.own:
-            if self.counter == 0 and self.random_host not in self.machines:
+            moves.append({'player':self.game.state.player,
+                            'action':'c', 'from':p})
+        return moves        
+class JacobAI(AI):
+    def __init__(self, game, name, start):
+        super(JacobAI, self).__init__(game, name, start)
+        self.machines = {i:0 for i in xrange(self.game.state.num_hosts)}
+        self.machines[start] = 2
+        self.counter = 0
+        self.getReconTarget()
+        
+    def getReconTarget(self):
+            if not 0 in self.machines.values():
+                self.machines = {i:0 for i in xrange(self.game.state.num_hosts)}
+            
+            while True:
+                tempRandomHost = random.randint(0,self.game.state.num_hosts-1)
+                if self.machines[tempRandomHost]==0:
+                    self.random_host = tempRandomHost
+                    break
+                    
+    def get_moves(self):
+        
+        moves = []
+        for p in self.own:
+
+            if self.counter == 0 and self.machines[self.random_host] == 0:
                 moves.append({'player':self.game.state.player,
                             'action':'r', 'from':p, 'to':self.random_host})
-                self.machines.append(self.random_host)
+                self.machines[self.random_host] = 1
+                
+                #create random target for recon
+                
             elif self.counter == 1:
-                #if not patched hack
-                '''for i in self.players_expl:
-                    if self.patches[self.random_host][i] == False:
-                        moves.append({'player':self.game.state.player, 
-                            'action':'h', 'from':p, 'to':self.random_host})'''
-                #if self.patches[self.random_host][j for j in self.players_expl]==True:
-                exploits = [ j for j in self.players_expl if self.patches[self.random_host][int(j[1:])]==False]
-                print exploits
+                
+                exploits = [ j for j in self.players_expl if self.oss[self.random_host][0]==j[0] and self.patches[self.random_host][int(j[1:])]==False]
+                #print exploits
                 if len(exploits) > 0:
                     moves.append({'player':self.game.state.player, 'action':'h', 
                     'from':p, 'to':self.random_host, 'exploit':exploits[0]}) 
-                elif self.random_host not in self.machines:
-                    moves.append({'player':self.game.state.player,
-                            'action':'r', 'from':p, 'to':self.random_host})
-                    self.machines.append(self.random_host)
+                    self.machines[self.random_host] = 2
                 else:
+                    self.getReconTarget()
+                    
                     moves.append({'player':self.game.state.player,
                             'action':'r', 'from':p, 'to':self.random_host})
-                    self.machines.append(self.random_host)
-                self.random_host = random.randint(0,self.game.state.num_hosts-1)
-                print moves
+                    self.machines[self.random_host] = 1
+                #print moves
             elif self.counter == 2 or self.counter == 4:
-                if self.random_host not in self.machines:
-                    moves.append({'player':self.game.state.player,
-                        'action':'r', 'from':p, 'to':self.random_host})
-                elif self.random_host not in self.machines:
-                    moves.append({'player':self.game.state.player,
-                        'action':'r', 'from':p, 'to':self.random_host})
-                else:
-                    moves.append({'player':self.game.state.player,
-                        'action':'r', 'from':p, 'to':self.random_host})
-                self.machines.append(self.random_host)       
-                self.random_host = random.randint(0,self.game.state.num_hosts-1)
+                self.getReconTarget()
+                
+                moves.append({'player':self.game.state.player,
+                    'action':'r', 'from':p, 'to':self.random_host})
+                self.machines[self.random_host] = 1
             elif self.counter == 3 or self.counter == 5:
-                #if self.patches[self.machines[j for j in xrange(len(self.machines))][i for i in self.players_expl]==True:
-                #[[moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machine[j]}), del self.machines[j] for j in xrange(len(self.machines))] for (i in self.players_expl) if self.patches[self.machines[j]][i]==False]
-                foundmove = False
-                tempHackMachine = []
-                for j in xrange(len(self.machines)):
-                    for i in self.players_expl:
-                        if self.patches[self.machines[j]][int(i[1:])]==False and foundmove == False and j not in tempHackMachine:
-                            moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machines[j], 'exploit':i})
-                            #del self.machines[j] this messes up the for loop
-                            tempHackMachine.append(j)
-                            foundmove = True
-                if not foundmove:
-                    self.random_host = random.randint(0,self.game.state.num_hosts-1)
+                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [ me for me in exploits if me[0] not in self.own]
+                print self.counter, exploits
+                if len(exploits) > 0:
+                    the_exploit = random.choice(exploits)
+                    moves.append({'player':self.game.state.player, 'action':'h', 
+                    'from':p, 'to':the_exploit[0], 'exploit':the_exploit[1]}) 
+                    self.machines[the_exploit[0]] = 2
+                else:
+                    self.getReconTarget()
                     moves.append({'player':self.game.state.player,
                         'action':'r', 'from':p, 'to':self.random_host})
-                    self.machines.append(self.random_host)  
-                    self.random_host = random.randint(0,self.game.state.num_hosts-1)
-
-                #del self.machines[j]
+                    self.machines[self.random_host] = 1
             elif self.counter == 6 or self.counter == 8:
                 moves.append({'player':self.game.state.player,
                             'action':'c', 'from':p})
@@ -161,37 +165,41 @@ class JacobAI(AI):
                 moves.append({'player':self.game.state.player,
                             'action':'b', 'from':p})
             elif self.counter == 9:
-                if len(self.game.state.players_traced) > 0:#there is a trace:
-                    moves.append({'player':self.game.state.player,
-                                'action':'d', 'from':p, 'to':random.choice(self.game.state.players_traced)})
+                for s in xrange(self.game.num_players):
+                    if s in self.game.state.players_traced[self.game.state.player]:
+                        moves.append({'action' : 'd' , 'user' : s , 'player' :self.game.state.player})
+                        return moves
+                
+                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [ me for me in exploits if me[0] not in self.own]
+                print self.counter, exploits
+                if len(exploits) > 0:
+                    the_exploit = random.choice(exploits)
+                    moves.append({'player':self.game.state.player, 'action':'h', 
+                    'from':p, 'to':the_exploit[0], 'exploit':the_exploit[1]}) 
+                    self.machines[the_exploit[0]] = 2
                 else:
-                    #[moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machine[j]}), del self.machines[j] for j in xrange(len(self.machines)) for i in self.players_expl if self.patches[self.machines[j]][i]==False]
-                    foundmove = False
-                    tempHackMachine = []
-                    for j in xrange(len(self.machines)):
-                        for i in self.players_expl:
-                            if self.patches[self.machines[j]][int(i[1:])]==False and foundmove == False and j not in tempHackMachine:
-                                moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machines[j], 'exploit':i})
-                                #del self.machines[j] this messes up the for loop
-                                tempHackMachine.append(j)
-                                foundmove = True
+                    self.getReconTarget()
+                    
+                    moves.append({'player':self.game.state.player,
+                            'action':'r', 'from':p, 'to':self.random_host})
+                    self.machines[self.random_host] = 1
             elif self.counter == 10:
                 self.counter = 6
-                foundmove = False
-                tempHackMachine = []
-                for j in xrange(len(self.machines)):
-                    for i in self.players_expl:
-                        if self.patches[self.machines[j]][int(i[1:])]==False and foundmove == False and j not in tempHackMachine:
-                            moves.append({'player':self.game.state.player, 'action':'h', 'from':p, 'to':self.machines[j], 'exploit':i})
-                            #del self.machines[j] this messes up the for loop
-                            tempHackMachine.append(j)
-                            foundmove = True
-                
-
+                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [ me for me in exploits if me[0] not in self.own]
+                print self.counter, exploits
+                if len(exploits) > 0:
+                    the_exploit = random.choice(exploits)
+                    moves.append({'player':self.game.state.player, 'action':'h', 
+                    'from':p, 'to':the_exploit[0], 'exploit':the_exploit[1]}) 
+                    self.machines[the_exploit[0]] = 2
+                else:
+                    self.getReconTarget()
+                    moves.append({'player':self.game.state.player,
+                        'action':'r', 'from':p, 'to':self.random_host})
+                    self.machines[self.random_host] = 1
         self.counter +=1  
-        #self.game.state.news[0].append(moves)
-
-            # decide whether to fortify or expand
             
         return moves
         '''if random.random() < 0.3: # fortify
@@ -278,48 +286,15 @@ class NathanAI(AI):
     if len(self.own) >2 and len(self.own)<13:
         moves = func2
     
-    #return moves"""
+    #return moves
 
-          """  else:
+    else:
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
         return moves"""
         
-    '''def war():
-        hack target with three computers
-        if some remain but you were cleaned hack with 1 - number removed
-        if some remain and not cleaned clean then scan if nothing detected
-        if all cleaned hack with 7 and follow same procedure, but if still 
-        cleaned label target Nathan'''
-    '''def func2():
-        when len(moves) < len(self.own) 
-            for i in xrange(self.own):
-                if i in self.known_accounts:
-                    moves.append({'player':self.game.state.player,'action':'c', 'from':i})
-            elif for h in self.own: turns_since_c[h] > random.randint(2,3):
-                moves.append({'player':self.game.state.player,'action':'c', 'from':h)}
-            elif for l in self.easy_hacks:
-                moves.append({'player':self.game.state.player,'action':'h', 'from':p,'to':#l,'exploit':h in self.players_expl if [h] in [j]})                
-            elif war possible:
-                start war
-            else new_num_hosts = num_hosts
-                for i in xrange(known_OSes):
-                    new_num_hosts.remove(i)
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,'to'random.choice(new_num_hosts)})
-        return moves'''  
-    #if len(self.own) < 3:
-        #func1()
-    #if len(self.own) >2 and <13
-        #moves = func2
-    '''if random.random() < 0.3: # fortify
-                    moves.append({'player':self.game.state.player,
-                                  'action':'b', 'from':p})
-                else:                     # expand
-                    moves.append({'player':self.game.state.player,
-                                  'action':'h', 'from':p,
-                                  'to':random.randint(0,self.game.state.num_hosts),
-                                  'exploit':random.choice(self.players_expl)})'''
-
+    
+    
         
 class Andrew(AI):
 

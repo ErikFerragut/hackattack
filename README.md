@@ -73,6 +73,8 @@ tl;dr : you can get 2 of the same exploit~~
 6. Knowledge system doesnt show home pc in known operating systems
 7. things displayed in news are not incorporated into the knowledge system
 8. ~~on line 203, may bug out.... unknown debug item printed every turn: this should be removed e.g. {0,[],[]}~~
+9. at ddos, update_status fails (line 173)
+
 
 ## Recently fixed bugs
 
