@@ -297,11 +297,11 @@ class EthanAI(AI):
     else:
                 moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-        return moves"""
+        return moves
         
     
     
-        
+"""        
 class Andrew(AI):
 
     

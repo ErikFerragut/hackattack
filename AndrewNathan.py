@@ -77,13 +77,13 @@ class AI(Player):
         self.log.append(said['text'])
         # add it to a list for guy2 that are involved
         # store inferred information
-self.patches[machines][int(exploits[1:])] == False
+
 
 class AndrewNathan(AI):
-	def __init__(self, game, name, start):
+    def __init__(self, game, name, start):
         super(AndrewNathan, self).__init__(game, name, start)
         
-    def get_moves:
+    def get_moves(self):
         moves = []
         for p in self.own:
             for exploits in self.players_expl:
