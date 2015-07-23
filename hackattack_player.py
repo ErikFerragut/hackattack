@@ -25,11 +25,6 @@ class Player(object):
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
         
-        
-        
-        
-        
-
         if self.name == 'Player 0':
             # show title screen until someone hits a key
             self.say({'text': "HACK ATTACK!\n\n"})
@@ -44,7 +39,7 @@ class Player(object):
             /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
             ''')
 
-            raw_input("\n\n\nPress enter to begin.")
+            #raw_input("\n\n\nPress enter to begin.")
 
     def display(self, string):
         print string
@@ -177,7 +172,7 @@ class Player(object):
         s = self.game.state
         # for each player (if they haven't lost)
         ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(self.game.player_names[s.player]))
+        raw_input("\n"*100 + "Ready {}? ".format(self.game.player_names[s.player])) 
             
         
         ## check for a new exploit
@@ -295,8 +290,9 @@ class Player(object):
         return moves
 
     def turn_done(self):
-        raw_input("\nPress enter to clear screen ")
-        self.display("\n"*100)
+        #raw_input("\nPress enter to clear screen ")
+        #self.display("\n"*100)
+        pass
 
     def say(self, said):
         '''How the player class receives messages from the game.'''

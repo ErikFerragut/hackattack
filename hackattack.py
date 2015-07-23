@@ -31,16 +31,28 @@ from hackattack_player import *
 #from hackattack_ai import *
 from hackattack_NetPlayer import *
 from hackattack_ai import *
+<<<<<<< HEAD
 
+=======
+
+from AndrewNathan import *
+
+>>>>>>> ca463878353516fc1b0d98a8f3fc3a49bc65437d
 import sys
+from collections import Counter
 
 class Game(object):
+
     def __init__(self):
         # all players
+<<<<<<< HEAD
         
         player_types = [BackDoor, EthanAI]
 
+=======
+>>>>>>> ca463878353516fc1b0d98a8f3fc3a49bc65437d
 
+        player_types = [ Player, Andrews]
 
         self.num_players = len(player_types)
         
@@ -99,6 +111,7 @@ class Game(object):
                     if move['from'] in self.players[playerB].own:
                         self.detected( playerB,  "Player {} scanned machine {} from machine {}".format(player.name, move['player'], move['from']))    
                 
+                
                 #if self.players[s].own[player][move['from']] is self.players[s].own[playerB]:
                     #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                     #if self.game.players_own[s][move['from']] == 0:
@@ -137,7 +150,8 @@ class Game(object):
                     player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.player_names[p]),
                                 'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
-                            self.player_names[move['player']], num_removed, move['from']))
+                        self.player_names[move['player']], num_removed, move['from']))
+
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
@@ -241,7 +255,7 @@ class Game(object):
             if you_str > them_str:
                 theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
-                player.own[move['user']] = {}
+                otherplayer.own = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
@@ -249,7 +263,7 @@ class Game(object):
             elif you_str < them_str:
                 theplayer.say({'text':"YOU LOST THE DDOS -- YOU ARE ELIMINATED",
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'lost'})
-                theplayer.own = {}#need?[player]
+                theplayer.own = {}
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.player_names[player]))
                 #announces in the news about the ddos activity
                 for p in xrange(self.num_players):
@@ -274,10 +288,12 @@ class Game(object):
                     except:
                         pass
 
-    def mainloop(self):
+    def mainloop(self, max_rounds=100):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
+                if self.state.game_round == max_rounds:
+                    return 'tie'
             self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
@@ -286,19 +302,25 @@ class Game(object):
             
             player.update_output()  # show screen
             if player.status == 'won':
-                break
+                return self.state.player
             elif player.status == 'out':
                 self.state.player = (self.state.player + 1) % self.num_players
                 continue
             
             moves = player.get_moves()
 
+            # check that the moves are legit
+            hosts_used = Counter([ m['from'] for m in moves if 'from' in m ])
+            if len(hosts_used) > 0:
+                assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
+                assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
+
             # handle save and load moves
             if moves[0]['action'] == 'q':
                 open(moves[0]['filename'], 'w').write( self.state.to_json() )
                 print "Game saved as file {}".format(moves[0]['filename'])
                 print "Reload using  'python hackattack.py {}'".format(moves[0]['filename'])
-                break
+                return 'q'
 
             ### do all the actions and provide results
 
@@ -321,11 +343,23 @@ class Game(object):
 if __name__ == '__main__':
     #pygameSay("test")
     #pygame.display.update()
-    g=Game()
-    if len(sys.argv) > 1:
-        S = '\n'.join(open(sys.argv[1], 'r').readlines())
-        g.state.from_json(S)
-    else:
-        g.state.player = 0
 
-    g.mainloop()
+    if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
+        num_repeat = 100
+        sys.argv.pop(1)
+    else:
+        num_repeat = 1
+
+    results = []
+    for trial in xrange(num_repeat):
+        g=Game()
+        if len(sys.argv) > 1:
+            S = '\n'.join(open(sys.argv[1], 'r').readlines())
+            g.state.from_json(S)
+        else:
+            g.state.player = 0
+
+        results.append(g.mainloop())
+
+    print Counter(results)
+
