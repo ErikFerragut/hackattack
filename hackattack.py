@@ -41,7 +41,7 @@ class Game(object):
         # all players
         
 
-        player_types = [ Player, AndrewNathan]
+        player_types = [ JacobAI, AndrewNathan]
 
 
 
@@ -331,6 +331,8 @@ if __name__ == '__main__':
         S = '\n'.join(open(sys.argv[1], 'r').readlines())
         g.state.from_json(S)
     else:
+    
+    
         g.state.player = 0
 
     g.mainloop()
