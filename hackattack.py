@@ -42,6 +42,7 @@ class Game(object):
         
 
 
+
         player_types = [ Andrews, JacobAI]
 
 
@@ -302,6 +303,12 @@ class Game(object):
             
             moves = player.get_moves()
 
+            # check that the moves are legit
+            hosts_used = Counter([ m['from'] for m in moves if 'from' in m ])
+            if len(hosts_used) > 0:
+                assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
+                assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
+
             # handle save and load moves
             if moves[0]['action'] == 'q':
                 open(moves[0]['filename'], 'w').write( self.state.to_json() )
@@ -334,9 +341,11 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
         num_repeat = 100
         sys.argv.pop(1)
+    else:
+        num_repeat = 1
 
     results = []
-    for trial in xrange(100):
+    for trial in xrange(num_repeat):
         g=Game()
         if len(sys.argv) > 1:
             S = '\n'.join(open(sys.argv[1], 'r').readlines())
