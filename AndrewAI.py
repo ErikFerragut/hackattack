@@ -94,19 +94,21 @@ class Andrews(AI):
     def get_moves(self):
         import random
         moves = []
+        self.whatmoved = []
+        
         if self.game.num_players > 1:   
             for s in xrange(self.game.num_players):
                 if s in self.game.state.players_traced[self.game.state.player] and s not in self.DDOSED:
                     moves.append({'action' : 'd' , 'user' : s , 'player' : self.game.state.player})
                     self.DDOSED.append(s)
                     return moves
-        self.whatmoved = []
+        
         amount2 = self.game.state.num_hosts / 2
         if len(self.own) > amount2: 
             for p in self.own:
                 moves.append({'player' : self.game.state.player, 'action' : 'c', 'from' : p})
             return moves 
-        amount = 1
+        
         for p in self.own:
             if self.own[p] > self.game.state.num_hosts - 1:
                 moves.append({'player' : self.game.state.player, 'action' : 'c', 'from' : p})
@@ -117,28 +119,29 @@ class Andrews(AI):
             if p not in self.whatmoved:    
                 for machines in xrange(self.game.state.num_hosts - 1):
                     for exploits in self.players_expl:  
-                        if self.patches[machines][int(exploits[1:])] == False and machines not in self.own and exploits[0] == self.oss[machines][0]:
-                            if amount > len(self.own):
-                                break
-                            amount += 1 
-                            moves.append({'player':self.game.state.player,
-                                  'action':'h', 'from':p,
-                                  'to': machines,
-                                  'exploit': exploits})
-                            self.whatmoved.append(p)
-        if len(moves) < len(self.own):
+                        if p not in self.whatmoved: 
+                            if self.patches[machines][int(exploits[1:])] == False and machines not in self.own and exploits[0] == self.oss[machines][0]:
+                                
+                                moves.append({'player':self.game.state.player,
+                                      'action':'h', 'from':p,
+                                      'to': machines,
+                                      'exploit': exploits})
+                                self.whatmoved.append(p)
+        if len(self.whatmoved) < len(self.own):
             for p in self.own:
-                if p not in self.whatmoved:    
+                 
                     for i in xrange(self.game.state.num_hosts - 1):
-                        if i not in self.own and i not in self.alreadyreconed:
-                            moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : i})
-                            self.whatmoved.append(p)
-                            self.alreadyreconed.append(i)
-                            if len(moves) >= len(self.own):
-                                return moves
+                        if p not in self.whatmoved:
+                            if i not in self.own and i not in self.alreadyreconed:
+                                moves.append({'player' : self.game.state.player, 'action' : 'r', 'from' : p, 'to' : i})
+                                self.whatmoved.append(p)
+                                self.alreadyreconed.append(i)
+                                if len(moves) >= len(self.own):
+                                    return moves
             if len(moves) < len(self.own):
                 for p in self.own:
                     if p not in self.whatmoved: 
                         moves.append({'player' : self.game.state.player, 'action' : 'b', 'from' : p})
                         self.whatmoved.append(p)
+        print moves
         return moves 
