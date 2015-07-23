@@ -343,9 +343,11 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
         num_repeat = 100
         sys.argv.pop(1)
+    else:
+        num_repeat = 1
 
     results = []
-    for trial in xrange(100):
+    for trial in xrange(num_repeat):
         g=Game()
         if len(sys.argv) > 1:
             S = '\n'.join(open(sys.argv[1], 'r').readlines())
