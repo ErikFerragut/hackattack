@@ -108,7 +108,7 @@ class Andrews(AI):
             return moves 
         amount = 1
         for p in self.own:
-            if self.own[0] > self.game.state.num_hosts - 1:
+            if self.own[p] > self.game.state.num_hosts - 1:
                 moves.append({'player' : self.game.state.player, 'action' : 'c', 'from' : p})
                 self.whatmoved.append(p)
                 

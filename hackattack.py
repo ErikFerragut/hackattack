@@ -44,7 +44,9 @@ class Game(object):
         
 
 
+
         player_types = [ Andrews, JacobAI, Andrews, JacobAI ]
+
 
 
 
@@ -304,9 +306,10 @@ class Game(object):
             moves = player.get_moves()
 
             # check that the moves are legit
-            hosts_used = Counter([ m['from'] for m in moves ])
-            assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
-            assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
+            hosts_used = Counter([ m['from'] for m in moves if 'from' in m ])
+            if len(hosts_used) > 0:
+                assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
+                assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
 
             # handle save and load moves
             if moves[0]['action'] == 'q':
