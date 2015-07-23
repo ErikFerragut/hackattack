@@ -141,11 +141,8 @@ class Game(object):
                     player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.player_names[p]),
                                 'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
-<<<<<<< HEAD
                         self.player_names[move['player']], num_removed, move['from']))
-=======
-                            self.player_names[move['player']], num_removed, move['from']))
->>>>>>> 6141064ba65613bb7ba1e5c9458309abf7111d68
+
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
