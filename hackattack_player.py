@@ -44,7 +44,7 @@ class Player(object):
             /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
             ''')
 
-            raw_input("\n\n\nPress enter to begin.")
+            #raw_input("\n\n\nPress enter to begin.")
 
     def display(self, string):
         print string
