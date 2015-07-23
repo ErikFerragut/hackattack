@@ -304,7 +304,9 @@ class Game(object):
             if len(hosts_used) > 0:
                 assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
                 assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
-
+                assert len(hosts_used) == len(player.own), "{} did not use some machine(s):{}\nowned:{}".format(player.name, moves, player.own)
+            else:
+                assert moves[0]['action'] in 'dq', "what?... player {}\nmoves{}\nowns:{}".format(player.name, moves, player.own)
             # handle save and load moves
             if moves[0]['action'] == 'q':
                 open(moves[0]['filename'], 'w').write( self.state.to_json() )
