@@ -232,7 +232,11 @@ class NathanAI(AI):
                               'to':random.randint(0,self.game.state.num_hosts),
                               'exploit':random.choice(self.players_expl)})
         return moves'''
+
 '''        
+=======
+"""        
+>>>>>>> 22d4a4902bb591242e9748311dfa7eba207b7f83
 class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
@@ -298,11 +302,14 @@ class EthanAI(AI):
         moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
         return moves
-'''        
+     
+
+        return '''
+
         
     
     
-"""        
+     
 class Andrew(AI):
 
     

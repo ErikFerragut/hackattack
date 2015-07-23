@@ -25,11 +25,6 @@ class Player(object):
             E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
         self.players_expl = list(E)
         
-        
-        
-        
-        
-
         if self.name == 'Player 0':
             # show title screen until someone hits a key
             self.say({'text': "HACK ATTACK!\n\n"})
@@ -44,7 +39,7 @@ class Player(object):
             /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
             ''')
 
-            raw_input("\n\n\nPress enter to begin.")
+            #raw_input("\n\n\nPress enter to begin.")
 
     def display(self, string):
         print string

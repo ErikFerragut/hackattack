@@ -32,8 +32,10 @@ from hackattack_player import *
 from hackattack_NetPlayer import *
 from hackattack_ai import *
 
-import sys
+from AndrewNathan import *
 
+import sys
+from collections import Counter
 
 class Game(object):
 
@@ -41,8 +43,8 @@ class Game(object):
         # all players
         
 
-        player_types = [ JacobAI, Andrews, BackDoor, CleanClass ]
 
+        player_types = [ Andrews, JacobAI, Andrews, JacobAI ]
 
 
 
@@ -102,6 +104,7 @@ class Game(object):
                 #for b in xrange(self.players[s].own[playerB]):
                     if move['from'] in self.players[playerB].own:
                         self.detected( playerB,  "Player {} scanned machine {} from machine {}".format(player.name, move['player'], move['from']))    
+                
                 
                 #if self.players[s].own[player][move['from']] is self.players[s].own[playerB]:
                     #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
@@ -246,7 +249,7 @@ class Game(object):
             if you_str > them_str:
                 theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
-                theplayer.own[move['user']] = {}
+                otherplayer.own = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
@@ -254,7 +257,7 @@ class Game(object):
             elif you_str < them_str:
                 theplayer.say({'text':"YOU LOST THE DDOS -- YOU ARE ELIMINATED",
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'lost'})
-                theplayer.own = {}#need?[player]
+                theplayer.own = {}
                 self.state.news[move['user']].append("{} tried to DDoS you but lost and was eliminated".format(self.player_names[player]))
                 #announces in the news about the ddos activity
                 for p in xrange(self.num_players):
@@ -279,10 +282,12 @@ class Game(object):
                     except:
                         pass
 
-    def mainloop(self):
+    def mainloop(self, max_rounds=100):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
+                if self.state.game_round == max_rounds:
+                    return 'tie'
             self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
@@ -291,19 +296,24 @@ class Game(object):
             
             player.update_output()  # show screen
             if player.status == 'won':
-                break
+                return self.state.player
             elif player.status == 'out':
                 self.state.player = (self.state.player + 1) % self.num_players
                 continue
             
             moves = player.get_moves()
 
+            # check that the moves are legit
+            hosts_used = Counter([ m['from'] for m in moves ])
+            assert set(hosts_used.keys()).issubset( set(player.own.keys()) ), "{} Used non-owned machine:{}\nowned:{}".format(player.name, moves, player.own)
+            assert max(hosts_used.values()) <= 1, "{} used machine more than once: {}\nowned:{}".format(player.name, moves, player.own)
+
             # handle save and load moves
             if moves[0]['action'] == 'q':
                 open(moves[0]['filename'], 'w').write( self.state.to_json() )
                 print "Game saved as file {}".format(moves[0]['filename'])
                 print "Reload using  'python hackattack.py {}'".format(moves[0]['filename'])
-                break
+                return 'q'
 
             ### do all the actions and provide results
 
@@ -326,11 +336,21 @@ class Game(object):
 if __name__ == '__main__':
     #pygameSay("test")
     #pygame.display.update()
-    g=Game()
-    if len(sys.argv) > 1:
-        S = '\n'.join(open(sys.argv[1], 'r').readlines())
-        g.state.from_json(S)
-    else:
-        g.state.player = 0
 
-    g.mainloop()
+    if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
+        num_repeat = 100
+        sys.argv.pop(1)
+
+    results = []
+    for trial in xrange(100):
+        g=Game()
+        if len(sys.argv) > 1:
+            S = '\n'.join(open(sys.argv[1], 'r').readlines())
+            g.state.from_json(S)
+        else:
+            g.state.player = 0
+
+        results.append(g.mainloop())
+
+    print Counter(results)
+
