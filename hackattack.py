@@ -33,7 +33,7 @@ from hackattack_NetPlayer import *
 #from hackattack_ai import *
 from AndrewNathan import *
 import sys
-
+from collections import Counter
 
 class Game(object):
 
@@ -279,10 +279,12 @@ class Game(object):
                     except:
                         pass
 
-    def mainloop(self):
+    def mainloop(self, max_rounds=1000):
         while True:
             if self.state.player == 0:
                 self.state.game_round += 1
+                if self.state.game_round == max_rounds:
+                    return 'tie'
             self.new_patches()
             player = self.players[self.state.player]
             player.update_status()  # did they win, lose?
@@ -291,7 +293,7 @@ class Game(object):
             
             player.update_output()  # show screen
             if player.status == 'won':
-                break
+                return self.state.player
             elif player.status == 'out':
                 self.state.player = (self.state.player + 1) % self.num_players
                 continue
@@ -303,7 +305,7 @@ class Game(object):
                 open(moves[0]['filename'], 'w').write( self.state.to_json() )
                 print "Game saved as file {}".format(moves[0]['filename'])
                 print "Reload using  'python hackattack.py {}'".format(moves[0]['filename'])
-                break
+                return 'q'
 
             ### do all the actions and provide results
 
@@ -326,11 +328,19 @@ class Game(object):
 if __name__ == '__main__':
     #pygameSay("test")
     #pygame.display.update()
-    g=Game()
-    if len(sys.argv) > 1:
-        S = '\n'.join(open(sys.argv[1], 'r').readlines())
-        g.state.from_json(S)
-    else:
-        g.state.player = 0
+    if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
+        num_repeat = 100
+        sys.argv.pop(1)
 
-    g.mainloop()
+    results = []
+    for trial in xrange(num_repeat):
+        g=Game()
+        if len(sys.argv) > 1:
+            S = '\n'.join(open(sys.argv[1], 'r').readlines())
+            g.state.from_json(S)
+        else:
+            g.state.player = 0
+
+        results.append(g.mainloop())
+
+    print Counter(results)
