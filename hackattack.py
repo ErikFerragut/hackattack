@@ -30,7 +30,7 @@ from hackattack_player import *
 #from hackattack_tk import *
 #from hackattack_ai import *
 from hackattack_NetPlayer import *
-#from hackattack_ai import *
+from hackattack_ai import *
 
 import sys
 
@@ -41,7 +41,7 @@ class Game(object):
         # all players
         
 
-        player_types = [ JacobAI, Andrews, EthanAI ]
+        player_types = [ JacobAI, Andrews, BackDoor, CleanClass ]
 
 
 

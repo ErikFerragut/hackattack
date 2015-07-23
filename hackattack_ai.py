@@ -113,8 +113,9 @@ class JacobAI(AI):
     def get_moves(self):
         
         moves = []
+        
         for p in self.own:
-
+            print "jacob player"
             if self.counter == 0 and self.machines[self.random_host] == 0:
                 moves.append({'player':self.game.state.player,
                             'action':'r', 'from':p, 'to':self.random_host})
@@ -199,7 +200,6 @@ class JacobAI(AI):
                         'action':'r', 'from':p, 'to':self.random_host})
                     self.machines[self.random_host] = 1
         self.counter +=1  
-            
         return moves
         '''if random.random() < 0.3: # fortify
                 moves.append({'player':self.game.state.player,
@@ -232,7 +232,7 @@ class NathanAI(AI):
                               'to':random.randint(0,self.game.state.num_hosts),
                               'exploit':random.choice(self.players_expl)})
         return moves'''
-        
+'''        
 class EthanAI(AI):
     import random
     def __init__(self, game, name, start):
@@ -295,13 +295,14 @@ class EthanAI(AI):
     #return moves
 
     else:
-                moves.append({'player':self.game.state.player,'action':'r', 'from':p,
+        moves.append({'player':self.game.state.player,'action':'r', 'from':p,
                 'to':random.choice(set(xrange(self.game.state.num_hosts)).difference(list(self.own)))})
-        return moves"""
+        return moves
+'''        
         
     
     
-        
+"""        
 class Andrew(AI):
 
     
