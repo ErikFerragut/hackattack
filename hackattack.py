@@ -44,7 +44,6 @@ class Game(object):
         player_types = [ Andrews, JacobAI, Andrews, JacobAI ]
 
 
-
         self.num_players = len(player_types)
         
         num_hosts = 5*self.num_players
@@ -333,12 +332,13 @@ class Game(object):
 if __name__ == '__main__':
     #pygameSay("test")
     #pygame.display.update()
+
     if len(sys.argv) > 1 and sys.argv[1] == 'repeat':
         num_repeat = 100
         sys.argv.pop(1)
 
     results = []
-    for trial in xrange(num_repeat):
+    for trial in xrange(100):
         g=Game()
         if len(sys.argv) > 1:
             S = '\n'.join(open(sys.argv[1], 'r').readlines())
@@ -349,3 +349,4 @@ if __name__ == '__main__':
         results.append(g.mainloop())
 
     print Counter(results)
+

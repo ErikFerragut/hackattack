@@ -86,6 +86,11 @@ class AndrewNathan(AI):
     def get_moves(self):
         moves = []
         for p in self.own:
+            
+            if self.own[p] > self.game.state.num_hosts - 1:
+                moves.append({'player' : self.game.state.player , 'from' : p , 'action' : 'c'})
+                return moves
+            
             for exploits in self.players_expl:
                 if self.patches[p][int(exploits[1:])] == False and exploits[0] == self.oss[p][0]:
                     moves.append({'player' : self.game.state.player , 'action' : 'p' , 'from' : p , 'exploit' : exploits})
