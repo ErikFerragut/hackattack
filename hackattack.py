@@ -31,14 +31,17 @@ from hackattack_player import *
 #from hackattack_ai import *
 from hackattack_NetPlayer import *
 #from hackattack_ai import *
-
+from AndrewNathan import *
 import sys
 
+
 class Game(object):
+
     def __init__(self):
         # all players
         
-        player_types = [ Player, Andrews]
+
+        player_types = [ Player, AndrewNathan]
 
 
 
@@ -99,6 +102,7 @@ class Game(object):
                     if move['from'] in self.players[playerB].own:
                         self.detected( playerB,  "Player {} scanned machine {} from machine {}".format(player.name, move['player'], move['from']))    
                 
+                
                 #if self.players[s].own[player][move['from']] is self.players[s].own[playerB]:
                     #self.detected( playerB,  "Player {} probed machine {} from machine {}".format(player.name, move['player'], move['from']))    
                     #if self.game.players_own[s][move['from']] == 0:
@@ -137,7 +141,8 @@ class Game(object):
                     player.say({'text':"You removed {} of {}'s accounts".format(num_removed, self.player_names[p]),
                                 'machine':move['from'], 'accounts removed':num_removed, 'player':p, 'type':'clean'})
                     self.state.news[p].append("{} removed {} of your accounts from machine {}".format(
-                            self.player_names[move['player']], num_removed, move['from']))
+                        self.player_names[move['player']], num_removed, move['from']))
+
                     # check for trace
                     if not p in self.state.players_traced[move['player']]:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
@@ -241,7 +246,7 @@ class Game(object):
             if you_str > them_str:
                 theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
-                player.own[move['user']] = {}
+                theplayer.own[move['user']] = {}
                 self.state.news[move['user']].append("YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
