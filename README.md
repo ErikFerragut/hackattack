@@ -80,4 +80,21 @@ tl;dr : you can get 2 of the same exploit~~
 
 ### ~~when enter is repeatedly pressed, it causes this error~~
 
+# Plan going forward (email of 25 July)
+Target: my group's annual conference
+
+Paper plan:
+* Cyber conflicts can be viewed as games (in the math sense),
+* Strategies for cyber conflict can be reduced to optimizing evaluation functions,
+* The best evaluation functions we can find depend on probabilities (explain...)
+* The best strategies would be hard to do "manually" (with human intervention)
+* The results indicate parameters we need to estimate to make this a realistic tool.
+
+Immediate next steps:
+1. Refactor the hackattack code to allow evaluation-function based analysis.  I will either do this myself, or architect it and delegate pieces, depending on which is easier. (August 28)
+2. Create several or many evaluation functions for testing (you'll do most of this) (September 13)
+3. Simulate the functions in various combinations with different levels of look-ahead. Vary detection probabilities and other parameters to see how the evaluation functions' outcomes change.  This is probably the hardest part.  (October 3)
+4. Write up the results as an 8-page full paper (deadline is October 16, but is usually extended by a week or two).
+
+Level of Effort: 2 or 3 times per month (2-4 hours each time) to get this done, starting in September after I've completed item 1.
 
