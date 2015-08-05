@@ -1,46 +1,41 @@
 import random
-import hackattack_util
+from hackattack_util import *  # OS_List_Letters & pick_exp_int
 from collections import defaultdict as ddict
+
 
 class Player(object):
     '''Handle all server-side interactions with the user'''
 
-    def __init__(self, game, name, start):
-        self.game = game
+    def __init__(self, name):
         self.name = name
         self.status = 'in'  # other status values are 'out' and 'won'
-        self.own = {start:1}
+        self.own = {}
         self.log = []
 
         # knowledge system
         self.min_accounts = ddict(lambda :ddict(str)) # [machine][player] = #
         self.max_accounts = ddict(lambda :ddict(str)) 
-        self.oss = ddict(str, {start:self.game.state.board_os[start]})      # [machine] = OS string
         # True = Patched, False = Vulnerable, undef = unknown
         self.patches = ddict(lambda :ddict(str)) # patches[machine][expl#] = True, False, undef
         self.traced = []   # list of players
         
         E = set([])
-        while len(E)<4:
-            E.add(random.choice(self.game.state.OSs)[0]+str(hackattack_util.pick_exp_int()))
-        self.players_expl = list(E)
+        while len(E) < Exploits_Per_Player:
+            E.add(random.choice(OS_List_Letters) + str(pick_exp_int()))
+        self.expl   = list(E)
+
+        self.traced = []
+        self.news   = []
+
+        if 'init_ai' in self.__dict__:
+            self.init_ai()
         
-        if self.name == 'Player 0':
-            # show title screen until someone hits a key
-            self.say({'text': "HACK ATTACK!\n\n"})
-
-            # look at http://www.network-science.de/ascii/ for more fonts
-            # I like o8, poison.  This is smslant
-            
-            self.display('''
-               __ __         __     ___  __  __           __  
-              / // /__ _____/ /__  / _ |/ /_/ /____ _____/ /__
-             / _  / _ `/ __/  '_/ / __ / __/ __/ _ `/ __/  '_/
-            /_//_/\_,_/\__/_/\_\ /_/ |_\__/\__/\_,_/\__/_/\_\ 
-            ''')
-
-            #raw_input("\n\n\nPress enter to begin.")
-
+    def start_player(self, game, start, position):
+        self.own[start] = 1
+        self.id = position
+        self.game = game
+        self.oss = ddict(str, {start:self.game.board_os[start]})
+        
     def display(self, string):
         print string
         
@@ -48,7 +43,6 @@ class Player(object):
         """Return move {'from':from_machine, 'to':to_machine, 'player':player,
         'exploit':exploit, 'user':target_user, 'action':action} based on an input
         of the form 'machine action parameters' and for player (global variable)"""
-        s=self.game.state
         words = move_str.lower().split()
 
         if len(words) == 0:
@@ -63,10 +57,10 @@ class Player(object):
             except:
                 self.display("Must specify a user by number")
                 return
-            if user not in s.players_traced[s.player]:
+            if user not in self.traced:
                 self.display("You can only DDoS a player after you have traced them")
                 return
-            return {'action':'d', 'user':user, 'player':s.player}
+            return {'action':'d', 'user':user, 'player':self.id}
 
         if words[0].lower() == 'q':
             if len(words) != 2:
@@ -79,7 +73,7 @@ class Player(object):
             return
 
         try:
-            move = { 'from': int(words[0]), 'action': words[1][0], 'player':s.player,  }
+            move = { 'from': int(words[0]), 'action': words[1][0], 'player':self.id  }
         except:
             self.display("Must indicate source of move first (as int) and then action (by letter)")
             return
@@ -97,7 +91,7 @@ class Player(object):
             except:
                 self.display("Target machine must be an integer")
                 return
-            if mac2 not in xrange(s.num_hosts):
+            if mac2 not in xrange(self.game.num_hosts):
                 self.display("Invalid target")
                 return
             move['to'] = mac2
@@ -118,12 +112,12 @@ class Player(object):
             else:
                 mac2 = int(words[2])
 
-            if mac2 not in xrange(s.num_hosts):
+            if mac2 not in xrange(self.game.num_hosts):
                 self.display("Invalid target")
                 return
 
             if words[3][1:].isdigit():
-                if not words[3].upper() in self.players_expl:
+                if not words[3].upper() in self.expl:
                     self.display("Not your exploit")
                     return
             else:
@@ -141,19 +135,10 @@ class Player(object):
             if len(words) != 3:
                 self.display("Follow format: <acting-machine> (P)atch <exploit>")
                 return
-            elif words[2][1:].isdigit() and (not words[2].upper() in self.players_expl):
+            elif words[2][1:].isdigit() and (not words[2].upper() in self.expl):
                 self.display("Must apply a patch for an exploit you have")
                 return
-            #elif
-                #print "Third word must be a letter followed by a number (no space)"
-                #return
-            #elif move['exploit'][0].upper() == self.game.state.board_os[move['from']][0]:
-                #print 'Wrong Os'
-                #return
-                #the above has an error when it references board_os
             else:
-                #move['exploit'] = words[2].upper()
-                #if words[2].lower() == words[0][self.boardOSs]:
                 return move
         elif move['action'] == 's':
             return move
@@ -169,60 +154,49 @@ class Player(object):
             self.status = 'won'
 
     def start_round(self):
-        s = self.game.state
         # for each player (if they haven't lost)
         ## are you ready? screen
-        raw_input("\n"*100 + "Ready {}? ".format(self.game.player_names[s.player])) 
+        raw_input("\n"*100 + "Ready {}? ".format(self.name)) 
             
         
         ## check for a new exploit
-        if random.random() <= 1. / 6:
-        
-            ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
-            #self.players_expl.append(ne)
+        if random.random() <= 1. / 6:        
+            ne = random.choice(OS_List_Letters) + str(pick_exp_int())
                 
-            while ne in self.players_expl:
-                ne = random.choice(self.game.state.OSs)[0] + str(hackattack_util.pick_exp_int())
+            while ne in self.expl:
+                ne = random.choice(OS_List_Letters) + str(pick_exp_int())
                 
-            self.players_expl.append(ne)#[s.player]
+            self.expl.append(ne)
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
     
     def update_output(self):
-        # to do:
-        # X 1. do not let this function update whose turn it is; do that in main loop
-        #   2. do not add exploit here; do that in main loop
-        #   3. don't use s.player to know who the player is, store it locally
-        #   4. do not determine if the game is over in this function, but in main loop
-        s = self.game.state
         ### output stuff to update the player
         if self.status == 'out':
-            self.display("{} is out".format(self.game.player_names[s.player]))
+            self.display("{} is out".format(self.name))
             return
         if self.status == 'won':
             self.display("You won!")
             return
 
-        #print s.news            
-        if len(s.news[s.player]) == 0:
-            self.display("No news to report on round {}".format(s.game_round))
+        if len(self.news) == 0:
+            self.display("No news to report on round {}".format(self.game.round))
         else:
-            self.display("\n   ".join(["ROUND {} NEWS!".format(s.game_round)] + s.news[s.player]))
-            s.news[s.player] = []
+            self.display("\n   ".join(["ROUND {} NEWS!".format(self.game.round)] +
+                                      self.news))
+            self.news = []
 
         ## show them what they have
         self.display("Your access:")
         for k,v in self.own.iteritems(): #self.own = {start:1} at start
             if v > 0:
                 self.display("{} account{} on machine {}, which runs the {} OS".format(
-                    v, 's' if v > 1 else '', k, s.board_os[k]))
+                    v, 's' if v > 1 else '', k, self.game.board_os[k]))
             
-        self.display(("Your exploits:", ", ".join(sorted(self.players_expl))))
-        # for e in self.players_expl:
-        #     print "{}{} - {} exploit # {}".format(e[0][0], e[1], e[0], e[1])
+        self.display(("Your exploits:", ", ".join(sorted(self.expl))))
 
-        self.display("Traced players: {}".format( "None" if len(s.players_traced[s.player]) == 0
-                                             else " ".join(map(str, s.players_traced[s.player])) ))
+        self.display("Traced players: {}".format( "None" if len(self.traced) == 0
+                                             else " ".join(map(str, self.traced)) ))
 
         # new knowledge system...
         self.display(("Known accounts:", "None" if len(self.min_accounts) == 0 else ""))
@@ -249,7 +223,6 @@ class Player(object):
                 self.display(("   Vulnerabilities: " + ', '.join(vuln)))
 
     def get_moves(self):
-        s = self.game.state
         ## have them assign a move to each owned machine (or do DDoS)
         self.display("<acting-machine> (R)econ <machine>")
         self.display("<acting-machine> (C)lean")
@@ -290,8 +263,6 @@ class Player(object):
         return moves
 
     def turn_done(self):
-        #raw_input("\nPress enter to clear screen ")
-        #self.display("\n"*100)
         pass
 
     def say(self, said):
@@ -306,7 +277,7 @@ class Player(object):
         elif said['type'] == 'os':
             self.oss[said['machine']] = said['OS']
         elif said['type'] == 'exploits':
-            for e in self.players_expl:
+            for e in self.expl:
                 if e[0] == self.oss[int(said['machine'])][0]:
                     if e in said['exploitable with']:
                         self.patches[said['machine']][int(e[1:])] = False
