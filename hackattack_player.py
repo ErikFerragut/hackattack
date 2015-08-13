@@ -218,9 +218,11 @@ class Player(object):
         if len(self.patches) == 0:
             self.display("Known Patches: None")
         for m in self.patches:
-            self.display("Machine {} Patches:".format(m))
             patched = [ str(p) for p in self.patches[m] if self.patches[m][p] ]
             vuln    = [ str(p) for p in self.patches[m] if self.patches[m][p] == False ]
+            if len(patched) + len(vuln) == 0:
+                continue
+            self.display("Machine {} Patches:".format(m))
             if len(patched) > 0:
                 self.display(("   Patched: " + ', '.join(patched)))
             if len(vuln) > 0:

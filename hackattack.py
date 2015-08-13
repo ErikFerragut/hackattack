@@ -315,7 +315,8 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    players = [ Andrews('Andrew'), EthanAI('Ethan'), JacobAI('Jacob'), AndrewNathan('AN') ]
+    # Andrews (in AndrewAI.py) is broken
+    players = [ Player('Player'), EthanAI('Ethan'), JacobAI('Jacob'), AndrewNathan('AN') ]
     g=Game(players)
     r = g.mainloop()
     print r
