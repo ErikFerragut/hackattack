@@ -11,7 +11,7 @@ class AndrewNathan(AI):
                 moves.append({'player' : self.id, 'from' : p , 'action' : 'c'})
                 return moves
             
-            for exploits in self.players_expl:
+            for exploits in self.expl:
                 if self.patches[p][int(exploits[1:])] == False and exploits[0] == self.oss[p][0]:
                     moves.append({'player' : self.id , 'action' : 'p' ,
                                   'from' : p , 'exploit' : exploits})

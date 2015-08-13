@@ -11,12 +11,14 @@ class Player(object):
         self.status = 'in'  # other status values are 'out' and 'won'
         self.own = {}
         self.log = []
+        self.news   = []
 
         # knowledge system
         self.min_accounts = ddict(lambda :ddict(str)) # [machine][player] = #
-        self.max_accounts = ddict(lambda :ddict(str)) 
+        self.max_accounts = ddict(lambda :ddict(str))
+        # replace min/max_accounts with others_own
+        
         # True = Patched, False = Vulnerable, undef = unknown
-        self.patches = ddict(lambda :ddict(str)) # patches[machine][expl#] = True, False, undef
         self.traced = []   # list of players
         
         E = set([])
@@ -24,17 +26,19 @@ class Player(object):
             E.add(random.choice(OS_List_Letters) + str(pick_exp_int()))
         self.expl   = list(E)
 
-        self.traced = []
-        self.news   = []
-
-        if 'init_ai' in self.__dict__:
-            self.init_ai()
+    def knowledge_dict(self):
+        return { 'own': self.own, 'others_own':self.others_own,
+                 'patches': self.patches, 'vuln':self.vuln,
+                 'traced': self.traced, 'expl':self.expl  }
         
     def start_player(self, game, start, position):
         self.own[start] = 1
         self.id = position
         self.game = game
         self.oss = ddict(str, {start:self.game.board_os[start]})
+        self.others_own = { i: { start: 0 } for i in xrange(game.num_players) if i != position }
+        self.patches = { i: [] for i in xrange(game.num_hosts) }  # known patches
+        self.vuln = { i: [] for i in xrange(game.num_hosts) }     # known vulnerabilities
         
     def display(self, string):
         print string
@@ -199,7 +203,7 @@ class Player(object):
                                              else " ".join(map(str, self.traced)) ))
 
         # new knowledge system...
-        self.display(("Known accounts:", "None" if len(self.min_accounts) == 0 else ""))
+        self.display(("Known accounts:", "None" if len(self.others_own) == 0 else ""))
         for m in self.min_accounts:
             self.display('Machine {}:'.format(m))
             for p in self.min_accounts[m]:

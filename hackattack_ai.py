@@ -3,6 +3,14 @@ from hackattack_util import *
 import random
 
 class AI(Player):
+    def start_player(self, game, start, position):
+        super(AI, self).start_player(game, start, position)
+        self.init_ai()
+
+    def init_ai(self):
+        '''For inherited classes, use this to do your own initialization'''
+        pass
+    
     def get_moves(self):
         moves = []
         for p in self.own:
@@ -14,7 +22,7 @@ class AI(Player):
                 moves.append({'player':self.id,
                               'action':'h', 'from':p,
                               'to':random.randint(0,self.game.num_hosts),
-                              'exploit':random.choice(self.players_expl)})
+                              'exploit':random.choice(self.expl)})
         return moves
 
     def start_round(self):
@@ -22,12 +30,12 @@ class AI(Player):
         if random.random() <= 1. / 6:
         
             ne = random.choice(OS_List_Letters) + str(pick_exp_int())
-            #self.players_expl.append(ne)
+            #self.expl.append(ne)
                 
-            while ne in self.players_expl:
+            while ne in self.expl:
                 ne = random.choice(OS_List_Letters) + str(pick_exp_int())
                 
-            self.players_expl.append(ne)
+            self.expl.append(ne)
             self.say({'text':'You found a new exploit! ' + ne, 'type':'new exploit',
                       'exploit':ne})
         
@@ -43,7 +51,7 @@ class AI(Player):
         elif said['type'] == 'os':
             self.oss[said['machine']] = said['OS']
         elif said['type'] == 'exploits':
-            for e in self.players_expl:
+            for e in self.expl:
                 if e[0] == self.oss[said['machine']][0]:
                     self.patches[said['machine']][int(e[1:])] = \
                         (e not in said['exploitable with'])
@@ -85,6 +93,7 @@ class CleanClass(AI):
 class JacobAI(AI):
     def init_ai(self):
         self.machines = {i:0 for i in xrange(self.game.num_hosts)}
+        start = self.own.keys()[0]
         self.machines[start] = 2
         self.counter = 0
         self.getReconTarget()
@@ -111,7 +120,7 @@ class JacobAI(AI):
                 
             elif self.counter == 1:
                 
-                exploits = [ j for j in self.players_expl if self.oss[self.random_host][0]==j[0] and self.patches[self.random_host][int(j[1:])]==False]
+                exploits = [ j for j in self.expl if self.oss[self.random_host][0]==j[0] and self.patches[self.random_host][int(j[1:])]==False]
                 #print exploits
                 if len(exploits) > 0:
                     moves.append({'player':self.id, 'action':'h', 
@@ -131,7 +140,7 @@ class JacobAI(AI):
                     'action':'r', 'from':p, 'to':self.random_host})
                 self.machines[self.random_host] = 1
             elif self.counter == 3 or self.counter == 5:
-                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [(m,e) for m in self.patches for e in self.expl if self.patches[m][int(e[1:])]==False ]
                 exploits = [ me for me in exploits if me[0] not in self.own]
                 print self.counter, exploits
                 if len(exploits) > 0:
@@ -152,11 +161,11 @@ class JacobAI(AI):
                             'action':'b', 'from':p})
             elif self.counter == 9:
                 for s in xrange(self.game.num_players):
-                    if s in self.ids_traced[self.id]:
+                    if s in self.traced:
                         moves.append({'action' : 'd' , 'user' : s , 'player' :self.id})
                         return moves
                 
-                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [(m,e) for m in self.patches for e in self.expl if self.patches[m][int(e[1:])]==False ]
                 exploits = [ me for me in exploits if me[0] not in self.own]
                 print self.counter, exploits
                 if len(exploits) > 0:
@@ -172,7 +181,7 @@ class JacobAI(AI):
                     self.machines[self.random_host] = 1
             elif self.counter == 10:
                 self.counter = 6
-                exploits = [(m,e) for m in self.patches for e in self.players_expl if self.patches[m][int(e[1:])]==False ]
+                exploits = [(m,e) for m in self.patches for e in self.expl if self.patches[m][int(e[1:])]==False ]
                 exploits = [ me for me in exploits if me[0] not in self.own]
                 print self.counter, exploits
                 if len(exploits) > 0:
@@ -219,7 +228,7 @@ class EthanAI(AI):
                 for l in self.easy_hacks:
                     q = random.choice(self.own2)
                     self.moves.append({'player':self.id,'action':'h','from':q,'to':l,
-                    'exploit':random.choice([e for e in self.players_expl 
+                    'exploit':random.choice([e for e in self.expl 
                     if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
                     self.own2.remove(q)
                     self.easy_hacks.remove(l)
@@ -231,6 +240,7 @@ class EthanAI(AI):
                 'to':random.choice(list(set(xrange(self.game.num_hosts)).difference(list(self.own))))})
                 self.own2.remove(v)
         return self.moves
+    
     def func2(self):
         self.own2 = [m for m in self.own.keys()]
         while 0 < len(self.own2): 
@@ -245,7 +255,7 @@ class EthanAI(AI):
                 for l in self.easy_hacks:
                     q = random.choice(self.own2)
                     self.moves.append({'player':self.id,'action':'h','from':q,'to':l,
-                    'exploit':random.choice([e for e in self.players_expl 
+                    'exploit':random.choice([e for e in self.expl 
                     if e[0] == self.oss[l][0] and self.patches[l][int(e[1:])] == False])})                 
                     self.own2.remove(q)
                     self.easy_hacks.remove(l)

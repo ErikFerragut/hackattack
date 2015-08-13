@@ -44,27 +44,28 @@ class Game(object):
         self.num_players = len(players)
         self.num_hosts = Hosts_Per_Player * self.num_players
 
-        starting_hosts = choose_without_replacement(xrange(self.num_hosts), self.num_players)
-        for i in xrange(len(self.players)):
-            self.players[i].start_player(self, s, i)
-
         self.move_funcs = {'r':self.do_recon,    'c':self.do_clean, 'h':self.do_hack,
                            'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos,
                            's':self.do_scan}
 
-        self.board_os = [ random.choice(self.OSs) for i in xrange(self.num_hosts) ]
+        self.board_os = [ random.choice(OS_List_Letters) for i in xrange(self.num_hosts) ]
         self.board_patches = [ [ i for i in range(Exploits_Per_OS)
                               if random.random() < Vuln_Prob ]
                                 for h in xrange(self.num_hosts) ]
+        
         self.round = 0   # number of rounds of the game played so far
         self.whose_turn = 0  # player whose turn it is
+        
+        starting_hosts = choose_without_replacement(xrange(self.num_hosts), self.num_players)
+        for i in xrange(len(self.players)):
+            self.players[i].start_player(self, starting_hosts[i], i)
         
     def detected(self, user, message):
         self.players[user].news.append(message) 
 
     def working_attacks(self, player, host):
         '''return a list of the short codes for attacks player has that work on machine'''
-        return [ e for e in self.players[player].players_expl
+        return [ e for e in self.players[player].expl
                  if self.board_os[host][0] == e[0] and int(e[1:]) not in
                   self.board_patches[host] ]
 
@@ -115,17 +116,17 @@ class Game(object):
                     if self.players[p].own[move['from']] == 0:
                         self.players[p].own.pop(move['from'])
                     player.say({'text':"You removed {} of {}'s accounts".format(
-                        num_removed, self.player_names[p]),
+                        num_removed, self.players[p].name),
                                 'machine':move['from'], 'accounts removed':num_removed,
                                 'player':p, 'type':'clean'})
                     self.players[p].news.append("{} removed {} of your accounts from machine {}".\
-                        format(self.player_names[move['player']], num_removed, move['from']))
+                        format(self.players[move['player']].name, num_removed, move['from']))
 
                     # check for trace
                     if not p in self.players[move['player']].traced:
                         if min([random.random() for i in xrange(num_removed)]) < 1./6:
                             self.players[move['player']].traced.append(p)
-                            player.say({'text':"You traced {}!".format(self.player_names[p]),
+                            player.say({'text':"You traced {}!".format(self.players[p].name),
                                         'player':p, 'type':'trace'})
 
         player.say({'text':"Clean completed on machine {}".format(move['from'])})
@@ -219,36 +220,37 @@ class Game(object):
             you_str = len(theplayer.own)
             them_str = len(otherplayer.own)
             if you_str > them_str:
-                theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.player_names[move['user']].upper()),
+                theplayer.say({'text': "YOU WON THE DDOS -- {} IS ELIMINATED".format(self.players[move['user']].name.upper()),
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'win'})
                 otherplayer.own = {}
                 self.players[move['user']].news.append(
-                    "YOU WERE DDOSED BY {}".format(self.player_names[player].upper()))
+                    "YOU WERE DDOSED BY {}".format(self.players[player].name.upper()))
                 #ddos results into news
                 for p in xrange(self.num_players):
                     self.players[p].news.append(
-                        "{} HAS SUCCESSFULLY DDOSED {}".format(self.player_names[player].upper(), self.player_names[move['user']].upper() ))
+                        "{} HAS SUCCESSFULLY DDOSED {}".format(self.players[player].name.upper(),
+                        self.players[move['user']].name.upper() ))
             elif you_str < them_str:
                 theplayer.say({'text':"YOU LOST THE DDOS -- YOU ARE ELIMINATED",
                                'ddoser':move['player'], 'ddosee':move['user'], 'result':'lost'})
                 theplayer.own = {}
                 self.players[move['user']].news.append(
                     "{} tried to DDoS you but lost and was eliminated".format(
-                        self.player_names[player]))
+                        self.players[player].name))
                 #announces in the news about the ddos activity
                 for p in xrange(self.num_players):
                     self.players[p].news.append(
                         "{} UNSUCCESSFULLY DDOSED {}".format(
-                            self.player_names[player].upper(),
-                            self.player_names[move['user']].upper() ))
+                            self.players[player].name.upper(),
+                            self.players[move['user']].name.upper() ))
             else:
                 theplayer.say({'text':"DDOS was a tie", 'ddoser':move['player'], 'ddosee':move['user'], 'result':'tie'})
                 self.players[move['user']].news.append(
-                    "{} tried to DDoS you but it was tie".format(self.player_names[player]))
+                    "{} tried to DDoS you but it was tie".format(self.players[player].name))
                 for p in xrange(self.num_players):
                     self.players[move['user']].news.append(
-                        "{} DDOSED {} BUT IT WAS A TIE".format(self.player_names[player].upper(),
-                            self.player_names[move['user']].upper() ))
+                        "{} DDOSED {} BUT IT WAS A TIE".format(self.players[player].name.upper(),
+                            self.players[move['user']].name.upper() ))
         else:
             theplayer.say({'text':"You need a trace before you can ddos (this output signifies a logic error!)"})
             
