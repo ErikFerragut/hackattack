@@ -118,7 +118,7 @@ class Player(object):
         self.strategy = strategy(self)
 
         self.move_funcs = {'r':self.do_recon,    'c':self.do_clean, 'h':self.do_hack,
-                           'b':self.do_backdoor, 'p':self.do_patch, 'd':self.do_ddos,
+                           'b':self.do_backdoor, 'p':self.do_patch, # 'd':self.do_ddos,
                            's':self.do_scan}
         self.own = {}
         self.exploits = set(random_exploit() for i in xrange(Exploits_Per_Player))
@@ -127,12 +127,22 @@ class Player(object):
 
     @staticmethod
     def knows_equal(know1, know2):
+        '''Return True if they are equal and False if not; may throw exception if one
+        is not a knowledge dictionary.'''
         assert know1.viewkeys() == know2.viewkeys()
         for k in know1:
             if not (know1[k] == know2[k]).all():
                 return False
         return True
-            
+
+    @staticmethod
+    def knows_diff(know1, know2):
+        '''Return a dictionary { key: { (i,j) : (know1_val, know2_val) } } of diffs'''
+        assert know1.viewkeys() == know2.viewkeys()
+        return { k : { (i,j) : (know1[k][i,j], know2[k][i,j])
+                       for i,j in zip(* (know1[k] - know2[k]).nonzero()) }
+                 for k in know1 }
+    
     def register(self, game, starting_machine, player_id):
         '''After the game starts, the player is registered, which sets its id in
         the game, and also the machine it starts with an account on'''
@@ -202,7 +212,12 @@ class Player(object):
         self.strategy.end_round()
 
     def get_new_exploit(self):
-        pass
+        if random.random() < New_Exploit_Prob:
+            print "New exploit for {}".format(self.name)
+            ne = random_exploit()
+            self.exploits.add(ne)  # no check for duplicates
+            self.know['exploits'][self.id, OS_List_Letters.index(ne[0]),
+                                  int(ne[1:])] = 1.0
 
     def validate_moves(self, moves):
         '''A valid set of moves obeys the following rules:
@@ -284,15 +299,14 @@ class Player(object):
                 continue
             if host in self.game.players[s].own:
                 num_accounts = self.game.players[s].own[host]
+                if random.random() < Detection_Prob['s']:
+                    self.game.players[s].detect( ('s', self.id, host) )
             else:
                 num_accounts = 0
                 
             # only impact is updated knowledge
             new_know['owns'][s, host, :] = 0.
             new_know['owns'][s, host, num_accounts] = 1.
-
-            if random.random() < Detection_Prob['s']:
-                self.game.players[s].detect( ('s', self.id, host) )
 
         # test:
         nk, pr = self.consider_scan(move, know)
@@ -406,12 +420,153 @@ class Player(object):
 
     def do_clean(self, move, know):
         print 'do_clean'
-        return know
+        new_know = deepcopy(know)
 
+        # for each other player remove up to how many accounts this player has
+        playerAaccts = self.own[move['from']]
+        for playerB in xrange(self.game.num_players):
+            if playerB == self.id:  # don't remove your own accounts!
+                continue
+            if move['from'] in self.game.players[playerB].own:
+                playerBaccts = self.game.players[playerB].own[move['from']]
+            else:
+                playerBaccts = 0
+            newBaccts = max(playerBaccts - playerAaccts, 0)
+            removed = playerBaccts - newBaccts
+            # -- remove accts
+            self.game.players[playerB].own[move['from']] = newBaccts
+            # -- and update knowledge
+            if removed < playerAaccts:  # then they must be off the machine
+                new_know['owns'][playerB, move['from'], :] = 0.0
+                new_know['owns'][playerB, move['from'], 0] = 1.0
+            elif removed == playerAaccts: # may have as many as max - removed
+                # new prob(m) = prob(m + removed), normalized
+                new_know['owns'][playerB, move['from'], :Max_Accounts-removed] = \
+                  new_know['owns'][playerB, move['from'], removed:]
+                new_know['owns'][playerB, move['from'], :] /= \
+                  new_know['owns'][playerB, move['from'], :].sum()
+            # -- and send detection notice to those players (100% chance)
+            if removed > 0:
+                self.game.players[playerB].detect(
+                    ('c', self.id, move['from'], removed) )
+
+        # test:
+        nk, pr = self.consider_clean(move, know)
+        assert any(self.knows_equal(new_know, nnkk) for nnkk in nk)
+        assert sum(pr) == 1.0
+        
+        return new_know
+    
+
+    def consider_clean(self, move, know):
+        new_knows = []
+        new_probs = []
+        
+        host = move['from']
+        acct = know['owns'][self.id, host, :].nonzero()[0][0]
+        # for each player think whether they have fewer or more than removed
+        outcomes = list(product(*( [[False, True]]*self.game.num_players ) ))
+        outcomes = [ o for o in outcomes if o[self.id] ] # avoid doubling up
+        for outcome in outcomes:
+            # True means removed < playerAaccts, False means equal
+            new_prob = np.prod([know['owns'][p,host,:acct].sum() if o else
+                                know['owns'][p,host,acct:].sum()
+                                for p,o in enumerate(outcome)
+                                if p != self.id])
+            if new_prob > 0.0:
+                new_know = deepcopy(know)
+                for p,o in enumerate(outcome):
+                    if p == self.id:
+                        continue
+                    if o: # true case: fewer than acct, so goes to 0
+                        new_know['owns'][p,host,:] = 0.0
+                        new_know['owns'][p,host,0] = 1.0
+                    else: # false case: move probs down and renormalize
+                        temp = new_know['owns'][p,host,acct:]
+                        new_know['owns'][p,host,:] = 0.0
+                        if temp.sum() > 0.0:
+                            new_know['owns'][p,host,:Max_Accounts - acct] = temp
+                            new_know['owns'][p,host,:] /= temp.sum()
+                            
+                new_knows.append(new_know)
+                new_probs.append(new_prob)
+
+        return new_knows, new_probs
+    
+    
     def do_hack(self, move, know):
         print 'do_hack'
-        return know
+        new_know = deepcopy(know)
+        host = move['to']        
+        os_id = OS_List_Letters.index(move['exploit'][0])
+        patch_id = int(move['exploit'][1:])
+        
+        if move['exploit'][0] == self.game.board_os[host] and \
+          patch_id not in self.game.board_patches[host]:
+            # it worked!
+            print "Hack worked!"
+            # -- learn how many accounts you have
+            num_acc = self.own[host] if host in self.own else 0
+            new_know['owns'][self.id, host, num_acc] = 0.0
+            num_acc += 1
+            if num_acc == Max_Accounts:
+                num_acc = Max_Accounts - 1
+            new_know['owns'][self.id, host, num_acc] = 1.0
+            # -- do it for real            
+            self.own[host] = num_acc
+            # -- learn the OS and that the exploit works
+            new_know['OS'][host, :] = 0.0
+            new_know['OS'][host, os_id] = 1.0
+            new_know['patches'][host, patch_id] = 0.0
+        else:
+            # only learn that patch was there if you knew OS
+            print "Hack failed"
+            if new_know['OS'][host, os_id] == 1.0:
+                new_know['patches'][host, patch_id] = 1.0
 
+        # detection check
+        for playerB in xrange(self.game.num_players):
+            if random.random() < Detection_Prob['b']:
+                if move['to'] in self.game.players[playerB].own:
+                    self.game.players[playerB].detect(
+                        ('h', self.id, move['from'], move['to'], move['exploit']) )
+        
+        nk, pr = self.consider_hack(move, know)
+        if not any([self.knows_equal(new_know, nnkk) for nnkk in nk]):
+            print "Knowledge mismatch.  Here's the diffs."
+            for nnkk in nk:
+                print self.knows_diff(new_know, nnkk)
+                
+        assert any([self.knows_equal(new_know, nnkk) for nnkk in nk])
+        assert sum(pr) == 1.0
+        
+        return new_know
+
+    
+    def consider_hack(self, move, know):
+        host = move['to']
+        os_id = OS_List_Letters.index(move['exploit'][0])
+        patch_id = int(move['exploit'][1:])
+        pre_acct = know['owns'][self.id, host, :].nonzero()[0][0]
+        post_acct = min(pre_acct + 1, Max_Accounts - 1)
+        
+        # two cases: it worked or it didn't
+        prob_success = know['OS'][host, os_id] * (1.0 - know['patches'][host, patch_id])
+
+        ifworks = deepcopy(know)  # then learn OS, patches, owns
+        ifworks['OS'][host, :] = 0.0
+        ifworks['OS'][host, os_id] = 1.0
+        ifworks['patches'][host, patch_id] = 0.0
+        ifworks['owns'][self.id, host, pre_acct] = 0.0
+        ifworks['owns'][self.id, host, post_acct] = 1.0
+
+        iffails = deepcopy(know)
+        if iffails['OS'][host, os_id] == 1.0:
+            iffails['patches'][host, patch_id] = 1.0
+
+        return [ ifworks, iffails ], [ prob_success, 1.0 - prob_success ]
+    
+            
     def do_backdoor(self, move, know):
         print 'do_backdoor'
         new_know = deepcopy(know)
@@ -455,15 +610,40 @@ class Player(object):
         
     def do_patch(self, move, know):
         print 'do_patch'
-        return know
+        new_know = deepcopy(know)
 
-    def do_ddos(self, move, know):
-        print 'do_ddos'
-        return know
+        # change it for real
+        if move['exploit'][0] == self.game.board_os[move['from']]:
+            self.game.board_patches[move['from']].append(int(move['exploit'][1:]))
 
+            # change your knowledge of it  -- crashes if patch too big (see known bugs)
+            new_know['patches'][move['from'],int(move['exploit'][1:])] = 1.0
+            
+            # detection
+            for playerB in xrange(self.game.num_players):
+                if playerB == self.id or \
+                    move['from'] not in self.game.players[playerB].own:
+                    continue
+                if random.random() < Detection_Prob['p']:
+                    self.game.players[playerB].detect(
+                        ('p', self.id, move['from'], move['exploit']) )
+
+        return new_know
+
+    def consider_patch(self, move, know):
+        # only one outcome is possible
+        new_know = deepcopy(know)
+
+        if move['exploit'][0] == self.game.board_os[move['from']]:
+            # change your knowledge of it  -- crashes if patch too big (see known bugs)
+            new_know['patches'][move['from'], int(move['exploit'][1:])] = 1.0
+        
+        return [new_know], [1.0]
+
+    
     def detect(self, event):
         '''Called when another player's action is detected.'''
-        print 'Detected', event
+        print '{} Detected {}'.format(self.name, event)
         # really need to update know
 
 
@@ -512,17 +692,18 @@ class PlayerStrategy(Strategy):
             print("<acting-machine> (B)ackdoor")
             print("<acting-machine> (P)atch <exploit>")
             print("<acting-machine> (S)can")
-            print("(D)DoS <user>")
+            # print("(D)DoS <user>")
+            print("or e, k, q")
 
             moves = []  # a list of moves, each is a dictionary
-            # std move format: acting-maching player action parameters (machine/exploit/user)
+            # std format: acting-maching player action-parameters (machine/exploit/user)
             while len(moves) < len(self.player.own.keys()):
                 move = None
                 while move == None:
                     move_str = raw_input("\nSelect a move: ")
 
-                    if move_str[0] == 'c':
-                        print eval( move_str[1:] )
+                    if move_str[0] == 'e':
+                        embed()  # brings up repl
                         continue
 
                     move_words = move_str.split()
@@ -534,9 +715,11 @@ class PlayerStrategy(Strategy):
                         print "knowledge\n", self.player.know
                         move = None
                         continue
-
-                    assert len(move_words) >= 2
-
+                    elif move_words[0] == 'q':
+                        assert False
+                    elif len(move_words) < 2:
+                        continue
+  
                     if move_words[1] not in 'rchbps':
                         continue
                     move = {'from':int(move_words[0]), 'action':move_words[1]}

@@ -1,5 +1,5 @@
 Design doc
-----------
+==========
 This document describes some of the details of how the program works.
 
 Classes
@@ -45,6 +45,8 @@ Also, should they keep both own and knowledge of own? Does that fulfill a role?
 
 Knowledge system
 ----------------
+
+### Background
 In detail, this means the first implementation of the knowledge system will include the following fields in a dictionary:
     1. for each machine
         1. OS is each possibility (pdf)
@@ -68,7 +70,7 @@ If number of machines is reduced from 5P to 3P, we get 12 machines:
 The fields are:
 {
  'OS':array(#machines, #OSs),   # each row is a pdf of which OS is used
- 'patches':array(#machines, max-patch-number)  # is machine i patched against j
+ 'patches':array(#machines, max-patch-number)  # is i patched against j
  'owns':array(#players, #machines, #accounts)  # pdf on last axis
  'exploits':array(#players, #OSs, max-patch-number)
 }
@@ -78,6 +80,7 @@ then the number of exploits that player has just went up by one.  This
 is different from knowing they have 3 and then finding out which they
 are.
 
+### Summary
 In summary, we have:
 '''
 1. know['OS'][host, OS] = prob it's that os
@@ -120,9 +123,12 @@ corresponding list of probabilities.
 Detection Events 
 ----------------
 The detect method in the player object receives events, such as:
- ('r', self.id, move['from'], move['to'])
+ ('r', self.id, move['from'], move['to'])    # say exploit?
  ('b', self.id, move['from'])                # say num accounts?
- ('s', self.id, move['from']) 
+ ('s', self.id, move['from'])
+ ('c', self.id, move['from'], removed)       # remember tracing
+ ('p', self.id, move['from'], move['exploit'])
+ ('h', self.id, move['from'], move['to'], move['exploit'])
 
 
 Open Issues in (My Understanding of) Game Theory
@@ -147,17 +153,51 @@ A simple 2-ply search, you get R1 N1 R2 N2 things to track. If each
 R1N1 is about 2, you could go O(20-30) ply. If each is ~1000, then you
 can go O(2-3) ply.
 
+The key question is how do you role up the scores when there are
+probabilities attached.  The well known min-max approach doesn't work
+here because you will base your strategy on the worst possible rare
+event. Perhaps take best over R1, worst over R2, and expected value
+over N*?  (Not quite right because if you are losing, you don't want
+to do the option that loses as slowly as possible, but rather the one
+with the biggest chance of a surprise come-back win.)
 
 Known Bugs
 ----------
 
-Exploits and patches are created without a limit, but the knowledge
-system imposes a limit on them. Perhaps this can be avoided if the
-knowledge system ends up with just two states: original uncertainty
-and total certainty. To know, we need to step through each action and
-see. Otherwise, change the random exploit function to be capped at the
-same limit used by knowledge.
+_Do Hack - Consider Mismatch_ Sometimes do hack's test of consider
+hack at the end of the method fails. It's not always a succesful hack
+and not always -- wait, I think it's from adding an exploit without
+updating knowledge (via the e/embed command)
+
+_Bounded Exploits_ Exploits and patches are created without a limit,
+but the knowledge system imposes a limit on them. Perhaps this can be
+avoided if the knowledge system ends up with just two states: original
+uncertainty and total certainty. To know, we need to step through each
+action and see. Otherwise, change the random exploit function to be
+capped at the same limit used by knowledge.
+
+_Ownership without OS_ Should probably start out by knowing the OS of
+your first machine and, in general, you should learn the OS of any
+machine you get access to.
+
+_Probabilistic Trace_ Traces explode number of outcomes. At first, I
+made traces automatic with successful cleaning to avoid multiplying
+outcomes. But then in the consider clean method, it branches on
+whether each other player is on the machine, which can be
+exponential. So instead I just dropped it altogether. How does the
+game end? That's an open question.
 
 
-Should probably start out by knowing the OS of your first machine and,
-in general, you should learn the OS of any machine you get access to.
+To Do List
+----------
+1. [DONE] write do-hack and consider-hack
+2. write do-ddos and consider-ddos -- how is losing incorporated into
+knowledge?
+3. write detect to handle the various types of detection
+4. write a function that lists all moves (if practical)
+    1. otherwise, all moves up to symmetries in uncertainty
+5. put in a random moves strategy and run it to look for errors
+6. put in strategies from before (maybe?)
+7. create a 1-ply evaluation strategy
+8. create a k-ply strategy class
+
