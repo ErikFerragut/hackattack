@@ -85,6 +85,7 @@ if __name__ == '__main__':
     from Player import Player
     from Strategy import *
     from EvaluationStrategy import *
+    from jacobAttack import *
     
     players = [ # Player('Player', PlayerStrategy),
                 # Player('Andrew', Andrews),
