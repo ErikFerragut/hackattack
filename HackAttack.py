@@ -89,6 +89,9 @@ if __name__ == '__main__':
     from Player import Player
     from Strategy import *
     from EvaluationStrategy import *
+    from jacobAttack import *
+    from nathaniscool import *
+
     
     players = [ # Player('Player', PlayerStrategy),
                 # Player('Andrew', Andrews),
@@ -96,7 +99,7 @@ if __name__ == '__main__':
                 # Player('Jacob', JacobAI),
                 # Player('AN', AndrewNathan),
                 Player('Random', RandomStrategy),
-                Player('Eval', EvaluationStrategy, {'f':account_difference,'k':3}) ]
+                Player('Eval', EvaluationStrategy, {'f':nathaniscool,'k':3}) ]
 
     results = []
 
