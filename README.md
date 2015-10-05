@@ -9,11 +9,11 @@ V 1.0 - simple starting version
 ## to do items
 
 ### Tweak knowledge handling
-1. Correctly compute what is learned when a hack fails (lines
-759--762)
-2. After each move is selected, branch on the results before selecting
+1. ~~Correctly compute what is learned when a hack fails (lines
+759--762)~~
+2. ~~After each move is selected, branch on the results before selecting
 the next move rather than averaging, which will prevent, for example,
-all owned machines doing the same hack (lines 1241--1248)
+all owned machines doing the same hack (lines 1241--1248)~~
 
 ### Update git repo
 1. Split file into multiple files
@@ -30,9 +30,21 @@ all owned machines doing the same hack (lines 1241--1248)
 
 ### Artificial intelligence
 1. Revisit the game theory book for easy ways to speed-up algorithms
+2. Create more evaluation functions in some reasonable way
+3. Make starting situations comparable (same number of exploits of
+   each level?)
+4. Test evals against each other and document winners
 
 ### Write paper
-1. Install latex
+1. Introduction (problem, purpose, thesis, main contributions) [0.5p]
+2. Background (related papers, how we're different) [0.5p]
+3. Method (summary of creating a game, eval functions, testing) [0.5p]
+4. Description of the game [1.5p]
+5. Description of eval functions [1.5p]
+6. Results (how many times each one won and other observations) [1p]
+7. Discussion (how results support thesis) [1p]
+8. Conclusion (restate main points) [0.5p]
+9. References [0.5p]
 
 ### Develop test code
 1. Allow a seed to be fixed so that the game is deterministic

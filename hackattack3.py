@@ -23,7 +23,6 @@ Exploits_Per_Player   = 6   # number exploits each player starts game with
 Hosts_Per_Player      = 5   # number of hosts on board is this * #players
 Detection_Prob        = { 'r':0.05, 'h':0.20, 'b':0.15, 'p':0.25, 's' : 0.30 }
 New_Exploit_Prob      = 0.167
-# deprecated -- remove these
 Patches_Per_OS        = 3   # number each host draws to start (with repl.)
 Max_Accounts          = 5   # maximum number of patches allowed (+1)
 Max_Patch_Number      = 15  # maximum patch number to be kept in knowledge (+1)
@@ -717,8 +716,15 @@ class Player(object):
             # only learn that patch was there if you knew OS
             print "Hack failed"
             worked = False
-            if new_know['OS'][host, os_id] == 1.0:
-                new_know['patches'][host, patch_id] = 1.0
+            phfos = np.array([ 1.0 if i != os_id else know['patches'][host, patch_id]
+                            for i in xrange(len(OS_List)) ]) * know['OS'][host, :]
+            assert phfos.sum() > 0.0, "attack failed when known to succeed"
+            phfos /= phfos.sum()
+            p1 = know['patches'][host, patch_id]
+            p2 = (1.0 - know['OS'][host, os_id]) * (1 - know['patches'][host, patch_id])
+            new_know['OS'][host, :] = phfos
+            new_know['patches'][host, patch_id] = p1 / (p1 + p2)
+
 
         # detection check
         for playerB in xrange(self.game.num_players):
@@ -756,15 +762,40 @@ class Player(object):
         ifworks['owns'][self.id, host,  0] = 0.0
         ifworks['owns'][self.id, host, -1] += maxed
 
+        if prob_success == 1.0:
+            return [ ifworks ], [ prob_success ]
+
         # this is wrong; need to work out Bayes rule here TODO
+        # when hack fails you learn a little about OS and a little about patches
+        #  P(OS = i | hack failed) = P( hack fails | OS = i ) P( OS = i ) / P(hack fails)
+        phfos = np.array([ 1.0 if i != os_id else know['patches'][host, patch_id]
+                          for i in xrange(len(OS_List)) ]) * know['OS'][host, :]
+        if phfos.sum() == 0.0:
+            # this is an attack that is known in advance it will succeed
+            assert prob_success == 1.0
+        else:
+            phfos /= phfos.sum()
+
+        # P( patched | hackfails ) = P( hackfails | patched ) P(patched) / P( hackfails )
+        # ( know['patches'] means patched for whatever OS is right )
+        # and P(hackfails | patched) = 1.0
+        #     P(hackfails | not patched) = P(os used was wrong)
+        #     P(hackfails) = P(hackfails | patched) P(patched) + P(fails | not) P(not)
+        p1 = know['patches'][host, patch_id]
+        p2 = (1.0 - know['OS'][host, os_id]) * (1 - know['patches'][host, patch_id])
+        # print "HACK FAIL NUMBERS\nphfos {}\n   p1 {}\n   p2 {}\np1/p* {}".format(
+        #     phfos, p1, p2, p1 / (p1 + p2))
+        
         iffails = deepcopy(know)
-        if iffails['OS'][host, os_id] == 1.0:
-            iffails['patches'][host, patch_id] = 1.0
+        iffails['OS'][host, :] = phfos
+        iffails['patches'][host, patch_id] = p1 / (p1 + p2)
 
         return [ ifworks, iffails ], [ prob_success, 1.0 - prob_success ]
     
-            
+
+    # this is no longer used
     def consider_hack1(self, move, know):
+        '''deprecated'''
         host = move['to']
         os_id = OS_List_Letters.index(move['exploit'][0])
         patch_id = int(move['exploit'][1:])
@@ -1198,7 +1229,8 @@ class EvaluationStrategy(Strategy):
         m = max(scores.values())
         best = [ c for c in scores if scores[c] == m ]
         best_move = candidates[random.choice(best)]
-        return best_move, m
+        return {'bestmove':best_move, 'maxscore':m,
+                'allmoves':candidates, 'allscores':scores}
     
     def tree_fuzz(self, know, k, mover):
         '''Using this implies a model where the opponent moves randomly.
@@ -1206,7 +1238,8 @@ class EvaluationStrategy(Strategy):
         if k == 1:
             score = self.evaluation_function(know, self.player.id)
         else:
-            _, score = self.tree_your_move(know, k-1, mover)
+            result = self.tree_your_move(know, k-1, mover)
+            score = result['maxscore']
 
         return score
     
@@ -1231,22 +1264,38 @@ class EvaluationStrategy(Strategy):
     
         # recursively construct and score tree to get best move
         moves = []
-        know = deepcopy(self.player.know)
+        knows = [deepcopy(self.player.know)]
+        probs = [ 1.0 ]
         for mover in movers:
-            best_move, score = self.tree_your_move(know, self.num_ply, mover)
-            print best_move, score
+            # best_move, score = self.tree_your_move(know, self.num_ply, mover)
+            # for each knowledge, get scores for all moves
+            results = [ self.tree_your_move(kn, self.num_ply, mover)
+                        for kn in knows ]
+            
+            # compute best expected score and choose that
+            candidates = results[0]['allmoves']
+            scores = [ sum([ pr * r['allscores'][r['allmoves'].index(c)]
+                         for r, pr in zip(results, probs) ])
+                       for c in candidates ]
+            m = max(scores)
+            best = [ candidates[i] for i in xrange(len(candidates))
+                     if scores[i] == m ]
+            print "best moves = ", best, "with score", m
+            best_move = random.choice(best)
             moves.append(best_move)
-            
-            nk, pr = self.player.consider_moves([best_move], know)
-            # TODO: make it branch on outcomes rather than average them,
-            #       but this requires figuring out the combining rule
-            new_know = self.player.knows_zeros()
-            for outcome, prob in zip(nk, pr):
-                if prob == 0.0:
-                    continue
-                self.player.add_wtd_know(new_know, outcome, prob)
-            know = new_know
-            
+
+            # now consider the best move and branch on it
+            new_knows = []
+            new_probs = []
+            for kn, pr in zip(knows, probs):
+                branch_knows, branch_probs = self.player.consider_moves([best_move], kn)
+                new_knows.extend(branch_knows)
+                new_probs.extend( [ bp * pr for bp in branch_probs ] )
+
+            knows, probs = new_knows, new_probs
+            print "Explored {} knowledge states after {} moves".format(len(knows),
+                                                                       len(moves))
+                        
         print "moves =", moves
         return moves
 
@@ -1270,7 +1319,7 @@ if __name__ == '__main__':
                 # Player('Jacob', JacobAI),
                 # Player('AN', AndrewNathan),
                 Player('Random', RandomStrategy),
-                Player('Eval', EvaluationStrategy, {'f':account_difference,'k':4}) ]
+                Player('Eval', EvaluationStrategy, {'f':account_difference,'k':3}) ]
 
     results = []
 
