@@ -80,7 +80,8 @@ def account_difference(know, pid):
     your_accounts = know['owns'][pid].dot(x).sum()
     all_accounts = know['owns'].dot(x).sum()
     return your_accounts * 2 - all_accounts
-
+def maxeval(know, pid):
+	return 0
 if __name__ == '__main__':
     from Player import Player
     from Strategy import *
