@@ -25,6 +25,15 @@ If one machine is doing a ddos, then no other action should be carried out.
 The moves are executed in the order in which they are listed, which may be tactically
 important.  An empty list of moves is also valid and effects a "pass".
 
+| action | from | to | exploit |
+|--------|------|----|---------|
+| r      | X    | X  |         |
+| h      | X    | X  | X       |
+| p      | X    |    | X       |
+| c      | X    |    |         |
+| b      | X    |    |         |
+| s      | X    |    |         |
+
 
 Knowledge system planning
 -------------------------
@@ -112,7 +121,7 @@ Where Stuff Is Stored
 5. know - the knowledge structure described elsewhere
 
 *Strategy*
-1. player - the player the strategy belongs to
+1. player - the player the strategy belongs to (and is controlling)
 
 
 The moves do* (* = recon, patch, etc.) have corresponding consider*
@@ -126,9 +135,9 @@ The detect method in the player object receives events, such as:
  ('r', self.id, move['from'], move['to'])    # say exploit?
  ('b', self.id, move['from'])                # say num accounts?
  ('s', self.id, move['from'])
- ('c', self.id, move['from'], removed)       # remember tracing
+ ('c', self.id, move['from'], orig-accts, new-accts)
  ('p', self.id, move['from'], move['exploit'])
- ('h', self.id, move['from'], move['to'], move['exploit'])
+ ('h', self.id, move['from'], move['to'], move['exploit'], worked)
 
 
 Open Issues in (My Understanding of) Game Theory
@@ -161,6 +170,22 @@ over N*?  (Not quite right because if you are losing, you don't want
 to do the option that loses as slowly as possible, but rather the one
 with the biggest chance of a surprise come-back win.)
 
+Furthermore your *knowledge must change* due to the other player
+moving. There are two fundamentally different ways to do this. First,
+you can follow the steps above where you allow every move by your
+opponent and do a k-ply search. Alternatively, you can update your
+knowledge by averaging or taking a weighted average of their possible
+moves. (Really, they make multiple moves, but since the moves can't
+build on each other, this seems a reasonable proxy.) The first method
+corresponds to a willful opponent and is useful for finding the worst
+case. The second method corresponds to a random opponent and is useful
+for finding the average case under that assumption. On the other hand,
+these play different roles: enumeration is required for k-ply but
+averaging is required at the start of each turn to account for what
+went unseen in the past. (Otherwise, the k-ply must start with the
+other players' actions?)
+
+
 Known Bugs
 ----------
 
@@ -187,17 +212,23 @@ whether each other player is on the machine, which can be
 exponential. So instead I just dropped it altogether. How does the
 game end? That's an open question.
 
+_Patch Update_ Currently only updates if prob OS right is 1.0, but
+should update appropriately if prob OS is right < 1.0 also. See lines
+526, 567, 681, 705.
+
 
 To Do List
 ----------
 1. [DONE] write do-hack and consider-hack
-2. write do-ddos and consider-ddos -- how is losing incorporated into
-knowledge?
-3. write detect to handle the various types of detection
+2. [DONE] write do-ddos and consider-ddos -- how is losing incorporated into
+knowledge? -- no removed it
+3. [DONE] write detect to handle the various types of detection
 4. write a function that lists all moves (if practical)
     1. otherwise, all moves up to symmetries in uncertainty
 5. put in a random moves strategy and run it to look for errors
 6. put in strategies from before (maybe?)
 7. create a 1-ply evaluation strategy
 8. create a k-ply strategy class
-
+9. fix patch update known bug
+10. fix ownership without os bug
+11. fix bounded exploits bug
