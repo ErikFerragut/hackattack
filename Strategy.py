@@ -182,4 +182,5 @@ class JacobAI(Strategy):
 
 class AndrewNathan(Strategy):
     pass
-
+class MaxEval(Strategy):
+	pass
