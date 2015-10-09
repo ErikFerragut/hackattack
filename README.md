@@ -8,6 +8,21 @@ V 1.0 - simple starting version
 
 ## to do items
 
+### First things
+1. ~~Balance opponents; decided not to because if balanced maybe a small
+   improvement gives it 100% win rate, whereas with unbalanced win
+   rate will be more informative~~
+2. ~~in 2+ ply, average or worst move? -- go with average b/c don't
+   really know what moves are available, so worst move may be a very
+   small probability move~~
+3. ~~Implement evaluation functions~~
+    1. ~~Random strategy~~ ran to completion
+    2. ~~net_accounts~~ ran to completion k=2
+    3. ~~net_machines~~ completed
+    4. ~~clean bonus~~ completed
+    5. ~~security bonus~~ completed
+    6. ~~mixtures of 2-5~~ completed
+
 ### Tweak knowledge handling
 1. ~~Correctly compute what is learned when a hack fails (lines
 759--762)~~
@@ -16,9 +31,9 @@ the next move rather than averaging, which will prevent, for example,
 all owned machines doing the same hack (lines 1241--1248)~~
 
 ### Update git repo
-1. Split file into multiple files
-2. Merge refactor branch back into master branch
-3. Tag master branch with v 3.0
+1. ~~Split file into multiple files~~
+2. ~~Merge refactor branch back into master branch~~
+3. ~~Tag master branch with v 3.0~~
 
 ### Game playability (PlayerStrategy)
 1. Make the PlayerStrategy summarize the know clearly and succinctly
@@ -30,7 +45,7 @@ all owned machines doing the same hack (lines 1241--1248)~~
 
 ### Artificial intelligence
 1. Revisit the game theory book for easy ways to speed-up algorithms
-2. Create more evaluation functions in some reasonable way
+2. ~~Create more evaluation functions in some reasonable way~~
 3. Make starting situations comparable (same number of exploits of
    each level?)
 4. Test evals against each other and document winners
@@ -75,4 +90,13 @@ Immediate next steps:
 
 Level of Effort: 2 or 3 times per month (2-4 hours each time) to get
 this done, starting in September after I've completed item 1.
+
+
+
+
+# Tidbits we may want to document
+
+1. your_accounts immediately does backdoors until it can't any more
+
+
 

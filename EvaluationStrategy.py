@@ -1,5 +1,4 @@
 from header import *
-from copy import deepcopy
 from Strategy import *
 
 # next: k-ply evaluation strategies
@@ -34,6 +33,9 @@ class EvaluationStrategy(Strategy):
            if k = 1, it then scores that result
            otherwise, it calls tree_your_move (with k-1) on it to get score
            returns the score
+
+           if k is negative then that's how many moves ahead it looks, but without
+           in-between fuzzes
         '''
         pid = self.player.id
         candidates = self.candidate_moves(self.player.know, self.player.id)[mover]
@@ -45,8 +47,12 @@ class EvaluationStrategy(Strategy):
         knows_and_probs = { i:self.player.consider_moves([candidates[i]], deepcopy(know))
                             for i in xrange(len(candidates)) }
         # compute score for each outcome directly or via recursion
-        if k == 1:
+        if k == 1 or k == -1:
             scores = { i: np.array([self.evaluation_function(kk,pid)
+                                    for kk in kp[0]])
+                       for i,kp in knows_and_probs.iteritems() }
+        elif k < -1:
+            scores = { i: np.array([self.tree_your_move(kk, k+1, mover)['maxscore']
                                     for kk in kp[0]])
                        for i,kp in knows_and_probs.iteritems() }
         else:            
@@ -65,11 +71,14 @@ class EvaluationStrategy(Strategy):
     
     def tree_fuzz(self, know, k, mover):
         '''Using this implies a model where the opponent moves randomly.
-        Plan to have one where it moves in its best (or your worst) interest.'''
+        To keep things moving, use only 1% of the possible moves to check, and
+        then add the existing 'know' to get it to add to full probability.'''
+        # breaks on > 2 players -- and only considers small pct. of moves
+        new_know = deepcopy(self.know_fuzz(1 - self.player.id, know, sample=0.01))
         if k == 1:
-            score = self.evaluation_function(know, self.player.id)
+            score = self.evaluation_function(new_know, self.player.id)
         else:
-            result = self.tree_your_move(know, k-1, mover)
+            result = self.tree_your_move(new_know, k-1, mover)
             score = result['maxscore']
 
         return score
@@ -111,8 +120,9 @@ class EvaluationStrategy(Strategy):
             m = max(scores)
             best = [ candidates[i] for i in xrange(len(candidates))
                      if scores[i] == m ]
-            print "best moves = ", best, "with score", m
             best_move = random.choice(best)
+            print "best move is {} with score {} and {} ties".format(
+                best_move, m, len(best))
             moves.append(best_move)
 
             # now consider the best move and branch on it

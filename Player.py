@@ -213,8 +213,8 @@ class Player(object):
 
     def get_new_exploit(self):
         if random.random() < New_Exploit_Prob:
-            print "New exploit for {}".format(self.name)
             ne = random_exploit()
+            print "New exploit {} for {}".format(ne, self.name)
             self.exploits.add(ne)  # no check for duplicates
             self.know['exploits'][self.id, OS_List_Letters.index(ne[0]),
                                   int(ne[1:])] = 1.0
@@ -278,7 +278,7 @@ class Player(object):
         '''Given a list of moves, carry them out in order using the do* methods
         given by the self.move_funcs dictionary.'''
         for m in moves:
-            print "Carrying out move", m
+            # print "Carrying out move", m
             self.know = self.move_funcs[m['action']](m, self.know)
             assert self.know_valid()
             
@@ -473,7 +473,6 @@ class Player(object):
                 new_know['owns'][playerB, move['from'], 0] = 1.0
             elif removed == playerAaccts: # may have as many as max - removed
                 # new prob(m) = prob(m + removed), normalized
-                print new_know['owns'][playerB,move['from'],:]
                 new_know['owns'][playerB, move['from'], :Max_Accounts-removed] = \
                   new_know['owns'][playerB, move['from'], removed:]
                 if new_know['owns'][playerB, move['from'], :].sum() == 0.0:
@@ -586,7 +585,6 @@ class Player(object):
             worked = True
             # -- learn how many accounts you have
             num_acc = self.own[host] if host in self.own else 0
-            print "-- ", new_know['owns'][self.id, host, :]
             new_know['owns'][self.id, host, num_acc] = 0.0
             num_acc += 1
             if num_acc == Max_Accounts:
@@ -660,7 +658,8 @@ class Player(object):
                           for i in xrange(len(OS_List)) ]) * know['OS'][host, :]
         if phfos.sum() == 0.0:
             # this is an attack that is known in advance it will succeed
-            assert prob_success == 1.0
+            assert np.abs(prob_success - 1.0) < TOL, "prob success = {} where 1.0 expected".format(
+                prob_success)
         else:
             phfos /= phfos.sum()
 

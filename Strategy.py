@@ -12,25 +12,32 @@ class Strategy(object):
         self.player = player
         self.args = strategy_args
 
-    def know_fuzz(self, playerB, startknow):
+    def know_fuzz(self, playerB, startknow, sample = 1.0):
         '''Given a know structure fuzz it (i.e., average over possible moves) for
         moves by playerB and return that.'''
-        print "debug: know_fuzz"
         new_know = self.player.knows_zeros()
         # all_moves is dict of what each host can do
         all_moves = self.candidate_moves(self.player.know, playerB)
-        PB = self.player.game.players[playerB] # use playerB's consider methods
         prob_wt = 1./ sum(map(len, all_moves.values()))
+        if sample < 1.0:
+            all_moves = {k:choose_without_replacement2(v, len(all_moves[k])*sample)
+                         for k,v in all_moves.iteritems()}
+        PB = self.player.game.players[playerB] # use playerB's consider methods
+        probsofar = 0.0
         for host_moving in all_moves:
             for the_move in all_moves[host_moving]:
                 nk, pr = PB.consider_moves([the_move], startknow)
                 for outcome, prob in zip(nk, pr):
                     if prob == 0.0:
                         continue
-                    assert self.player.know_valid(outcome)
+                    assert self.player.know_valid(outcome), str(outcome)
                     self.player.add_wtd_know(new_know, outcome, prob * prob_wt)
+                    probsofar += prob * prob_wt
 
-        assert self.player.know_valid(new_know)
+        self.player.add_wtd_know(new_know, startknow, 1.0 - probsofar)
+
+
+        assert self.player.know_valid(new_know), "bad know: {}".format(new_know)
         return new_know
     
         
@@ -41,7 +48,7 @@ class Strategy(object):
 
         assert self.player.know_valid(self.player.know)
 
-        print "Starting round"
+        # print "Starting round"
         
         # update knowledge according to a uniformly random chosen move
         startknow = deepcopy(self.player.know)

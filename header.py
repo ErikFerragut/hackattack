@@ -33,6 +33,12 @@ def pick_exp_int():
 def random_exploit():
     return '{}{}'.format(np.random.choice(OS_List_Letters), pick_exp_int())
 
+def choose_without_replacement2(fromthis, thismany):
+    thismany = int(thismany)
+    this2 = [ a for a in fromthis ]
+    random.shuffle(this2)
+    return this2[:thismany]
+
 def choose_without_replacement(fromthis, thismany):
     '''Return in random order thismany samples from fromthis
     so that no two are the same.'''

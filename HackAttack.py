@@ -8,6 +8,7 @@ import numpy as np
 from collections import Counter
 from copy import deepcopy
 from itertools import product
+import time
 
 from header import *
 # from Player import *
@@ -40,15 +41,14 @@ class HackAttack(object):
         self.round = 0   # number of rounds of the game played so far
         self.whose_turn = 0  # player whose turn it is
 
-    def play(self, max_rounds=100):
-        x = np.arange(Max_Accounts)
+    def play(self, max_rounds=100, outputlog = None):
+        start_time = time.time()
         while True:            
             # update counters, game over if did maximum # rounds
             if self.whose_turn == 0:
                 self.round += 1
-                for i in self.players_in:
-                    print i, '->', account_difference(self.players[i].know, i)
                 if self.round == max_rounds:
+                    break
                     numacc = { i:len(self.players[i].own)
                                 for i in self.players_in }
                     mostacc = max(numacc.values())
@@ -67,50 +67,78 @@ class HackAttack(object):
             if len(self.players[self.whose_turn].own) == 0:
                 self.players_in.remove(self.whose_turn)
                 if len(self.players_in) == 1:
+                    break
                     return self.players_in # a list with just the winner id
 
             # next player's turn
             self.whose_turn = (self.whose_turn + 1) % self.num_players
 
+        numacc = {i:len(self.players[i].own) for i in self.players_in}
+        mostacc = max(numacc.values())
+        winners = [ i for i in numacc if numacc[i] == mostacc ]
+        outputstr = "RESULT {} rounds winners {} exploits {} {} time {}".format(
+            self.round, winners, 
+            sorted(self.players[0].exploits), sorted(self.players[1].exploits), 
+            time.time() - start_time)
+        print outputstr
+        if outputlog != None:
+            outputlog.write(outputstr + '\n')
+            outputlog.flush()
+            
+        return winners
 
-
-
-def account_difference(know, pid):
-    x = np.arange(Max_Accounts)
-    your_accounts = know['owns'][pid].dot(x).sum()
-    all_accounts = know['owns'].dot(x).sum()
-    return your_accounts * 2 - all_accounts
-def maxeval(know, pid):
-	x= np.arrange(Max_Accounts)
-	your_accounts = know['owns'][pid].dot(x).sum()
-	all_accounts = know['owns'].dot(x).sum()
-	return your_accounts * 2 - all_accounts
 if __name__ == '__main__':
     from Player import Player
     from Strategy import *
     from EvaluationStrategy import *
-    from jacobAttack import *
-    from nathaniscool import *
+    from EvaluationFunctions import *
 
+    import sys
+    print sys.argv
+
+    # would be pretty easy to change to allow more than 2 strategies
     
-    players = [ # Player('Player', PlayerStrategy),
-                # Player('Andrew', Andrews),
-                # Player('Ethan', EthanAI),
-                # Player('Jacob', JacobAI),
-                # Player('AN', AndrewNathan),
-                Player('Random', RandomStrategy),
-                Player('Eval', EvaluationStrategy, {'f':nathaniscool,'k':3}) ]
-
+    if len(sys.argv) != 5:
+        players = [ Player('Random', RandomStrategy),
+                    Player('Eval', EvaluationStrategy, {'f':nathaniscool,'k':3}) ]
+    elif len(sys.argv) == 5:
+        for i in [1,3]:
+            assert sys.argv[i].startswith('mixture') or sys.argv[i] in globals(), \
+              "Function {} undefined; choices are {}".format(
+                sys.argv[i], ['your_accounts', 'net_accounts', 'your_machines',
+                              'net_machines', 'clean_machines', 'security',
+                              'mixtureA:B:C:D'])
+            try:
+                k = int(sys.argv[i+1])
+            except ValueError:
+                assert False, "k-ply param {} non-int".format(sys.argv[i+1])
+        players = []
+        for i in [1,3]:
+            if sys.argv[i].lower() == 'random': # ignores the k-ply parameter
+                players.append( Player('Random{}'.format(i//2), RandomStrategy) )
+            elif sys.argv[i].startswith('mixture'):
+                a,b,c,d = map(float, sys.argv[i][7:].split(':'))
+                evalfunc = get_mixture_eval(a,b,c,d)
+                players.append( Player('mixture{}'.format(i//2), EvaluationStrategy,
+                                       {'f':evalfunc, 'k':int(sys.argv[i+1])} ) )
+            else:
+                players.append( Player('{}{}'.format(sys.argv[i], i//2),
+                                       EvaluationStrategy, {'f':globals()[sys.argv[i]],
+                                                            'k':int(sys.argv[i+1])} ) )
+            
     results = []
 
+    outputfile = open('output.log', 'a')
     for i in xrange(1, 2):
         print '-'*80
         print ('GAME ' + str(i)).center(80)
         print '-'*80    
         g=HackAttack(players)
-        r = g.play(20)
-        print r
+        r = g.play(20, outputfile)
+        print r        
         results.append(r)
 
-    print Counter(map(tuple,results))
-
+    results2 = Counter(map(tuple,results))
+    print results2
+    outputfile.write('OUTCOME {} -> {}\n'.format(sys.argv, results2))
+    
