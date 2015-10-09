@@ -11,9 +11,6 @@ from itertools import product
 import time
 
 from header import *
-# from Player import *
-# from Strategy import *
-# from EvaluationStrategy import *
 
 ################################################################################
 # HackAttack Class
