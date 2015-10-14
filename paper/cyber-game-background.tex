@@ -1,84 +1,69 @@
-Liang~\cite{liang2013game} is a survey.  It gives a summary of types of games broken down by cooperative v. non-cooperative, complete v. incomplete information (does each player know the other players' payoff functions), perfect v. imperfect information (do players know all previous moves and outcomes?), static v. dynamic game (one simultaneous move or consecutive moves). By this breakdown, our game is non-cooperative, has complete but imperfect information, and is a dynamic game.
+% what are cyber games
+An extensive literature now exists that analyzes cyber security using
+game theory. However, there is very little in terms of realistic
+games. Games can be categorized by various independent dimensions:
+static v. dynamic, complete v. incomplete, perfect
+v. imperfect. Static games are games in which the order of the moves
+do not matter; these are generally viewed as games where the players
+move simultaneously. Non-static, or dynamic, games are more realistic
+for modeling cyber conflict. In a game of complete information, each
+player knows the payoff function of each of the other players, whereas
+this is not the case for games of incomplete information, which may be
+more realistic. Finally, in games of perfect information, each player
+observes (without error) all actions taken and their outcomes. A
+notable feature of cyber conflict is that each agent attempts to
+remain undetected; games where actions or outcomes may be unobserved
+or observed with error or uncertainty are called games of imperfect
+information. In this paper, we develop a dynamic game of complete but
+imperfect information. For useful surveys that describe the literature
+along this taxonomy, see~\cite{liang2013game}
+and~\cite{roy2010survey}. 
 
-Sallhammar~\cite{sallhammar2007using} is Karin Sallhammar's thesis that has one introductory paragraph and six chapters, each one a paper. The title given is the first paper (Paper A).  Paper C is~\cite{sallhammar2005incorporating}. Paper D is~\cite{sallhammar2006stochastic} (which is probably essentially the same as~\cite{sallhammar2006towards}). Paper F is~\cite{sallhammar2007framework}. (Papers B and E are about attackers' expected behavior and real-time risk assessment.)
+% static games and repeated static games
+A number of researchers have studies static games~\cite{}. These games
+have the significant advantage that they can be analyzed (e.g., Nash
+equilibria can be computed) using existing methods. In some cases
+(more \cites{}?) the repeated game is studied, which adds some realism,
+but fails to capture the essence of cyber attacks where a sequence of
+small gains leads to a dominant position.
 
+% dynamic games with perfect information
+Among dynamic games, it is common to assume complete and perfect
+information where each player can observe the actions of the
+others. For example, in~\cite{} attacks are always detected. This
+renders the results inapplicable to real cyber conflicts, since cyber
+attacks are designed to be (and often are) undetectable.
 
+% dynamic games with imperfect information
 
+% key issues; we address them
+The survey~\cite{roy2010survey} describes the lack of realism in cyber
+games.
+\begin{quote}
+  Some of the limitations of the present research are: (a) Current
+  stochastic game models only consider perfect information and
+  assume that the defender is always able to detect attacks; (b)
+  Current stochastic game models assume that the state transition
+  probabilities are fixed before the game starts and these
+  probabilities can be computed from the domain knowledge and past
+  statistics; (c) Current game models assume that the players’ actions
+  are synchronous, which is not always realistic; (d) Most models are
+  not scalable with the size and complexity of the system under
+  consideration.
+\end{quote}
+In this work, we address all of these concerns.
 
-And so on...
+One issue they seem to all have is that payoff functions must be
+assigned to certain outcomes. These numbers typically must be chosen
+to represent some intuitive notion of the benefit of each outcome, but
+the choices, begin very difficult to validate, must generally be
+accepted as notional. In our game, we define a win condition. Namely,
+the attacker who owns the most assets at the end of a given number of
+time steps is the winner. This view of the payoff directly correlates
+with the real-world goals of attackers and is therefore more
+defensible.
 
-
-Roy~\cite{roy2010survey}.
-
-Tambe~\cite{tambe2011security}
-
-Lye~\cite{lye2005game}
-
-
-
-
-Bier~\cite{bier2006game}
-
-Luo~\cite{luo2010game}
-
-Fielder~\cite{fielder2014game}
-
-Backhaus~\cite{backhaus2013cyber}
-
-Zonouz~\cite{zonouz2014rre}
-
-Dunlavy~\cite{dunlavy2009mathematical}
-
-Grossklags~\cite{grossklags2009uncertainty}
-
-Shiva~\cite{shiva2010stochastic}
-
-Carroll~\cite{carroll2011game}
-
-Kiekintveld~\cite{kiekintveld2009computing}
-
-Manshaei~\cite{manshaei2013game}
-
-Alpcan~\cite{alpcan2006intrusion}
-
-Kiekintveld~\cite{kiekintveld2011approximation}
-
-Bensoussan~\cite{bensoussan2010game}
-
-Sallhammar~\cite{sallhammar2007framework}
-
-Sallhammar~\cite{sallhammar2005incorporating}
-
-Farhang~\cite{farhang2014dynamic}
-
-Van~\cite{van2013flipit}
-
-Shen~\cite{shen2011survey}
-
-Letchford~\cite{letchford2011computing}
-
-Wu~\cite{wu2010modeling}
-
-Chan~\cite{chan2012interdependent}
-
-Bowers~\cite{bowers2012defending}
-
-Gueye~\cite{gueye2012towards}
-
-Sahinoglu~\cite{sahinoglu2012game}
-
-Shiva~\cite{shiva2012holistic}
-
-He~\cite{he2012game}
-
-Schlicher~\cite{schlicher2012information}
-
-Beard~\cite{beard2012using}
-
-Simmons~\cite{simmons2013adapt}
-
-Leslie~\cite{leslie2015threshold}
-
-Abbasvand~\cite{abbasvand2013survey}
-
-Jones~\cite{jones2013asymmetric}
+Another key distinction is that {\em all} previous work we are aware
+of analyzes an attacker-defender situation. We analyze a two-attacker
+situation where two adversaries are attempting to control a common
+pool of resources.

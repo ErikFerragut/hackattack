@@ -1,0 +1,341 @@
+% This is "sig-alternate.tex" V2.0 May 2012
+% This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
+%
+% This example file demonstrates the use of the 'sig-alternate.cls'
+% V2.5 LaTeX2e document class file. It is for those submitting
+% articles to ACM Conference Proceedings WHO DO NOT WISH TO
+% STRICTLY ADHERE TO THE SIGS (PUBS-BOARD-ENDORSED) STYLE.
+% The 'sig-alternate.cls' file will produce a similar-looking,
+% albeit, 'tighter' paper resulting in, invariably, fewer pages.
+%
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V2.5) produces:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) NO page numbers
+%
+% as against the acm_proc_article-sp.cls file which
+% DOES NOT produce 1) thru' 3) above.
+%
+% Using 'sig-alternate.cls' you have control, however, from within
+% the source .tex file, over both the CopyrightYear
+% (defaulted to 200X) and the ACM Copyright Data
+% (defaulted to X-XXXXX-XX-X/XX/XX).
+% e.g.
+% \CopyrightYear{2007} will cause 2007 to appear in the copyright line.
+% \crdata{0-12345-67-8/90/12} will cause 0-12345-67-8/90/12 to appear in the copyright line.
+%
+% ---------------------------------------------------------------------------------------------------------------
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% ================= IF YOU HAVE QUESTIONS =======================
+% Questions regarding the SIGS styles, SIGS policies and
+% procedures, Conferences etc. should be sent to
+% Adrienne Griscti (griscti@acm.org)
+%
+% Technical questions _only_ to
+% Gerald Murray (murray@hq.acm.org)
+% ===============================================================
+%
+% For tracking purposes - this is V2.0 - May 2012
+
+\documentclass{sig-alternate}
+
+\begin{document}
+%
+% --- Author Metadata here ---
+\conferenceinfo{CISR}{'15 Oak Ridge, Tennessee USA}
+%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+%\crdata{0-12345-67-8/90/01}  
+% Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
+% --- End of Author Metadata ---
+
+\title{Literature Review of Cyber Games}
+
+% \subtitle{[Extended Abstract]
+% \titlenote{A full version of this paper is available as
+% \textit{Author's Guide to Preparing ACM SIG Proceedings Using
+% \LaTeX$2_\epsilon$\ and BibTeX} at
+% \texttt{www.acm.org/eaddress.htm}}}
+
+
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{1} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+Erik M. Ferragut\\
+       \affaddr{Oak Ridge National Laboratory}\\
+       \affaddr{Oak Ridge, Tennessee}\\
+       % \email{ferragutem@ornl.gov}
+}
+
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+% \additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
+% email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
+% (The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
+\date{16 October 2015}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+% \begin{abstract}
+% Lit review for cyber conflict
+% \end{abstract}
+
+% % A category with the (minimum) three required fields
+% \category{H.4}{Information Systems Applications}{Miscellaneous}
+% %A category including the fourth, optional field follows...
+% \category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+% \terms{Theory}
+
+% \keywords{ACM proceedings, \LaTeX, text tagging}
+
+\section{Detailed summary}
+
+Liang~\cite{liang2013game} is a survey.  It gives a summary of types
+of games broken down by cooperative v. non-cooperative, complete
+v. incomplete information (does each player know the other players'
+payoff functions), perfect v. imperfect information (do players know
+all previous moves and outcomes?), static v. dynamic game (one
+simultaneous move or consecutive moves). By this breakdown, our game
+is non-cooperative, has complete but imperfect information, and is a
+dynamic game. 
+
+
+Sallhammar~\cite{sallhammar2007using} is Karin Sallhammar's thesis
+that has one introductory paragraph and six chapters, each one a
+paper. The title given is the first paper (Paper A).  Paper C
+is~\cite{sallhammar2005incorporating}. Paper D
+is~\cite{sallhammar2006stochastic} (which is probably essentially the
+same as~\cite{sallhammar2006towards}). Paper F
+is~\cite{sallhammar2007framework}. (Papers B and E are about
+attackers' expected behavior and real-time risk assessment.)
+Algorithms for solving stochastic games in [Som04].  In {\bf Paper A} the
+game has a few states from secure to breached.  Attacker may increment
+the state (toward breached) and defender may reset it to secure (0).
+They model it as continuous time with exponential wait times driven by
+selected parameters for the attacker and defender speeds and also
+probabilities of success.  Treated like a game (using min-max) but the
+defender has no choice, right?  Unclear.  Turns into a markov chain
+problem where the limiting probabilities can be computed from the
+transition matrix.  Becomes unclear and focuses on mean time to first
+system breach (MTFSB).  Somehow, best attack rate is 0.25, which is
+because the attacker prefers to not attack {\em when they would have
+  been detected} over not attacking when they would not have been
+detected.  Apparently requires knowing what would have happened, which
+is very unrealistic.  But without that, they would be unable to
+distinguish attack cases and would either always or never attack, I
+think.  Paper B is like Paper A except it posits a set of three
+resources and stochastically models attacks on them.
+
+Bensoussan~\cite{bensoussan2010game} uses a {\em differential game}
+similar to a SIS epidemiological model where no longer infected
+machines can later again become infected. This system is then solved
+by setting the right derivatives to zero (and using dynamic
+programming). Not especially relevant despite being about a botnet
+attacker and a network defender. Also, it seems no stochastics are
+included.
+
+Sallhammar~\cite{sallhammar2007framework}, also known as Paper F from
+her thesis, is the culmination of several papers from 2002--2007. The
+general framework appears to be based on using a Hidden Markov Model
+to capture the gap between observations and true state as the system
+evolves over time.
+
+Lye~\cite{lye2005game} uses a stochastic game with two players
+(attacker and defender), which works as follows.  There are a finite
+collection of states.  At each time, both players choose a move, and
+then they receive a reward that's a function of the state and the
+chosen moves (different function for each player). Then the state is
+updated according to transition probabilities depending on previous
+state and player moves. Nash equilibria are computed (18 in all).
+They point out the common complaint ``why not put all security on''
+and say it is to preserve usability (at end of Section 6).
+
+Roy~\cite{roy2010survey} is a survey that comes from Dasgupta's
+lab. Their taxonomy has cooperative and non-cooperative games, with
+the latter broken up as static or dynamic games. They further break up
+the static and dynamic games, with dynamic ones being divided into
+complete and not complete information and also perfect and imperfect
+information. In the category most like HackAttack, complete and
+imperfect information, they list just two references
+(\cite{alpcan2006intrusion} and \cite{nguyen2009security}).  In the
+closely related category of incomplete and imperfect information, two
+more (\cite{alpcan2004game} and \cite{you2003kind}) are given. Their
+discussion in Section 4.4 lists a number of issues that HackAttack
+seems to address:
+
+\begin{quotation}
+Many of the current game-theoretic security approaches are based on
+either static game models [23, 24] or games with perfect information
+[25, 39, 4, 6] or games with complete information [31]. However, in
+reality a network administrator often faces a dynamic game with
+incomplete and imperfect information against the attacker. Some of the
+current models involving dynamic game with incomplete and imperfect
+information are specific to wireless networks [34] while a few others
+[2, 40] do not consider a realistic attack scenario.
+
+In particular, some of the limitations of the present research are:
+(a) Current stochastic game models [25] only consider perfect
+information and assume that the defender is always able to detect
+attacks; (b) Current stochastic game models [25] assume that the state
+transition probabilities are fixed before the game starts and these
+probabilities can be computed from the domain knowledge and past
+statistics; (c) Current game models assume that the players’ actions
+are synchronous, which is not always realistic; (d) Most models are
+not scalable with the size and complexity of the system under
+consideration.
+\end{quotation}
+
+Alpcan~\cite{alpcan2006intrusion} is one of only a few examples to
+consider dynamic games with imperfect information. They use three
+players: attacker, defender, and purely stochastic sensors. They get a
+zero-sum (for ease of analysis) 2-player Markov stochastic game. They
+consider various levels of information, including defective
+sensors. The attacker's options are attack and don't attack, which is
+either detected or not detected, and the defender can either respond
+or not respond. This is repeated in consecutive discrete
+times. Specialized algorithms from the literature are used to
+``solve'' the game. (The co-author T.~Ba{\c{s}}ar has a full book
+called {\em Dynamic Noncooperative Game Theory}.)
+
+Alpcan~\cite{alpcan2004game} considers both a discrete/finite version
+and a continuous version. They haven't quite stumbled onto Markov
+stochastic games, but they are building toward it. Basically an early
+version of~\cite{alpcan2006intrusion}, in my opinion. They consider a
+dynamic game, which is stochastic via a ``nature'' player (whom they
+call fictitious play), and they attempt to solve it using simulations
+and such.
+
+Nguyen~\cite{nguyen2009security} considers repeated static games,
+sets up a matrix game and solves it. As payoff matrices seem
+arbitrary, the results are notional only.
+
+Bier~\cite{bier2006game} is essentially a concept paper arguing for
+combining reliability methods and game theory to study conflicts
+related to terrorism (not necessarily cyber attacks). The interesting
+idea is how some defenses (e.g., conspicuous alarm system) increase
+risk for other defenders while other defenses (e.g., vaccines)
+decrease risk for others. This suggests a dynamic that we did not
+(yet) study directly.
+
+In~\cite{luo2010game} a tree approach is used to handle a dynamic game
+with essentially complete and perfect information, although they seem
+to claim otherwise. They compare a greedy, a single step look-ahead,
+and (probably) a further look ahead and show the last is best.
+
+In~\cite{fielder2014game}, they find Nash equilibria and mixed Nash
+equilibria for games and show they correspond to minimax
+solutions. Also, they use reports of hacking incidents as a basis for
+their games. There exist $n$ resources at baseline defense, and the
+defender may harden $m < n$ of them. Each asset has a payoff for each
+of attacker and defender for each case of being compromised or
+not. They find Nash equilibrium. They prove that the defender's Nash
+equilibrium is also their minimax strategy for that game (their
+Theorem 1). (They also do a fast approximation of it using SVD.) They
+have an example where the obvious solution is not as good as the game
+theory solution.
+
+In~\cite{grossklags2009uncertainty}, the authors focus on  quantifying
+the value of information for rational and intelligent defenders. They
+also compare sophisticated and unsophisticated defenders (as modeled
+by different ways to find strategies).
+
+\section{Categorization}
+
+\begin{description}
+\item[Surveys] \cite{liang2013game,roy2010survey}
+
+\item[Concept Papers] Relationship to reliability~\cite{bier2006game}.
+
+\item[Non-repeated Static Games] TBD
+
+\item[Repeated Static Games] Nguyen et
+  al.~\cite{nguyen2009security} consider repeated static matrix games
+  (with apparently arbitrary matrices).
+
+
+\item[Dynamic Games -- Differential] SIS epidemiological modeling
+  by~\cite{bensoussan2010game}.
+
+
+\item[Dynamic Games -- Stochastic] The work of Sallhammar et
+  al.~\cite{sallhammar2007using, sallhammar2005incorporating,
+    sallhammar2006stochastic, sallhammar2006towards,
+    sallhammar2007framework} is based on stochastic
+  games. Also,~\cite{lye2005game} where 18 Nash equilibria are
+  computed. Several works by Ba{\c{s}}ar consider dynamic games with
+  imperfect information~\cite{alpcan2006intrusion} in terms of a
+  2-player zero-sum Markov stochastic game.
+
+\item[Dynamic Games -- Other] Tree-based approach~\cite{luo2010game}. 
+
+\end{description}
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{game}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+
+%\balancecolumns
+
+\end{document}
