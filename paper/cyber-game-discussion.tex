@@ -1,0 +1,18 @@
+Main things we learned:
+\begin{enumerate}
+\item k-2 > k2 -- since your opponent knows so little about your situation, you are better off just thinking about your own moves; this somewhat justifies attack trees, graphs, and petri nets.
+\item k-3 is super slow! so we couldn't test the benefits of scanning deeper moves
+\end{enumerate}
+
+
+
+How can we improve this?
+\begin{enumerate}
+\item Make it more realistic by modeling a specific enterprise network
+\item Introduce system owner moves, like system refresh, nessus scans, etc.
+\item Speed up the deeper analysis by:
+\begin{enumerate}
+  \item Exploit symmetries that result from lack of information (e.g., it doesn't matter what you hack if you don't know anything about any machine)
+  \item Search the min-max tree more intelligently
+\end{enumerate}
+\end{enumerate}

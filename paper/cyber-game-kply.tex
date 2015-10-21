@@ -1,0 +1,32 @@
+Outline:
+\begin{enumerate}
+\item What are evaluation functions?
+\item Traditional definition of $k$-ply search
+\item Modified $k$-ply search for HackAttack
+\end{enumerate}
+
+A strategy for a game is a function that takes as input a player's situation and returns that player's move(s). There are many ways to develop strategies. Most commonly in the cyber security game theory literature is to explicitly write down the objective function and perform the related min-max optimization [citations needed]. This approach works well only in the simplest games, such as static matrix games. For more complex games, such as stochastic Markov games, alternative methods (e.g., [examples]) can be used [citations needed]. However, the most complex games must adopt methods similar to those used to develop strategies for chess and checkers. These approaches involve the development and use of {\em evaluation functions} to score the desirability of any possible state of the game. The evaluation function is then used in a multiple look-ahead tree search to select the best move to play.
+
+\begin{figure}[h!tbp]
+[Insert picture of a tree showing min-max strategy] 
+\caption{Figure!\label{fig:minmaxtree}}
+\end{figure}
+
+As a simple example, a tic-tac-toe evaluation function might be defined by summing up points as follows: 3 points for occupying the center, -3 if the opponent occupies the center, 1 for each corner occupied, -1 for each opponent-occupied corner, 4 points for having a two-in-a-row, 10 points for having two two-in-a-rows, 1000 points for having three-in-a-row, and -1000 for the opponent having three-in-a-row. Such a function can then be used to consider what-if scenarios and select an optimal move.
+
+As shown in Figure~\ref{fig:minmaxtree}, a tree is constructed top-down starting with the current board configuration as the root. For each possible move, a child node is created. This makes up the {\em 1-ply} tree. Then, at each leaf, each opponent move is added as a child, making up the {\em 2-ply} tree. This process continues to the desired depth. At the bottom, each board configuration is scored according to the evaluation function. These scores are then rolled up as follows. If the last move represents the player's move then, under the assumption that the player will try to improve the board, the maximum of the childs' scores are assigned to the parent. On the other hand, if the last move represents the opponent's move then the minimum is used. This process is repeated up the tree, alternating between min and max. The score given to the root is the largest value among its children (which may occur multiple times). One of these highest-scoring moves is then selected. This is the {\em $k$-ply strategy} for the given evaluation function.
+
+The basic $k$-ply strategy assumes that all possible moves are known and deterministic. It also assumes that each player gets one move. In HackAttack, results are probabilistic and the number of moves a player gets next turn depends on the outcome of their move this turn. Furthermore, each player has only limited knowledge of the other players' knowledge, accounts, and exploits. Consequently, we adopted some simplifying assumptions, and explored two different kinds of $k$-ply search: no-response and random-response.
+
+% simplifying assumption: 
+%% only consider one resource's move at a time, then think about the outcome of that as the starting point for the next resource
+%% no smart-response
+
+% no-response: only think about your own moves
+
+% random-response: your move and then random move
+
+% why not smart-response? because (1) you don't know for sure where they have accounts so it's hard (complex and slow) to model, and (2) they wouldn't know what to do against you because they don't know what you have 
+
+{\vspace*{0.2cm}\hrule 
+  {\begin{center} \color{red} \Huge \bf{HERE} \end{center} }\hrule \vspace*{0.2cm} }

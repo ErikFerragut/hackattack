@@ -1,0 +1,215 @@
+\usepackage{graphicx}
+
+% %% Set page size, to 1-inch margins, no headers or footers
+% \pagestyle{plain}
+% \setlength{\headsep}{0in}
+% \setlength{\footskip}{.5in}
+% %% actual margin setting
+% \usepackage[hmargin=1in,top=0.5in,headsep=0.1in,bottom=1.0in,foot=0.5in,textheight=9in,paperwidth=8.5in,paperheight=11in]{geometry}
+
+
+\usepackage{url}      % used for typesetting urls, incl. in bib
+\usepackage{color}     % good for putting notes in red and blue
+
+\usepackage{mathtools}  % imports amsmath and then some
+\usepackage{amsfonts}  % required for mathbb font
+\usepackage{amsthm}
+
+\usepackage{algorithm,algorithmic}
+\usepackage{epsfig, wrapfig, graphicx, subfigure, xcolor}
+
+% %% Stuff Blair used
+% \DeclareGraphicsExtensions{.eps} 
+% \usepackage{epstopdf}
+% \usepackage[final]{pdfpages}
+% \usepackage{natbib}
+% \usepackage{verbatim}
+% \usepackage{draftcopy}
+% \usepackage{times}      % a font choice, see http://www.tug.dk/FontCatalogue/ for more
+% \usepackage{enumitem}
+% \usepackage{pgf}
+% \usepackage{setspace}
+% \usepackage[english]{babel}   % internationalization (e.g., hyphenation)
+% \usepackage{textcomp}
+% \usepackage{color}
+% \usepackage{calc}
+% \usepackage{url}
+% \usepackage{hyperref}
+% \hypersetup{colorlinks=true,linkcolor=black, citecolor=black,filecolor=black, pagecolor=black, urlcolor=black}
+
+% for commenting in both blue and red-bold, and leaving an unambiguous
+% place you left off
+\newcommand{\note}[1]{ {\color{blue} #1} }
+\newcommand{\vlad}[1]{ {\color{red} \bfseries #1}}
+\newcommand{\here}{\vspace*{0.2cm}\hrule 
+  {\begin{center} \color{red} \Huge \bf{HERE} \end{center} }\hrule \vspace*{0.2cm} }
+
+% for checkboxes -- use begin{description} with \item[\todo] or \item[\done]
+% - should I define \todolist, \itemtodo, and \itemdone?
+\newcommand{\todo}{\framebox{\color{white} X}\,}
+\newcommand{\done}{\framebox{X}\,}
+
+% generic derivative symbol
+\newcommand{\dd}{\; \mathrm{d}}
+\newcommand{\ddd}{\mathrm{d}}
+
+%% Change the headings for table of contents and references
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\refname}{\hfil References Cited\hfil}
+
+% %% Add dots in TOC
+% \makeatletter
+% \renewcommand\l@section[2]{%
+%   \ifnum \c@tocdepth >\z@
+%     \addpenalty\@secpenalty
+%     \addvspace{1.0em \@plus\p@}%
+%     \setlength\@tempdima{1.5em}%
+%     \begingroup
+%       \parindent \z@ \rightskip \@pnumwidth
+%       \parfillskip -\@pnumwidth
+%       \leavevmode \bfseries
+%       \advance\leftskip\@tempdima
+%       \hskip -\leftskip
+%       #1\nobreak\
+%       \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}
+%      \hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+%     \endgroup
+%   \fi}
+% \makeatother
+
+% %% Other
+% %% -- huh?
+% \newcommand{\zapspace}{\topsep=0pt\partopsep=0pt\itemsep=0pt\parskip=0pt}
+% %% -- put a centered heading?
+% \newcommand{\required}[1]{\section*{\hfil #1\hfil}}
+% %% -- change spacing between sections and bib entries?
+% \newcommand{\secskip}{\vskip0.3cm}
+% \newcommand{\bibskip}{\vskip0.1cm\noindent}
+
+%% Headers and Footers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}    % huh?
+\headheight 0.4in
+\headsep 0.2in
+\textheight 9in
+%\footskip 0.2in
+\fancyhead[R]{}
+\fancyhead[L]{} 
+\fancyfoot[C]{\thepage}
+
+
+% %% Definitions for even tighter spacing on enumeration and itemize
+% \newenvironment{test_item}{
+% \begin{itemize}[noitemsep,topsep=0pt,partopsep=0pt, parsep=0pt]
+%   \renewcommand{\labelitemi}{\raise .5ex\hbox{\tiny$\bullet$}}
+% }{\end{itemize}}
+
+% \newenvironment{packed_enum}{
+% \begin{enumerate}
+%   \setlength{\itemsep}{1pt}
+%   \setlength{\parskip}{0pt}
+%   \setlength{\parsep}{0pt}
+% }{\end{enumerate}}
+
+% \newenvironment{packed_itemize}{
+% \begin{itemize}
+%   \setlength{\itemsep}{1pt}
+%   \setlength{\parskip}{0pt}
+%   \setlength{\parsep}{0pt}
+% }{\end{itemize}}
+
+
+
+%% theorem-styled environments
+%% - "theorem" in bold and numbered
+%% - text italicized
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{claim}[prop]{Claim}
+\newtheorem{goal}[prop]{Goal}
+\newtheorem{principle}[prop]{Principle}
+\newtheorem{theorem}[prop]{Theorem}
+\newtheorem{hypo}[prop]{Hypothesis}
+\newtheorem{guess}[prop]{Guess}
+\newtheorem{axiom}[prop]{Axiom}
+\newtheorem{lemma}[prop]{Lemma}
+\newtheorem{claimedlemma}[prop]{Claimed Lemma}
+\newtheorem{claimedtheorem}[prop]{Claimed Theorem}
+\newtheorem{cor}[prop]{Corollary}
+\newtheorem{conj}[prop]{Conjecture}
+\newtheorem{obs}[prop]{Observation}
+
+\theoremstyle{definition}
+%% definition-styled environments (roman text)
+%% - "definition" in bold and numbered
+%% - text not italicized
+\newtheorem{defn}[prop]{Definition}
+\newtheorem{problem}[prop]{Problem}
+\newtheorem{exercise}[prop]{Exercise}
+\newtheorem{question}[prop]{Question}
+
+\theoremstyle{remark}
+%% remark-styled environments
+%% - "remark" not bold, but italicized
+%% - text not italicized
+\newtheorem{remark}[prop]{Remark}
+\newtheorem{ex}[prop]{Example}
+
+%% to do proofs, use \begin{proof} and \end{proof}
+%% except maybe if using IEEE format, can use IEEEproof
+
+% shortcuts to bb font, probability, and bigO
+\renewcommand{\P}{\ensuremath{\mathrm{P}}}
+\newcommand{\bigO}{\ensuremath{\mathcal{O}}}
+\newcommand{\RR}{\ensuremath{\mathbb{R}}}
+\newcommand{\CC}{\ensuremath{\mathbb{C}}}
+\newcommand{\ZZ}{\ensuremath{\mathbb{Z}}}
+\newcommand{\NN}{\ensuremath{\mathbb{N}}}
+
+% Update for your publication, but this is required by all UT-Battelle publications.
+\newcommand{\ornlthanks}{The manuscript has been authored by a contractor of the U.S. Government under contract DE-AC05-00OR22725. Accordingly, the U.S. Government retains a nonexclusive, royalty-free license to publish or reproduce the published form of this contribution, or allow others to do so, for U.S. Government purposes.}
+
+
+% spacing for editing
+%\renewcommand{\baselinestretch}{2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%              What follows may need to go after begin document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \setcounter{tocdepth}{3}
+% \pagenumbering{arabic}
+
+% %% Example cover letter include:
+% \includepdf[pages={1-1}]{SignedCoverLetter.pdf}
+
+% %% Put something in the TOC without giving a section heading
+%\phantomsection
+%\addcontentsline{toc}{section}{Field Work Proposal (DOE Form 5120.2)}
+%\includepdf[pages={1-4}]{SignedFWP.pdf}
+%\includepdf[pages=-,pagecommand={\thispagestyle{plain}}]{pdf_files/FWP.pdf} 
+
+
+% %% Restart the numbering, typically change between arabic and roman
+% \newpage
+% \setcounter{page}{1}
+% \pagenumbering{roman}
+
+
+% % Table of Contents
+% \phantomsection
+% \addcontentsline{toc}{section}{Table of Contents}
+% \renewcommand{\contentsname}{Table of Contents}
+% \tableofcontents
+% \newpage
+
+% %% Blair's way of including subsections
+% \clearpage
+% \setcounter{page}{1}
+% \pagenumbering{arabic}
+% \fancyhead[R]{Narrative}
+
+% \phantomsection
+% \addcontentsline{toc}{section}{Narrative}
+% \thispagestyle{fancy}
+% \input{narrative}

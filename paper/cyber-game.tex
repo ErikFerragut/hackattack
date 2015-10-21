@@ -47,10 +47,17 @@
 
 \documentclass{sig-alternate}
 
+\include{goodmathstuff.tex}
+\usepackage{array,multirow}  % for results table
+
+\usepackage[table,x11names]{xcolor}  % for moves table
+
+\newcommand{\highlightrow}{\rowcolor{SkyBlue1}}
+
 \begin{document}
 %
 % --- Author Metadata here ---
-\conferenceinfo{CISR}{'15 Oak Ridge, Tennessee USA}
+\conferenceinfo{CISR}{'16 Oak Ridge, Tennessee USA}
 %\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  
 % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
@@ -148,15 +155,38 @@ Max Wildgruber\\
 % \additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
 % email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
 % (The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
-\date{16 October 2015}
+\date{30 October 2015}
 % Just remember to make sure that the TOTAL number of authors
 % is the number that will appear on the first page PLUS the
 % number that will appear in the \additionalauthors section.
 
 \maketitle
 \begin{abstract}
-Game theory + formalization of cyber conflict $\implies$ best
-practices for cyber conflict
+  Game theory is appropriate for studying cyber conflict because it
+  allows for an intelligent and goal-driven adversary. Applications of
+  game theory have led to a number of results regarding optimal attack
+  and defense strategies. (example of one that's not very realistic.)
+  However, the overwhelming majority of cyber game theory explores
+  overly simplistic games, often ones in which each participant's
+  actions are visible to every other participant. These
+  simplifications strip away the fundamental properties of real cyber
+  conflicts: probabilistic alerting, hidden actions, unknown opponent
+  capabilities.
+
+  In this paper, we demonstrate that it is possible to analyze a more
+  realistic game, one in which different resources have different
+  weaknesses, players have different exploits, and moves occur in
+  secrecy, but they can be detected. Certainly, more advanced and
+  complex games are possible, but the game presented here is the most
+  realistic cyber game we know of. While optimal strategies can be
+  found for simpler games using min-max optimization or [whatever they
+  do on stochastic Markov chains], our more complex game must be
+  analyzed using the same kinds of analyses used to study other
+  complex games, such as checkers and chess. We define a simple
+  evaluation function and employ $k$-ply searches to create
+  strategies. We show that such scenarios can be analyzed, and find
+  that in cases of extreme uncertainty, it is often better to ignore
+  one's opponent's possible moves.
 \end{abstract}
 
 % % A category with the (minimum) three required fields
@@ -171,21 +201,19 @@ practices for cyber conflict
 \section{Introduction}
 \input{cyber-game-intro.tex}
 
+
 \section{Background}
 \input{cyber-game-background.tex}
 
-\section{Definition of HackAttack}
+\section{Description of HackAttack}
 \input{cyber-game-hackattack.tex}
 
-\section{Move Selection}
+\section{Strategies Considered}
 \input{cyber-game-kply.tex}
-Describe how you could have a strategy or you could use $k$-ply
-searches. Describe three ways to consider the other guy's moves, and
-issues with picking one move at a time.
 
-\section{Evaluation Functions}
-\input{cyber-game-evalfunctions.tex}
-Include subsections?
+% \section{Evaluation Functions}   % no section needed b/c only one function!
+% \input{cyber-game-evalfunctions.tex}
+% Include subsections?
 
 \section{Results}
 \input{cyber-game-results.tex}
@@ -220,6 +248,6 @@ and the \textbf{.cls} and \textbf{.tex} files that it describes.
 %
 %APPENDICES are optional
 
-%\balancecolumns
+\balancecolumns
 
 \end{document}

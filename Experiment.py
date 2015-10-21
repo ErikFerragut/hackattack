@@ -11,15 +11,19 @@ if len(sys.argv) < 3:
     print "Usage: python Experiment.py <number_of_parts> <which_part>"
     print "\nRuns over all pairs of algorithms and k values, doing only one part of many"
     print "(parts are counted 0-up)"
+    assert False
     
 outputfile = open('output.log', 'a')
 
 methods = [('random', RandomStrategy, {})] + \
           [(ef.__name__, EvaluationStrategy, {'f':ef, 'k':k}) for k in [1,2,-2,-3]
-           for ef in [net_accounts, net_machines, clean_machines, security] ]
+#           for ef in [net_accounts, net_machines, clean_machines, security] ]  # used on sava
+           for ef in [net_machines] ]
 
-experiments = [ (i1, i2) for i1 in xrange(len(methods)-1)
-                for i2 in xrange(i1+1, len(methods)) ]
+# in sava version, i1 < i2, which doesn't make fair comparisons
+experiments = [ (i1, i2) for i1 in xrange(len(methods))
+                for i2 in xrange(len(methods))
+                if i1 != i2 ]
 
 num_parts  = int(sys.argv[1])
 part_starts = [ (len(experiments) * i) / num_parts for i in xrange(num_parts+1) ]
