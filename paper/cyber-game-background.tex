@@ -1,9 +1,9 @@
 % what are cyber games
 An extensive literature now exists that analyzes cyber security using
-game theory. However, there is very little in terms of realistic
+game theory. However, there has been very little work analyzing realistic
 games. Games can be categorized by various independent dimensions:
-static v. dynamic, complete v. incomplete, perfect
-v. imperfect. Static games are games in which the order of the moves
+static or dynamic, complete or incomplete, perfect
+or imperfect. Static games are games in which the order of the moves
 do not matter; these are generally viewed as games where the players
 move simultaneously. Non-static, or dynamic, games are more realistic
 for modeling cyber conflict. In a game of complete information, each
@@ -22,23 +22,22 @@ see~\cite{liang2013game} and~\cite{roy2010survey}.
 
 % static games and repeated static games
 A number of researchers have studied (or primarily focused on) static
-games~\cite{grossklags2009uncertainty,he2012game,chen2009game,liu2006bayesian}. These
+games, such as~\cite{chen2009game,grossklags2009uncertainty,he2012game,liu2006bayesian}. These
 games have the significant advantage that they can be analyzed (e.g.,
 Nash equilibria can be computed) using existing methods. In some cases
 (e.g.,~\cite{nguyen2009security}) the repeated game is studied, which
 adds some realism, but fails to capture the essence of cyber attacks
-where a sequence of small gains leads to a dominant position.
+where a sequence of small gains may lead to a dominant position.
 
 % *** In Liang, dynamic, perfect: 14, 16, 39, 42, 48, 49
 
 % dynamic games with perfect information
 Among dynamic games, it is common to assume perfect information where
 each player can observe the actions of the others. For example,
-in~\cite{patcha2004game, nguyen2009security, luo2010game,
+in~\cite{luo2010game, nguyen2009security, patcha2004game, 
   sagduyu2011jamming, shamma2005dynamic}, attacks are always
 detected. This renders the results inapplicable to real cyber
-conflicts, since cyber attacks are designed to be (and often are)
-undetected.
+conflicts, since cyber attacks are often undetected.
 
 % *** In Liang, dynamic, imperfect: 8, 20, 21, 22, 26, 29,
 % 30, 31, 36, 37, 44
@@ -46,8 +45,8 @@ undetected.
 % dynamic games with imperfect information (skip)
 Almost all work involving dynamic games with imperfect information
 focuses on so-called stochastic games. In these games
-(e.g.,~\cite{alpcan2006intrusion, lye2005game, xiaolin2008markov,
-  sallhammar2006stochastic, nguyen2009stochastic}), there is a finite
+(e.g.,~\cite{alpcan2006intrusion, lye2005game, nguyen2009stochastic,
+  sallhammar2006stochastic, xiaolin2008markov}), there is a finite
 state space, and transition probabilities are determined by the
 simultaneous move choices made by the players. Special methods have
 been developed to find optimal strategies for these games, such as the
@@ -58,26 +57,25 @@ in this work.
 
 % key issues; we address them
 The survey~\cite{roy2010survey} describes the lack of realism in cyber
-games.
+games as a key issue in previous research.
 \begin{quote}
   Some of the limitations of the present research are: (a) Current
   stochastic game models only consider perfect information and
   assume that the defender is always able to detect attacks; (b)
   Current stochastic game models assume that the state transition
-  probabilities are fixed before the game starts and these
-  probabilities can be computed from the domain knowledge and past
-  statistics; (c) Current game models assume that the players' actions
+  probabilities are fixed before the game starts \ldots; 
+  (c) Current game models assume that the players' actions
   are synchronous, which is not always realistic; (d) Most models are
   not scalable with the size and complexity of the system under
   consideration.
 \end{quote}
-In this work, we address all of these concerns.
+In this work, we address the first three of these concerns.
 
-One issue they seem to all have is that payoff functions must be
+One issue all previous games have is that payoff functions must be
 assigned to certain outcomes. These numbers typically must be chosen
 to represent some intuitive notion of the benefit of each outcome, but
-the choices, being very difficult to validate, must generally be
-accepted as notional. In our game, we define a win condition. Namely,
+the payoffs, being very difficult to validate, must generally be
+accepted as notional. In our game, we instead define a win condition. Namely,
 the attacker who owns the most assets at the end of a given number of
 time steps is the winner. This view of the payoff directly correlates
 with the real-world goals of attackers and is therefore more
@@ -86,13 +84,18 @@ defensible.
 Another key distinction is that {\em all} previous work we are aware
 of analyzes an attacker-defender situation. We analyze a two-attacker
 situation where two adversaries are attempting to control a common
-pool of resources.
+pool of resources. This allows for a symmetry in the strategies and
+avoids having to construct two different kinds of strategies (i.e.,
+attackers and defenders). Consequently, the analysis and comparison of
+strategies is simplified. Also, adding defenders at a future time will
+be possible by augmenting the game with ownership and defensive moves
+(e.g., clean-booting).
 
 Furthermore, the complexity of our game makes it very difficult to use
 the strategy optimization methods popular in the literature. Instead,
 we adopt the strategy analysis methods used in games such as
 chess. These include using an evaluation function and performing
-$k$-ply searches, as described in~\cite{levy2009computer}.
+$k$-ply searches, as described in~\cite{levy2009computer,shannon1950programming}.
 
 
 

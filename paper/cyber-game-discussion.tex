@@ -1,18 +1,61 @@
-Main things we learned:
-\begin{enumerate}
-\item k-2 > k2 -- since your opponent knows so little about your situation, you are better off just thinking about your own moves; this somewhat justifies attack trees, graphs, and petri nets.
-\item k-3 is super slow! so we couldn't test the benefits of scanning deeper moves
-\end{enumerate}
+Our experiments produced both expected and unexpected 
+outcomes. It was expected, and the experiments showed, that deeper
+tree searches yield better performance. In particular, the Random
+strategy, effectively a 0-ply search, performs the worst, as
+expected. Still, it manages to defeat the other strategies
+occasionally when it starts the game with a powerful
+exploit. Furthermore, the 1- and 2-ply searches outperformed the 0-ply
+search.  Unfortunately, due to the large breadth of possible moves,
+searches of depth three or more were intractable with the available
+computational resources; this is discussed below.
 
+Other results were unexpected. Not only did the same evaluation
+functions lead to different strategies, but each individual strategy
+produced a nuanced variation in tactics depending on the power and
+variety of exploits it
+begins with. 
+In general, more powerful exploits lead to more agressive
+play (more attacks), and weaker exploits lead to more defensive play
+(more securing of controlled computers). This shows that the
+complexity of realistic cyber conflict may not require
+complex algorithms. Instead, a simple evaluation function and a
+$k$-ply search may suffice to produce highly effective, robust, and
+nuanced strategies.
 
+Another unexpected result was the clear dominance of the No-Response
+strategy over the Random-Response strategy. This shows that, in this
+example of extreme uncertainty about the opponent's situation, it is
+more effective to consider one's own moves only. Attempting to average
+or search over a wide range of opponent moves when each move has only
+a very small probability only seems to help avoid ``knock-out''
+moves. (For example, the Random-Response strategy was more likely than
+the others to {\tt clean} a newly acquired computer, apparently in
+order to avoid being {\tt cleaned} off by the other opponent should
+they have happened to be on there first. This observation adds
+credibility to the analysis of risk from unilateral actions common in the
+literature, such as in attack trees~\cite{schneier1999attack}, attack
+graphs~\cite{sheyner2002automated}, and attack Petri
+nets~\cite{zakrzewska2011modeling}.
 
-How can we improve this?
-\begin{enumerate}
-\item Make it more realistic by modeling a specific enterprise network
-\item Introduce system owner moves, like system refresh, nessus scans, etc.
-\item Speed up the deeper analysis by:
-\begin{enumerate}
-  \item Exploit symmetries that result from lack of information (e.g., it doesn't matter what you hack if you don't know anything about any machine)
-  \item Search the min-max tree more intelligently
-\end{enumerate}
-\end{enumerate}
+The main shortcoming of this approach is the fact that the
+exploration of moves in a $k$-ply search tree is very slow and scales
+exponentially with $k$. This made it impossible to explore the
+implications of deeper searches. However, a number of methods
+for accelerating and deepening the search are available. For example,
+in early rounds of the game, there is typically a symmetry among unexplored
+computers in the sense that what is known about each of them is the
+same. As a result, they lead to the same scores being computed for
+moves on each of those computers. 
+Rather
+than simply compute all of those scores in the tree, the symmetry in
+the knowledge can be exploited to drastically reduce the exploration
+required. Another approach to speed up the search involves being
+more judicious on which branches of the tree to explore. For example,
+if a first possible move is especially poor, the tree can be cut at
+that point, eliminating all of the computations that belong to its
+descendents. These and other heuristics for accelerating computation
+have been well studied in the literature~\cite{levy2009computer}. They
+have been applied to chess games to provide substantial speed-ups and
+to enable much deeper searches since Claude Shannon's seminal work in
+1950~\cite{shannon1950programming}.
+

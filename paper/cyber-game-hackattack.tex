@@ -1,38 +1,77 @@
-The game, HackAttack, was developed specifically for this research to simplify cyber conflict into an analyzable game, while avoiding oversimplification. In HackAttack, two players battle over a pool of resources, similar to how two actors might attempt to grow their botnets. The winner is the player who has the most computers after a set time frame. The game is turn based, and players take one action each turn for each resource they control. The resources are a collection of ``neutral'' computers accessible from the Internet. Actions are types of attacking, defending, and scouting. These moves are summarized in Table~\ref{tab:moves}.
+We developed the game, HackAttack, specifically for this research to simplify cyber conflict into an analyzable game while avoiding oversimplification. 
+In HackAttack, players battle over a pool of resources, similar to how two actors might attempt to grow their botnets. 
+The winner is the player who has the most computers after a set time frame. 
+The game is turn based in a fixed player order, and players take one action each turn for each resource they control. The resources are a collection of ``neutral'' computers accessible from the Internet. 
+
+The rules of this game apply to any number of players, and the game has been played with up to five players to test the game mechanics. However, for the purposes of this analysis, only two players were used. 
+
+{\em Computers and Accounts.}
+The game is played with $5p$ computers where $p$ is the number of players.
+For example, in a two-player game, there are 10 available computers.
+Each player has a starting computer on which they have one account.
+Accounts represent the presence a player has on a computer. Each player begins with one account on their starting computer
+More accounts make it easier to remove the other player off a computer and to resist being removed off a computer.
+We say that a player {\em controls} a computer if they have at least one account on it.
+The most accounts any player can have on any machine is four. 
+Multiple players can have a presence on a computer, with each of them having up to four accounts on it at the same time. 
+
+{\em Exploits.}
+Exploits are named by the operating system (OS) they target and their power level.  At the start of the game, computers are randomly, but equiprobably designated a certain OS, indicated by four types, 0 through 3. (These can be thought to stand for Linux, Mac, Solaris, and Windows, for example, but the specific labels have no bearing on the game.) 
+
+The power levels for an exploit range from 0 to 14. The chance of getting an exploit with power level $n$ is $2^{-(n+1)}$. Therefore an exploit with power 0 has a 50\% chance of being found, an exploit with power 1 a 25\% chance, all the way to exploits with power 14, which has about a 0.003\% chance of being found\footnote{Technically, the probabilities are then normalized to sum to 1 by dividing by (100 - 0.003)\%.}. Each player starts out with four exploits, and there is a 1/6 chance of gaining a random exploit each round. 
+
+{\em Vulnerabilities and Patches.}
+Computers at the start of the game are patched against three exploits, unknown to the players, representing the antivirus software the host user already has. These patches are chosen with the same probability as the exploits for players; weaker ones are more common. 
+
+
+{\em Actions.}
+On their turn, each player gets to assign one action to each computer they control.
+Actions are types of attacking, defending, and scouting. These moves are summarized in Table~\ref{tab:moves}.
 	
 \begin{table*}
 \begin{center}
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|r|r|}
 \hline 
-\highlightrow \multicolumn{3}{|c|}{Attack} \\
+\highlightrow \multicolumn{4}{|c|}{Attack} \\
 \hline 
-{\tt Hacking} & Use an exploit to gain an account on a computer &  20\% P.D. \\
+{\tt Hacking} & Use an exploit from one computer to gain an account on another &  20\% P.D. & Remote \\
 \hline 
-\highlightrow \multicolumn{3}{|c|}{Defense} \\
+\highlightrow \multicolumn{4}{|c|}{Defense} \\
 \hline 
-{\tt Patching} & Blocking all future uses of an exploit on a computer & 25\% P.D. \\
-{\tt Cleaning} & Remover other player's accounts from a computer & 100\% P.D. \\
-{\tt Backdooring} & Adding more ways to control a computer & 15\% P.D.  \\
+{\tt Backdooring} & Add more ways to control a computer & 15\% P.D.  & Local \\
+{\tt Cleaning} & Remove other player's accounts from a computer & 100\% P.D. & Local \\
+{\tt Patching} & Block all future uses of an exploit on a computer & 25\% P.D.  & Local \\
 \hline 
-\highlightrow \multicolumn{3}{|c|}{Scouting} \\
+\highlightrow \multicolumn{4}{|c|}{Scouting} \\
 \hline 
-{\tt Reconning} & Identify a computer's OS and vulnerabilities & 5\% P.D. \\
-{\tt Scanning} & Use an account on a computer to find the presence of other players & 30\% P.D. \\
+{\tt Reconning} & Identify a computer's OS and vulnerabilities & 5\% P.D. & Remote \\
+{\tt Scanning} & Use an account on a computer to find the presence of other players & 30\% P.D. 
+& Local \\
 \hline
 \end{tabular}
-\caption{Summary of available moves in HackAttack. PD = Probability of Detection.\label{tab:moves}}
+\caption{Summary of available moves in HackAttack. PD = Probability of Detection. {\tt Hacking} and {\tt recon} affect a targeted computer from a controlled computer. The other actions affect the controlled computer itself.\label{tab:moves}}
 \end{center}
 \end{table*}
 
-Attacking, in the game called {\tt hacking}, is using an exploit to gain one account on a computer. Exploits are named by the operating system (OS) they target and their power level.  At the start of the game, computers are randomly, but evenly designated a certain OS, indicated by four types, 0 through 3. (These can be thought to stand for Linux, Mac, Solaris, and Windows, for example, but the specific labels have no bearing on the game.) An exploit for a specific OS only works for that one OS.  The power levels for an exploit range from 0 to 14. The chance of an exploit with power level $x$ is $2^{-(x+1)}$. Therefore an exploit with power 0 has a 50\% chance of being found, an exploit with power 1 a 25\% chance, all the way to exploits with power 14, which has about a 0.003\% chance of being found. Each player starts out with four exploits, and there is a 1/6 chance of gaining a random exploit each round. Exploits are the only form of attack, and using different exploits is the only way to change how you attack. If the {\tt hacking} succeeds, the one carrying out the hack gains an account on the target machine.  Accounts represent the presence a player has on a computer. Each player begins with one account on their starting computer, and a successful hack puts one account on the computer targeted.  More accounts make it easier to remove the other player off a computer and to resist being removed off a computer. The most accounts any player can have on any machine is 4. If the {\tt hacking} fails, the attacker learns no additional information about the target. 
+Attacking, in the game called {\tt hacking}, is using an exploit to gain one account on a computer.
+An exploit for a specific OS only works for that one OS.  
+Exploits are the only form of attack, and using different exploits is the only way to change how you attack. If the {\tt hacking} succeeds, the one carrying out the hack gains an account on the target machine.  
+A successful hack puts one account on the computer targeted, up to the maximum number of accounts. 
+If the {\tt hacking} fails, the attacker learns no additional information about the target. 
 
-Defense is accomplished by {\tt patching} to decrease the likelihood an opponent successfully attacks your computer, {\tt cleaning} to remove your opponent from a computer, or {\tt backdooring} to making it harder for you to be removed off a computer.  {\tt Patching} makes a computer you own permanently safe against an exploit you choose. Since you only know about the exploits you own and use to hack, you can only patch exploits you own. Computers at the start of the game are patched against three exploits, unknown to you, representing the antivirus software the host user already has. These patches are chosen with the same probability as the exploits for players; weaker ones are more common. One downside of {\tt patching} is that if you patch an exploit and are later removed from the computer, then you cannot use the exploit you patched to get back on that computer. {\tt Backdooring} puts one more account on a computer that you own. While the maximum accounts any one person can have on a computer is four, multiple players can have a presence on a computer, with each of them having up to four accounts. Having at least one account on a computer makes it contribute to your total number of machines controlled at the end of the twenty rounds, and both players can have the same computer count toward their totals.  {\tt Cleaning} removes enemy accounts off a computer equal to the accounts you have on that computer.  Removing a player from a computer is important because only computers with at least one player account on it will count toward a player's final computer total. After {\tt cleaning}, you know how many enemy accounts were removed.  The different outcomes of this have varying meanings, and certain results make it unclear if the opponent is still on the computer. Cleaning is especially useful after you detect an opposing action on that machine.
+Defense is accomplished by {\tt patching} to decrease the likelihood of an opponent successfully attacking your computer, {\tt cleaning} to remove your opponent from a computer, or {\tt backdooring} to making it harder for you to be removed off a computer. 
+{\tt Backdooring} puts one more account on a computer that you own. 
+{\tt Cleaning} removes enemy accounts off a computer equal to the accounts you have on that computer.  Removing a player from a computer is important because only computers with at least one player account on it will count toward a player's final computer total. After {\tt cleaning}, you know how many enemy accounts were removed.  The different outcomes of this have varying meanings, and certain results make it unclear if the opponent is still on the computer. {\tt Cleaning} is especially useful after you detect an opponent using that machine.
+ {\tt Patching} makes a computer you own permanently safe against an exploit you choose. Since you only know about the exploits you own and use to hack, you can only patch exploits you own. 
+One downside of {\tt patching} is that if you patch an exploit and are later removed from the computer, then you cannot use the exploit you patched to get back on that computer. 
 
-The scouting functions, {\tt scanning} and {\tt reconning}, reveal information about a computer. {\tt Scanning} tells you who else, if anyone, is on the targeted computer you own and the amount of accounts they have on it.  It is used instead of {\tt cleaning} at times so you can know if your clean will entirely remove your opponent. Unlike {\tt cleaning}, {\tt scanning} tells you definitively if someone else is on a computer and if they will remain after a clean.  {\tt Reconning} tells you the OS of the targeted computer and what exploits you have, if any, that can hack it, but not if it is already occupied. This action is used to set up a hack on the following turn because it can almost guarantee the hack's success or failure.  If you are cleaned off that computer and want to get back on, you would not need to recon again because you would remember the computer's OS.
+The scouting functions, {\tt scanning} and {\tt reconning}, reveal information about a computer. {\tt Scanning} tells you who else, if anyone, is on the targeted computer you own and the amount of accounts they have on it.  It may be used before {\tt cleaning} to know if your {\tt clean} will entirely remove your opponent. Unlike {\tt cleaning}, {\tt scanning} tells you definitively if someone else is on a computer and if they will remain after a {\tt clean}.  {\tt Reconning} one computer from a controlled computer tells you the OS of the targeted computer and what exploits you have, if any, that can {\tt hack} it, but it does not indicate whether it is already occupied. This action is used to set up a {\tt hack} on the following turn because it can almost guarantee the {\tt hack}'s success.  If you are {\tt cleaned} off that computer and want to get back on, you would not need to {\tt recon} again because you would remember the computer's OS.
 
-It is important to note that each player only observes another player's action if it is ``detected''. Otherwise, they are aware ony of their own actions and the results of those actions. Every action, therefore, has a detection probability based on how much it interacts with the computer.  {\tt Patching} has a 25\% detection rate, {\tt hacking} 20\%, {\tt backdooring} 15\%, {\tt reconning} 5\%, {\tt scanning} 30\%, and {\tt cleaning} 100\%. One important thing to note is that you can be detected by a player on the targeted machine, and, in the case of {\tt hacking} and {\tt reconning}, on the acting computer. 
+{\em Detection.}
+It is important to note that each player only observes another player's action if it is ``detected''. Otherwise, they are aware only of their own actions and the results of those actions. Every action, therefore, has a detection probability based on how much it interacts with the computer.  {\tt Patching} has a 25\% detection rate, {\tt hacking} 20\%, {\tt backdooring} 15\%, {\tt reconning} 5\%, {\tt scanning} 30\%, and {\tt cleaning} 100\%. One important thing to note is that you can be detected by a player on the targeted machine, and, in the case of {\tt hacking} and {\tt reconning}, on the acting computer. 
 
-After 20 rounds, the player having accounts (at least one each) on the greatest number of computers is the winner, or a tie is declared if each player controls the same number of machines. A game is stopped early if one player is cleaned off of every computer.
 
-The rules of this game could be applied to multiple players, and this has been done to test the game mechanics. However, for the purposes of this analysis, only two players were used. Also, there were 10 available computers.
+{\em Win Condition.}
+After 20 rounds, the player controlling the greatest number of computers is the winner, or a tie is declared if each player controls the same number of machines. A game is stopped early if one player is {\tt cleaned} off of every computer. 
+Having at least one account on a computer makes it contribute to your total number of machines controlled at the end of the twenty rounds, and both players can have the same computer count toward their totals.  
 

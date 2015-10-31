@@ -1,2 +1,142 @@
 
-\input{../results-from-rota/table.tex}
+
+% moves ahead is negative means the opponent doesn't move.
+
+% values are 1stPlayerWins/2ndPlayerWins/Ties out of 10 tries
+
+% \begin{table}[h!tb]
+% \begin{center}
+% \begin{tabular}{cc|cccc}
+% &  \multicolumn{1}{c}{}  & \multicolumn{4}{c}{Second Player} \\
+%  \parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{First Player}}}
+% &    & 0        & 1        & 2         & -2       \\ \cline{2-6} % \hline
+% & 0 & X        & 3/6/1 & 0/9/1 & 2/8/0 \\
+% & 1 & 5/2/3 & X        & 4/6/0 & 2/7/1 \\
+% & 2 & 8/0/2 & 5/5/0 & X        & 3/7/0 \\
+% &-2& 10/0/0 & 7/3/0 & 9/1/0 & X \\
+% % \cline{2-6}  % \hline
+% \end{tabular}
+% \end{center}
+% \caption{Table\label{tab:results}}
+% \end{table}
+
+%  \parbox[t]{2mm}{\multirow{5}{*}{\rotatebox[origin=c]{90}{First Player}}}
+
+Each of four strategies were tested against each of the others with each strategy going first or second in ten games for each configuration.
+The four strategies are (1) Random, which picks a legal move uniformly at random, (2) One-Step, is a 1-ply search that looks at only the first move, 
+(3) Random-Response, which looks two moves ahead and models the opponent's move as Random, and 
+(4) No-Response, which considers making two of its own moves and ignores the opponent's response.
+All four methods use the net-computers evaluation function.
+Table~\ref{tab:results} summarizes these pairwise results.
+
+\begin{table}[h!tb]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|} \hline
+\highlightrow
+ Strategy for P1 & Strategy for P2 & \multicolumn{2}{c|}{Wins} & Ties \\ \cline{3-4}
+\highlightrow & & P1 & P2 & \\ \hline
+Random & {\bf One-Step} & 3 & 6 & 1 \\
+{\bf One-Step} & Random &5 & 2 & 3 \\
+Random & {\bf Rand-Response} & 0 & 9 & 1 \\
+{\bf Rand-Response} & Random & 8 & 0 & 2 \\
+Random & {\bf No-Response} & 2 & 8 & 0 \\
+{\bf No-Response} & Random & 10 & 0 & 0 \\
+One-Step & Rand-Response & 4 & 6 & 0 \\
+Rand-Response & One-Step & 5 & 5 & 0 \\
+One-Step & {\bf No-Response} & 2 & 7 & 1 \\
+{\bf No-Response} & One-Step & 7 & 3 & 0 \\
+Rand-Response & {\bf No-Response} &  3 & 7 & 0 \\
+{\bf No-Response} & Rand-Response & 9 & 1 & 0 \\
+\hline
+\end{tabular}
+\caption{Results from comparing each pair of strategies in ten games each. The winning strategy is shown in bold text.\label{tab:results}}
+\end{center}
+\end{table}
+
+The results show that Random is the worst strategy and that No-Response is the best against the strategies tested. 
+One-Step and Random-Response performed comparably and evenly split wins when pitted against each other. They both lost approximately the same number of games to No-Response. 
+However, the Random-Response strategy won more often against Random than One-Step did.
+In summary, the strategy rankings are, from best to worst:
+\begin{enumerate}
+\item No-Response, 
+\item Random-Response, 
+\item One-Step, and 
+\item Random.
+\end{enumerate}
+There appears to be no real benefit to any strategy to going first.
+We next extract general trends and observations from the games of each non-random strategy.
+
+\subsection{One-Step Strategy}
+One-Step mostly chose {\tt hacking} moves.
+When it did not, it chose {\tt cleaning}.
+It {\tt cleans} if it has detected a successful attack.
+It may {\tt clean} on the first round if it only has low-power attacks (e.g., level 0 or 1).
+Third, it may choose to {\tt clean} if many rounds have passed.
+This behavior follows from direct application of the evaluation function.
+In general, the strategy chooses a move if it is the most likely way to either increase the number of computers it has accounts on, or to decrease the number of computers the opponent has accounts on. Since {\tt cleaning} has a 100\% chance of success in this game, it is an ideal move when another player is known to be on a shared computer. 
+Hence, it follows that the strategy will {\tt clean} when it detects a successful attack, but not on failed attacks. 
+In the case where no powerful attacks exist, the slight chance that an opponent has started on the same machine as the player means that {\tt cleaning}, which works with 100\% probability, is more likely to improve the net-computers evaluation function than attempting to {\tt hack} another computer.
+Similarly, if the prospects for a successful attack are very low (e.g., the best exploit has only power level 1), then {\tt cleaning} is more likely to improve the evaluation function because the knowledge structure models a slight chance that the opponent is on the same machine at the start.
+In a third case of using the {\tt clean} action, after several rounds, the strategy has tried enough {\tt hacks} to deduce that the probability of any attack working on the as-yet unexploited machines is very low.
+It then follows that the better option is to {\tt clean} the machines it does have access to.
+
+When {\tt hacking}, the highest-power exploits are used first.
+If these exploits fail, then other exploits will be attempted.
+A common pattern is to attempt to {\tt hack} a computer using the best available exploit, and if it fails, to then {\tt hack} the same computer using the next best available exploit for a different OS.
+Probabilistically, this makes sense. 
+When a powerful {\tt hack} fails, it provides significant evidence that the OS it assumed was incorrect.
+The probability of that powerful attack succeeding on another computer is about 25\% because that computer must have the right OS (a 25\% chance) for it to succeed.
+However, if another powerful attack for another OS is available, its probability of success on the same computer is around 33\% because one of the other OSs have already been ruled out.
+In contrast, if only one powerful attack is available, the strategy will try that exploit wherever it can.
+Only after it has been tried everywhere will the next, in this case weak, exploit be attempted.
+
+This leads to an overall strategy that takes into account the power of the exploits available. 
+It can be summarized as follows. 
+First, if only weak exploits are available, begin by {\tt cleaning} the machine the player begins on.  
+Second, {\tt hack} each machine with the best available exploit. 
+On each machine where this fails, {\tt hack} that machine with the next best powerful exploits. 
+Also, upon successful detection of a {\tt hack}, {\tt clean} the {\tt hacked} computer.
+When the chance of successfully {\tt hacking} additional computers is sufficiently low, proceed defensively and {\tt clean} each controlled computer on each subsequent turn.
+
+% In the rare cases where One-Step lost to Random, Random had a poweful attack (e.g., W4 or higher) and One-Step did not.
+
+
+
+\subsection{Random-Response Strategy}
+The Random-Response strategy follows many of the same guidelines as does the One-Step strategy regarding when it {\tt cleans} on the first round, how it selects exploits to use in {\tt hacks}, and the fact that it never uses the scouting moves ({\tt recon} and {\tt scan}).
+When one powerful exploit is available, the Random-Response strategy, like the One-Step strategy, will continually try that exploit until it has been tried on every computer (excluding the computer it begins the game on). 
+
+One key difference between the Random-Response and the One-Step is that in the Random-Response strategy, a computer is {\tt cleaned} the first turn after it has been succesfully {\tt hacked} into. 
+Also, computers are {\tt cleaned} periodically after a certain amount of time. 
+
+These slight changes make Random-Response a slightly more defensive strategy than One-Step.
+This difference follows because as the strategy considers its opponents possible moves, it recognizes that there is a possibility it could get {\tt cleaned} off its newly acquired computer.
+While this cannot be prevented immediately, a {\tt cleaning} move on the next available turn is the best defense against it.
+
+This slight difference made this strategy more effective against the Random strategy.
+Unlike One-Step, which lost when its opponent had a powerful attack, Random-Response managed to win even in those cases.
+For example, in one game where the Random strategy had a power level 9 exploit, the Random-Response strategy was able to keep it in check by judicious use of {\tt cleaning} moves, and ended up winning the game.
+
+\subsection{No-Response Strategy}
+The No-Response strategy behaved fundamentally differently from the other strategies.
+Because it looked ahead at two of its own moves, it was able to value {\tt recon} actions much more highly than the other strategies did.
+This follows because a randomly chosen {\tt hack}, even with a powerful exploit, has at most a 25\% chance of success.
+As a result, a new computer would be gained approximately every fourth move.
+In contrast, a {\tt recon} move reveals the OS of the target machine.
+Knowing the OS, the probability of success may be much higher, near one if a good exploit is available for that OS.
+So a {\tt recon}-{\tt hack} combination should yield a new computer at approximately every second move, making it the preferable strategy.
+
+When the No-Response strategy applies exploits, it applies whichever exploit is indicated to be effective by the {\tt recon}.
+This makes it fundamentally different than the One-Step and Random-Response strategies, which will generally choose the most powerful exploits first.
+
+As the number of viable targets are reduced by exploration and exploitation, the strategy veers toward a defensive posture.
+This includes a combination of {\tt backdooring}, {\tt cleaning}, and (occassionally) {\tt scanning}.
+The {\tt cleaning} makes sense for the same reasons it was used by One-Step and Random-Response (e.g., after detection of successful attack and when few viable targets remain).
+The difference here is that looking the extra step ahead brings into play the relevance of the number of accounts.
+A {\tt cleaning} is not guaranteed to remove the opponent from the computer since the opponent may have more accounts than the player.
+To know for sure that the opponent is eliminated, one can first {\tt scan} to find out how many accounts there are, and then, if the opponent does not have more accounts than the player has, a {\tt cleaning} will eliminate the opponent.
+Additionally, a {\tt backdoor} strengthens the player's hold on the computer and makes a subsequent {\tt clean} move more effective.
+
+A typical game for the No-Response strategy involves a sequence of {\tt recon} moves until a vulnerability is found, and then a successful {\tt hack} move is made.
+As the position evolves, the strategy becomes more defensive and combines its ongoing offensive campaign with defensive {\tt backdoor}, {\tt clean}, and  {\tt scan} actions.
+

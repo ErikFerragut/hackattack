@@ -63,10 +63,10 @@
 % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{Game Theoretic Analysis Can Suggest Best Practices for Cyber
-  Conflicts\titlenote{(Produces the permission block, and
-copyright information). For use with
-SIG-ALTERNATE.CLS. Supported by ACM.}}
+\title{HackAttack: Game-Theoretic Analysis\\
+of Realistic Cyber Conflicts%\titlenote{(Produces the permission block, and copyright
+    %information). For use with SIG-ALTERNATE.CLS. Supported by ACM.}%
+}
 % \subtitle{[Extended Abstract]
 % \titlenote{A full version of this paper is available as
 % \textit{Author's Guide to Preparing ACM SIG Proceedings Using
@@ -165,8 +165,8 @@ Max Wildgruber\\
   Game theory is appropriate for studying cyber conflict because it
   allows for an intelligent and goal-driven adversary. Applications of
   game theory have led to a number of results regarding optimal attack
-  and defense strategies. (example of one that's not very realistic.)
-  However, the overwhelming majority of cyber game theory explores
+  and defense strategies.
+  However, the overwhelming majority of applications explore
   overly simplistic games, often ones in which each participant's
   actions are visible to every other participant. These
   simplifications strip away the fundamental properties of real cyber
@@ -177,16 +177,18 @@ Max Wildgruber\\
   realistic game, one in which different resources have different
   weaknesses, players have different exploits, and moves occur in
   secrecy, but they can be detected. Certainly, more advanced and
-  complex games are possible, but the game presented here is the most
-  realistic cyber game we know of. While optimal strategies can be
-  found for simpler games using min-max optimization or [whatever they
-  do on stochastic Markov chains], our more complex game must be
-  analyzed using the same kinds of analyses used to study other
-  complex games, such as checkers and chess. We define a simple
-  evaluation function and employ $k$-ply searches to create
-  strategies. We show that such scenarios can be analyzed, and find
-  that in cases of extreme uncertainty, it is often better to ignore
-  one's opponent's possible moves.
+  complex games are possible, but the game presented here is more
+  realistic than any other game we know of in the scientific
+  literature. While optimal strategies can be found for simpler games
+  using calculus, case-by-case analysis, or, for stochastic games,
+  Q-learning, our more complex game is more naturally analyzed using the same
+  methods used to study other complex games, such as checkers and
+  chess. We define a simple evaluation function and employ 
+  multi-step searches to create strategies. We show that such scenarios can be
+  analyzed, and find that in cases of extreme uncertainty, it is often
+  better to ignore one's opponent's possible moves. Furthermore, we
+  show that a simple evaluation function in a complex game can lead to
+  interesting and nuanced strategies.
 \end{abstract}
 
 % % A category with the (minimum) three required fields
@@ -198,17 +200,23 @@ Max Wildgruber\\
 
 % \keywords{ACM proceedings, \LaTeX, text tagging}
 
+\vfill 
+\eject
 \section{Introduction}
+\label{sec:intro}
 \input{cyber-game-intro.tex}
 
 
 \section{Background}
+\label{sec:background}
 \input{cyber-game-background.tex}
 
-\section{Description of HackAttack}
+\section{HackAttack}
+\label{sec:hackattack}
 \input{cyber-game-hackattack.tex}
 
-\section{Strategies Considered}
+\section{Strategies}
+\label{sec:strategies}
 \input{cyber-game-kply.tex}
 
 % \section{Evaluation Functions}   % no section needed b/c only one function!
@@ -216,22 +224,20 @@ Max Wildgruber\\
 % Include subsections?
 
 \section{Results}
+\label{sec:results}
 \input{cyber-game-results.tex}
 
 \section{Discussion}
+\label{sec:discussion}
 \input{cyber-game-discussion.tex}
 
 \section{Conclusions}
+\label{sec:conc}
 \input{cyber-game-conclusions.tex}
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-This section is optional; it is a location for you
-to acknowledge grants, funding, editing assistance and
-what have you.  In the present case, for example, the
-authors would like to thank Gerald Murray of ACM for
-his help in codifying this \textit{Author's Guide}
-and the \textbf{.cls} and \textbf{.tex} files that it describes.
+% %ACKNOWLEDGMENTS are optional
+% \section{Acknowledgments}
+
 
 %
 % The following two commands are all you need in the
