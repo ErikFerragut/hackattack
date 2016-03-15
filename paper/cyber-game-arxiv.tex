@@ -50,12 +50,12 @@
 
 \documentclass{sig-alternate}
 
-\include{goodmathstuff.tex}
+% \include{goodmathstuff.tex}
 \usepackage{array,multirow}  % for results table
 
 \usepackage[table,x11names]{xcolor}  % for moves table
 
-\newcommand{\ornlthanks}{\tiny The manuscript has been authored by a contractor of the U.S. Government under contract DE-AC05-00OR22725. Accordingly, the U.S. Government retains a nonexclusive, royalty-free license to publish or reproduce the published form of this contribution, or allow others to do so, for U.S. Government purposes.}
+\newcommand{\ornlthanks}{\small The manuscript has been authored by a contractor of the U.S. Government under contract DE-AC05-00OR22725. Accordingly, the U.S. Government retains a nonexclusive, royalty-free license to publish or reproduce the published form of this contribution, or allow others to do so, for U.S. Government purposes.}
 
 % \newcommand{\highlightrow}{\rowcolor{SkyBlue1}}
 \newcommand{\highlightrow}{}  % disable for arxiv version
@@ -439,7 +439,7 @@ Having at least one account on a computer makes it contribute to your total numb
 % what is a strategy, and evaluation function?
 A strategy for a game is a function that takes as input a player's situation and returns that player's move(s).
 There are many ways to develop strategies. 
-A common approach in the cyber security game theory literature is to explicitly write down the objective function and then directly derive optimal solutions. This approach works well only in the simplest games, such as static matrix games. For more complex games, such as stochastic Markov games, alternative methods (e.g., Q-Learning) can be used~\cite{alpcan2006intrusion}. However, the most complex games must adopt methods similar to those used to develop strategies for checkers and chess. These approaches involve the development and use of {\em evaluation functions} to score the desirability of any possible state of the game. The evaluation function is a formalization of expert intuition on what constitutes a good position. For example, in the game of chess, it may include points for material, controlling the center of the board, having freedom to move, and so on. The evaluation function is then used in a multiple look-ahead tree search to select the best move to play using a minimax algorithm~\cite{shannon1950programming}
+A common approach in the cyber security game theory literature is to explicitly write down the objective function and then directly derive optimal solutions. This approach works well only in the simplest games, such as static matrix games. For more complex games, such as stochastic Markov games, alternative methods (e.g., Q-Learning) can be used~\cite{alpcan2006intrusion}. However, the most complex games must adopt methods similar to those used to develop strategies for checkers and chess. These approaches involve the development and use of {\em evaluation functions} to score the desirability of any possible state of the game. The evaluation function is a formalization of expert intuition on what constitutes a good position. For example, in the game of chess, it may include points for material, controlling the center of the board, having freedom to move, and so on. The evaluation function is then used in a multiple look-ahead tree search to select the best move to play using a minimax algorithm~\cite{shannon1950programming}.
 
 % example evaluation function
 As a simple example, a possible tic-tac-toe evaluation function is described in Figure~\ref{fig:tictactoe}. Such an evaluation function can then be used to consider what-if scenarios and select a move. For example, Figure~\ref{fig:tictactoe} shows a board and two possible moves that have been scored according to this evaluation function. This approach suggests that the second move is preferable to the first. 
@@ -568,7 +568,7 @@ Hence, it follows that the strategy will {\tt clean} when it detects a successfu
 In the case where no powerful attacks exist, the slight chance that an opponent has started on the same machine as the player means that {\tt cleaning}, which works with 100\% probability, is more likely to improve the net-computers evaluation function than attempting to {\tt hack} another computer.
 Similarly, if the prospects for a successful attack are very low (e.g., the best exploit has only power level 1), then {\tt cleaning} is more likely to improve the evaluation function because the knowledge structure models a slight chance that the opponent is on the same machine at the start.
 In a third case of using the {\tt clean} action, after several rounds, the strategy has tried enough {\tt hacks} to deduce that the probability of any attack working on the as-yet unexploited machines is very low.
-It then follows that the better option is to {\tt clean} the machines it does have access to.
+It then follows that the better option is to {\tt clean} the machines it can access.
 
 When {\tt hacking}, the highest-power exploits are used first.
 If these exploits fail, then other exploits will be attempted.
@@ -721,8 +721,7 @@ evaluation function that adds some weight to the information content in
 the knowledge of the game, the strategy could emphasize an intrinsic
 value of learning the OS of computers and the players on each
 machine. Such an evaluation function might allow a 1-ply search to
-mimic the strategies that were found to be so effective in the 2-ply
-No-Response strategy.
+mimic the more effective 2-ply strategies.
 
 
 % %ACKNOWLEDGMENTS are optional
