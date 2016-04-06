@@ -48,14 +48,14 @@
 %
 % For tracking purposes - this is V2.0 - May 2012
 
-\documentclass{sig-alternate}
-
+% \documentclass{sig-alternate}
+\documentclass{sig-alternate-05-2015}
 % \include{goodmathstuff.tex}
 \usepackage{array,multirow}  % for results table
 
 \usepackage[table,x11names]{xcolor}  % for moves table
 
-\newcommand{\ornlthanks}{\small The manuscript has been authored by a contractor of the U.S. Government under contract DE-AC05-00OR22725. Accordingly, the U.S. Government retains a nonexclusive, royalty-free license to publish or reproduce the published form of this contribution, or allow others to do so, for U.S. Government purposes.}
+\newcommand{\ornlthanks}{The manuscript has been authored by a contractor of the U.S. Government under contract DE-AC05-00OR22725. Accordingly, the U.S. Government retains a nonexclusive, royalty-free license to publish or reproduce the published form of this contribution, or allow others to do so, for U.S. Government purposes.}
 
 % \newcommand{\highlightrow}{\rowcolor{SkyBlue1}}
 \newcommand{\highlightrow}{}  % disable for arxiv version
@@ -69,7 +69,7 @@
 % --- End of Author Metadata ---
 
 \title{HackAttack: Game-Theoretic Analysis\\
-of Realistic Cyber Conflicts{\Large \thanks{\ornlthanks}}%\titlenote{(Produces the permission block, and copyright
+of Realistic Cyber Conflicts{\thanks{\ornlthanks}}%\titlenote{(Produces the permission block, and copyright
     %information). For use with SIG-ALTERNATE.CLS. Supported by ACM.}%
 }
 % \subtitle{[Extended Abstract]
@@ -201,8 +201,38 @@ Max C.~Wildgruber\\
   analyzed, and find that in cases of extreme uncertainty, it is often
   better to ignore one's opponent's possible moves. Furthermore, we
   show that a simple evaluation function in a complex game can lead to
-  interesting and nuanced strategies.
+  interesting and nuanced strategies that follow tactics that tend to
+  select moves that are well tuned to the details of the situation and the
+  relative probabilities of success.
 \end{abstract}
+
+
+
+
+ \begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10002950.10003648</concept_id>
+<concept_desc>Mathematics of computing~Probability and statistics</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+<concept>
+<concept_id>10002978.10002986.10002988</concept_id>
+<concept_desc>Security and privacy~Security requirements</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[300]{Mathematics of computing~Probability and statistics}
+\ccsdesc[300]{Security and privacy~Security requirements}
+
+
+\printccsdesc
+
+
+\keywords{cyber-security, game theory, botnet, probabilistic
+  inference}
 
 % % A category with the (minimum) three required fields
 % \category{H.4}{Information Systems Applications}{Miscellaneous}
@@ -213,8 +243,10 @@ Max C.~Wildgruber\\
 
 % \keywords{ACM proceedings, \LaTeX, text tagging}
 
-\vfill 
-\eject
+%% use this to avoid a weird header by itself at bottom of first column
+% \vfill 
+% \eject
+
 \section{Introduction}
 \label{sec:intro}
 Computers connected to the Internet are potential targets for criminals, botnets, and national cyber capabilities. Cyber conflicts result from competing interests struggling to control the same assets. If one side of the conflict is manually assessing the situation, reasoning about the risks, making decisions, and executing attacks it will likely be overwhelmed if the other side adopts an automated approach in which algorithms are used to make every choice. The speed of human-in-the-loop decision making is likely to be several orders of magnitude slower than a well tuned algorithm. The future of cyber offense and defense undoubtedly depends on the development of advanced, scalable, and effective algorithms for decision-making in real-time. Moreover, the organization that first masters this technology will likely obtain a decisive advantage over their adversaries. 
